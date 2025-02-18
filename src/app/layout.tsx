@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { QueryProvider } from "@/shared";
+import {
+  ColorSchemeScript,
+  createTheme,
+  mantineHtmlProps,
+  MantineProvider,
+} from "@mantine/core";
+import "@mantine/core/styles.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,11 +31,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = createTheme({});
   return (
-    <html lang="en">
-      <head></head>
+    <html lang="ru" {...mantineHtmlProps}>
+      <head>
+        <ColorSchemeScript defaultColorScheme="light" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <QueryProvider child={children} />
+        <MantineProvider theme={theme}>
+          <QueryProvider child={children} />
+        </MantineProvider>
       </body>
     </html>
   );
