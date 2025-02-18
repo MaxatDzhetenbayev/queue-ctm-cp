@@ -2,6 +2,16 @@
 import React, { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { AxiosError } from "axios";
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  Input,
+  Paper,
+  Text,
+  Title,
+} from "@mantine/core";
 
 export const LoginForm = () => {
   const [login, setlogin] = useState("");
@@ -25,54 +35,49 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-lg">
-        <h1 className="text-2xl font-semibold text-center text-gray-700">
-          Добро пожаловать!
-        </h1>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label
-              htmlFor="login"
-              className="block text-sm font-medium text-gray-600"
+    <Container size="xs" h="100vh">
+      <Center h="100%">
+        <Paper shadow="xs" p="xl">
+          <Box>
+            <Center>
+              <Title order={1}>Добро пожаловать!</Title>
+            </Center>
+            <form
+              onSubmit={handleLogin}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                marginTop: "20px",
+              }}
             >
-              Логин:
-            </label>
-            <input
-              id="login"
-              value={login}
-              onChange={(e) => setlogin(e.target.value)}
-              required
-              className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Пароль:
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          {error && (
-            <p className="text-red-500 text-sm">{getErrorMessage(error)}</p>
-          )}
-          <button
-            type="submit"
-            className="w-full py-2 mt-4 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
+              <Box>
+                <Input
+                  id="login"
+                  value={login}
+                  onChange={(e) => setlogin(e.target.value)}
+                  required
+                />
+              </Box>
+              <Input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              {error && (
+                <Text c="red" fz="md">
+                  {getErrorMessage(error)}
+                </Text>
+              )}
+              <Button type="submit" fullWidth>
+                Войти
+              </Button>
+            </form>
+          </Box>
+        </Paper>
+      </Center>
+    </Container>
   );
 };
