@@ -7,11 +7,12 @@ export interface ILoginData {
 }
 
 export const useLogin = () => {
+  console.log("working");
   return useMutation({
     mutationKey: ["login"],
     mutationFn: async (data: ILoginData) => api.post("/auth/login", data),
     onSuccess: () => {
-      window.location.href = "/kz/dashboard";
+      window.location.href = "/dashboard";
     },
   });
 };

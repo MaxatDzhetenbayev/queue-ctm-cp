@@ -1,20 +1,11 @@
 import React from "react";
 import { useManagerTodaySummary } from "./hooks";
-import { Skeleton } from "@/shared";
 
 export const ManagerTodayStatistics = () => {
   const { data, isLoading } = useManagerTodaySummary();
 
   return isLoading ? (
-    <div>
-      <Skeleton className="w-full h-10 mt-3" />
-      <div className="grid grid-cols-2 gap-4 ">
-        <Skeleton className="w-[200px] h-14 mt-3" />
-        <Skeleton className="w-[200px] h-14 mt-3" />
-        <Skeleton className="w-[200px] h-14 mt-3" />
-        <Skeleton className="w-[200px] h-14 mt-3" />
-      </div>
-    </div>
+    <div>loading...</div>
   ) : (
     <>
       <h2 className="text-2xl font-semibold mb-4">Дневная статистика</h2>

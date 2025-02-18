@@ -3,7 +3,6 @@
 import React from "react";
 import { useManagerReceptions } from "../hooks/index";
 import { receptionTransformDto } from "../../../entities/receptions/helpers";
-import { Skeleton } from "@/shared";
 import {
   ChangeReceptiontionStatusButton,
   ReceptionDetail,
@@ -27,14 +26,7 @@ export const ManagerReceptions = () => {
   return (
     <div className="overflow-auto h-full max-h-[330px]">
       {isLoading ? (
-        <div>
-          <Skeleton className="w-[200px] h-5" />
-          <Skeleton className="w-full h-10 mt-3" />
-          <Skeleton className="w-full h-10 mt-3" />
-          <Skeleton className="w-full h-10 mt-3" />
-          <Skeleton className="w-full h-10 mt-3" />
-          <Skeleton className="w-full h-10 mt-3" />
-        </div>
+        <div>loading...</div>
       ) : (
         <>
           <h2 className="text-2xl font-semibold mb-4">Приемы</h2>

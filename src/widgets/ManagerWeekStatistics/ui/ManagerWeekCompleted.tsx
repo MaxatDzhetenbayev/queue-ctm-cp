@@ -12,7 +12,6 @@ import {
   Tooltip,
 } from "chart.js";
 import { useManagerWeekStatics } from "../hooks";
-import { Skeleton } from "@/shared";
 
 export const ManagerWeekCompleted = () => {
   ChartJS.register(
@@ -30,7 +29,7 @@ export const ManagerWeekCompleted = () => {
 
   return isLoading ? (
     <div className="">
-      <Skeleton className="w-[330px] h-[330px]" />
+     loading...
     </div>
   ) : (
     <div className="bg-neutral-50 p-4 rounded-lg">

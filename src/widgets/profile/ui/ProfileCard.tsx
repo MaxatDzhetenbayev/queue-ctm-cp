@@ -1,13 +1,12 @@
 "use client";
 import React from "react";
 import { useProfile } from "../hooks/useProfile";
-import { Skeleton } from "@/shared";
 
 export const ProfileCard = () => {
   const { data: user, isLoading, isError } = useProfile();
 
   if (isLoading) {
-    return <Skeleton className="w-[20px] h-[30px]" />;
+    return <div>loading...</div>;
   }
 
   if (isError) {

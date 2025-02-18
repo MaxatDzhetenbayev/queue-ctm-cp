@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 
 export const LoginForm = () => {
   const [login, setlogin] = useState("");
-  const [password, setLogin] = useState("");
+  const [password, setPassword] = useState("");
   const { mutate, error } = useLogin();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -57,7 +57,7 @@ export const LoginForm = () => {
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setLogin(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
