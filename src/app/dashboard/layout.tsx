@@ -24,9 +24,9 @@ export default async function LocaleLayout({
         </Box>
 
         <Box component="main" mt={40}>
-          <Container size="xl">
-            <Paper p="lg">{children}</Paper>
-          </Container>
+          <Paper p="lg" style={{ maxWidth: "1640px", margin: "0 auto" }}>
+            {children}
+          </Paper>
         </Box>
       </Box>
     </Box>
