@@ -31,7 +31,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const theme = createTheme({});
+  const theme = createTheme({
+    breakpoints: {
+      xl: "1640px",
+    },
+  });
   return (
     <html lang="ru" {...mantineHtmlProps}>
       <head>

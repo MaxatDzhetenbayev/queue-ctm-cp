@@ -1,5 +1,6 @@
 import { LogoutButton } from "@/features";
 import { ProfileCard } from "@/widgets";
+import { Box, Container, Flex, Paper } from "@mantine/core";
 
 export default async function LocaleLayout({
   children,
@@ -7,66 +8,27 @@ export default async function LocaleLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className=" bg-gray-100">
-      {/* Sidebar */}
-      {/* <aside className="w-64 bg-blue-800 text-white p-6">
-        <div className="text-lg font-bold mb-8">Навигация</div>
-        <nav>
-          <ul className="space-y-4">
-            <li>
-              <Link
-                href="/admin/dashboard"
-                className="hover:bg-blue-700 px-4 py-2 rounded block"
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/admin/products"
-                className="hover:bg-blue-700 px-4 py-2 rounded block"
-              >
-                Products
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/admin/orders"
-                className="hover:bg-blue-700 px-4 py-2 rounded block"
-              >
-                Orders
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/admin/settings"
-                className="hover:bg-blue-700 px-4 py-2 rounded block"
-              >
-                Settings
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </aside> */}
-
-      {/* Main Content */}
-      <div className="flex-1 ">
-        {/* Header */}
-        <header className="bg-white shadow-md p-4">
-          <div className="flex justify-between items-center">
-            <div className="text-xl font-semibold ">Главная</div>
-            <div className="flex items-center space-x-4">
+    <Box bg="gray.0" h="100vh">
+      <Box>
+        <Box
+          component="header"
+          bg="#fff"
+          style={{ height: 64, boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)" }}
+        >
+          <Container size="xl" h="100%">
+            <Flex justify="flex-end" align="center" h="100%" gap={16}>
               <ProfileCard />
               <LogoutButton />
-            </div>
-          </div>
-        </header>
+            </Flex>
+          </Container>
+        </Box>
 
-        {/* Main content area */}
-        <main className="px-6 pt-6 flex max-w-[1680px] mx-auto">
-          {children}
-        </main>
-      </div>
-    </div>
+        <Box component="main" mt={40}>
+          <Container size="xl">
+            <Paper p="lg">{children}</Paper>
+          </Container>
+        </Box>
+      </Box>
+    </Box>
   );
 }
