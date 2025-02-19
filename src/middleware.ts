@@ -1,30 +1,35 @@
-import {
-  NextRequest,
-  // NextResponse
-} from "next/server";
+// middleware.js
 
-// function authMiddleware(req: NextRequest) {
-//   const token = req.cookies.get("access_token");
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-//   if (req.nextUrl.pathname === `/login`) {
-//     return NextResponse.next();
-//   }
+interface DecodedToken {
+  id: number;
+  login: string;
+  role: string;
+}
 
-//   if (!token) {
-//     return NextResponse.redirect(new URL(`/login`, req.nextUrl.origin));
-//   }
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  const token = req.cookies.get("access_token");
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+  try {
+    const decoded = jwt.decode(token.value) as DecodedToken;
 
-//   return NextResponse.next();
-// }
-
-export default function middleware() {
-// req: NextRequest
-  // const authResult = authMiddleware(req);
-  // if (authResult && authResult.status !== 200) {
-  //   return authResult;
-  // }
+    if (decoded.role === "manager" && !pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    if (decoded.role === "admin" && !pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin", req.url));
+    }
+  } catch (error) {
+    console.log(error);
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 }
 
 export const config = {
-  // matcher: ["/", "/:path*"],
+  matcher: ["/dashboard", "/admin"],
 };

@@ -13,7 +13,7 @@ export default async function LocaleLayout({
         <Box
           component="header"
           bg="#fff"
-          style={{ height: 64, boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)" }}
+          style={{ height: 80, boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)" }}
         >
           <Container size="xl" h="100%">
             <Flex justify="flex-end" align="center" h="100%" gap={16}>
