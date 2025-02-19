@@ -4,6 +4,7 @@ import {
   useChangeReceptionStatus,
   ChangeReceptionStatusProps,
 } from "../../hooks";
+import { Button } from "@mantine/core";
 
 type ChangeReceptionStatusButtonProps = ChangeReceptionStatusProps & {
   children: React.ReactNode;
@@ -19,11 +20,11 @@ export const ChangeReceptiontionStatusButton = ({
     useChangeReceptionStatus();
 
   return (
-    <button
+    <Button
       onClick={() => handleChangeReceptionStatusById({ id, status })}
       className={"cursor-pointer bg-[#611BF8] rounded-md text-white px-3 py-1 "}
     >
       {children}
-    </button>
+    </Button>
   );
 };
