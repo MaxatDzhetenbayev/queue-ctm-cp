@@ -2,14 +2,17 @@
 
 import React from "react";
 import { useLogout } from "../hooks/useLogout";
-import { Button } from "@mantine/core";
+import { IoLogOut } from "react-icons/io5";
 
 export const LogoutButton = () => {
   const { mutate } = useLogout();
 
   return (
-    <Button bg="#611BF8" onClick={() => mutate()}>
-      Выйти
-    </Button>
+    <IoLogOut
+      style={{ cursor: "pointer" }}
+      onClick={() => mutate()}
+      size={40}
+      color="#9C71F8"
+    />
   );
 };

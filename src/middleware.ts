@@ -17,7 +17,6 @@ export function middleware(req: NextRequest) {
   }
   try {
     const decoded = jwt.decode(token.value) as DecodedToken;
-
     if (decoded.role === "manager" && !pathname.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
