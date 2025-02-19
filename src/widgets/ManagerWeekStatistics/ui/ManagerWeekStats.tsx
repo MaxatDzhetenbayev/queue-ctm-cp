@@ -42,7 +42,7 @@ export const ManagerWeekStats = () => {
                 data?.completed ? data.completed : 0,
                 data?.declined ? data.declined : 0,
               ],
-              backgroundColor: ["#228be6", "#40c057", "#f03e3e"],
+              backgroundColor: ["#9C71F8", "#76C892", "#ED475F"],
             },
           ],
         }}
