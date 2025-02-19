@@ -7,7 +7,7 @@ import {
   ReceptionDetail,
   Statuses,
 } from "@/features";
-import { Box, Skeleton, Table, Title } from "@mantine/core";
+import { Box, Flex, Skeleton, Table, Title } from "@mantine/core";
 
 export const ManagerReceptions = () => {
   const { data, isLoading, isError } = useManagerReceptions();
@@ -86,7 +86,7 @@ export const ManagerReceptions = () => {
                         <ReceptionDetail id={reception.id} />
                       )}
                       {reception.status.id === Statuses.PENDING && (
-                        <>
+                        <Flex gap={8}>
                           <ChangeReceptiontionStatusButton
                             id={reception.id}
                             status={Statuses.WORKING}
@@ -99,7 +99,7 @@ export const ManagerReceptions = () => {
                           >
                             Отменить
                           </ChangeReceptiontionStatusButton>
-                        </>
+                        </Flex>
                       )}
                       {reception.status.id === Statuses.WORKING && (
                         <ChangeReceptiontionStatusButton
