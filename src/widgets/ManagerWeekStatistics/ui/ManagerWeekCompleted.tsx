@@ -38,7 +38,7 @@ export const ManagerWeekCompleted = () => {
     <Skeleton h="100%" />
   ) : (
     <Box>
-      <MantineTitle order={3}>Статистики за неделю</MantineTitle>
+      <MantineTitle order={2}>Статистики за неделю</MantineTitle>
       <Line
         style={{ height: "330px" }}
         data={{
