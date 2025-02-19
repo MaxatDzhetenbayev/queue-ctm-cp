@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useManagerTodaySummary } from "./hooks";
+import { useManagerTodaySummary } from "../hooks";
 import {
   Card,
   Center,
