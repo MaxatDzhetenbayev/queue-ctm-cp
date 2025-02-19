@@ -30,8 +30,14 @@ export const useChangeReceptionStatus = () => {
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["receptions-list"],
+      const queryKeys = [
+        "receptions-list",
+        "manager-today-summary",
+        "manager-weekday-statistics",
+        "kpi-weekday-completed",
+      ];
+      queryKeys.forEach((key) => {
+        queryClient.invalidateQueries({ queryKey: [key] });
       });
     },
   });
