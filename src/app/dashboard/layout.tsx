@@ -13,20 +13,20 @@ export default async function LocaleLayout({
         <Box
           component="header"
           bg="#fff"
-          style={{ height: 80, boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)" }}
+          style={{ boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)" }}
         >
           <Container size="xl" h="100%">
-            <Flex justify="flex-end" align="center" h="100%" gap={16}>
+            <Flex justify="flex-end" align="center" h="60px" gap={16}>
               <ProfileCard />
               <LogoutButton />
             </Flex>
           </Container>
         </Box>
-
-        <Box component="main" flex={1} h="100%" py={40}>
+        <Box component="main" py={30} flex={1}>
           <Paper
             p="lg"
             h="100%"
+            mah={780}
             style={{
               maxWidth: "1640px",
               margin: "0 auto",
