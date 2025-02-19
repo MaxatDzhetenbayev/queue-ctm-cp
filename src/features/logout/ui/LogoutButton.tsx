@@ -7,5 +7,9 @@ import { Button } from "@mantine/core";
 export const LogoutButton = () => {
   const { mutate } = useLogout();
 
-  return <Button onClick={() => mutate()}>Выйти</Button>;
+  return (
+    <Button bg="#611BF8" onClick={() => mutate()}>
+      Выйти
+    </Button>
+  );
 };
