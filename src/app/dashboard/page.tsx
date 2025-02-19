@@ -8,7 +8,7 @@ import React from "react";
 export default function Page() {
   return (
     <Flex direction="column" h="100%" gap="lg">
-      <Box flex={1} style={{ overflowY: "auto" }}>
+      <Box flex={1} style={{ overflowY: "auto", scrollbarWidth: "none" }}>
         <ManagerReceptions />
       </Box>
       <Flex flex={1} h="100%" gap={16}>
