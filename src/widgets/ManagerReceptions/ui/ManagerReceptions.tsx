@@ -35,6 +35,7 @@ export const ManagerReceptions = () => {
           <Skeleton mt={5} h={35} w="100%" />
           <Skeleton mt={5} h={35} w="100%" />
           <Skeleton mt={5} h={35} w="100%" />
+          <Skeleton mt={5} h={35} w="100%" />
         </Box>
       ) : (
         <>

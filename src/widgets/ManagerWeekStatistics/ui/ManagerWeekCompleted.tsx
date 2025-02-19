@@ -12,6 +12,7 @@ import {
   Tooltip,
 } from "chart.js";
 import { useManagerWeekStatics } from "../hooks";
+import { Box, Skeleton, Title as MantineTitle } from "@mantine/core";
 
 export const ManagerWeekCompleted = () => {
   ChartJS.register(
@@ -27,16 +28,21 @@ export const ManagerWeekCompleted = () => {
 
   const { data, isLoading } = useManagerWeekStatics();
 
+  const labels: string[] = [];
+
+  for (const item in data) {
+    labels.push(item);
+  }
+
   return isLoading ? (
-    <div className="">
-     loading...
-    </div>
+    <Skeleton h="100%" />
   ) : (
-    <div className="bg-neutral-50 p-4 rounded-lg">
+    <Box>
+      <MantineTitle order={3}>Статистики за неделю</MantineTitle>
       <Line
         style={{ height: "330px" }}
         data={{
-          labels: ["Пн", "Вт", "Ср", "Чт", "Пт"],
+          labels,
           datasets: [
             {
               label: "Завершенные приемы",
@@ -48,6 +54,6 @@ export const ManagerWeekCompleted = () => {
           ],
         }}
       />
-    </div>
+    </Box>
   );
 };

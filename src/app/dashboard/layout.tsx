@@ -9,7 +9,7 @@ export default async function LocaleLayout({
 }>) {
   return (
     <Box bg="gray.0" h="100vh">
-      <Box>
+      <Flex direction="column" h="100%">
         <Box
           component="header"
           bg="#fff"
@@ -23,12 +23,20 @@ export default async function LocaleLayout({
           </Container>
         </Box>
 
-        <Box component="main" mt={40}>
-          <Paper p="lg" style={{ maxWidth: "1640px", margin: "0 auto" }}>
+        <Box component="main" flex={1} h="100%" py={40}>
+          <Paper
+            p="lg"
+            h="100%"
+            style={{
+              maxWidth: "1640px",
+              margin: "0 auto",
+              overflow: "hidden",
+            }}
+          >
             {children}
           </Paper>
         </Box>
-      </Box>
+      </Flex>
     </Box>
   );
 }

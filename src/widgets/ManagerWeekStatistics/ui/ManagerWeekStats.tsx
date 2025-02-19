@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from "chart.js";
 import { useManagerWeekStats } from "../hooks";
+import { Box, Skeleton } from "@mantine/core";
 
 export const ManagerWeekStats = () => {
   ChartJS.register(
@@ -26,24 +27,26 @@ export const ManagerWeekStats = () => {
   const { data, isLoading } = useManagerWeekStats();
 
   return isLoading ? (
-    <div className="">loading...</div>
+    <Box h="100%">
+      <Skeleton h="100%" />
+    </Box>
   ) : (
-    <div className="bg-neutral-50 p-4 rounded-lg">
+    <Box>
       <Doughnut
         data={{
           labels: ["Приемы", "Завершенные", "Отмененные"],
           datasets: [
             {
-              data: [data?.total, data?.completed, data?.declined],
-              backgroundColor: [
-                "var(--geist-primary)",
-                "var(--geist-neutral)",
-                "var(--geist-primary-light)",
+              data: [
+                data?.total ? data.total : 0,
+                data?.completed ? data.completed : 0,
+                data?.declined ? data.declined : 0,
               ],
+              backgroundColor: ["#228be6", "#40c057", "#f03e3e"],
             },
           ],
         }}
       />
-    </div>
+    </Box>
   );
 };
