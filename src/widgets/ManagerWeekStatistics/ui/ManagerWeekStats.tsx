@@ -31,8 +31,9 @@ export const ManagerWeekStats = () => {
       <Skeleton h="100%" />
     </Box>
   ) : (
-    <Box>
+    <Box style={{ display: "flex", alignItems: "flex-end", height: "100%" }}>
       <Doughnut
+        style={{}}
         data={{
           labels: ["Приемы", "Завершенные", "Отмененные"],
           datasets: [
