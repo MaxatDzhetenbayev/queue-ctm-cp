@@ -28,49 +28,49 @@ export const ManagerTodayStatistics = () => {
     <Flex direction="column" h="100%" gap="lg">
       <Title order={2}>Дневная статистика</Title>
       <SimpleGrid cols={2} flex={1}>
-        <Card p={10} shadow="md" bg="violet.4">
+        <Card p={10} radius="md" bg="#F3E8FF">
           <Center h="100%">
             <Flex direction="column" gap="sm">
-              <Title order={3} style={{ textAlign: "center" }} c="#fff">
+              <Title fz={"lg"} fw="normal" style={{ textAlign: "center" }}>
                 Обслуженные клиенты
               </Title>
-              <Text fz="h2" style={{ textAlign: "center" }} c="#fff">
+              <Text fz={"h1"} fw="bold" style={{ textAlign: "center" }}>
                 {data?.totalReceptions}
               </Text>
             </Flex>
           </Center>
         </Card>
-        <Card p={10} shadow="md" bg="red.4">
+        <Card p={10} radius="md" bg="#FEF2F2">
           <Center h="100%">
             <Flex direction="column" gap="sm">
-              <Title order={3} style={{ textAlign: "center" }} c="#fff">
+              <Title fz={"lg"} fw="normal" style={{ textAlign: "center" }}>
                 Доля проблемных записей
               </Title>
-              <Text fz="h2" style={{ textAlign: "center" }} c="#fff">
+              <Text fz={"h1"} fw="bold" style={{ textAlign: "center" }}>
                 {data?.problematicRate}
               </Text>
             </Flex>
           </Center>
         </Card>
-        <Card p={10} shadow="md" bg="green.4">
+        <Card p={10} radius="md" bg="#F0FDF4">
           <Center h="100%">
             <Flex direction="column" gap="sm">
-              <Title order={3} style={{ textAlign: "center" }} c="#fff">
+              <Title fz={"lg"} fw="normal" style={{ textAlign: "center" }}>
                 Средний рейтинг удовлетворенности
               </Title>
-              <Text fz="h2" style={{ textAlign: "center" }} c="#fff">
+              <Text fz={"h1"} fw="bold" style={{ textAlign: "center" }}>
                 {data?.averageRating}
               </Text>
             </Flex>
           </Center>
         </Card>
-        <Card p={10} shadow="md" bg="blue.4">
+        <Card p={10} radius="md" bg="#EFF6FF">
           <Center h="100%">
             <Flex direction="column" gap="sm">
-              <Title order={3} style={{ textAlign: "center" }} c="#fff">
+              <Title fz={"lg"} fw="normal" style={{ textAlign: "center" }}>
                 Средняя загруженность
               </Title>
-              <Text fz="h2" style={{ textAlign: "center" }} c="#fff">
+              <Text fz={"h1"} fw="bold" style={{ textAlign: "center" }}>
                 {data?.managerLoad.toPrecision(2)}%
               </Text>
             </Flex>
