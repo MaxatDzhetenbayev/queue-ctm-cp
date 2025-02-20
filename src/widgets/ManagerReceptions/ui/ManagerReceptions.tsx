@@ -65,17 +65,17 @@ export const ManagerReceptions = () => {
                     className="hover:bg-neutral-50 transition-colors"
                   >
                     <Table.Td className="px-6 py-2 text-sm">
-                      {reception.profile.full_name}
+                      {reception?.profile?.full_name}
                     </Table.Td>
                     <Table.Td className="px-6 py-2 text-sm">
-                      {reception.profile.phone}
+                      {reception?.profile?.phone}
                     </Table.Td>
                     <Table.Td className="px-6 py-2 text-sm">
-                      {reception.time}
+                      {reception?.time}
                     </Table.Td>
                     <Table.Td className="px-6 py-2">
                       <span className="px-2 py-1 text-xs rounded-full bg-primary-100">
-                        {reception.status.name}
+                        {reception?.status?.name}
                       </span>
                     </Table.Td>
                     <Table.Td className="px-6 py-2 space-x-2">

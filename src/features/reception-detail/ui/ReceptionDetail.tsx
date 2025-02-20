@@ -12,12 +12,12 @@ export const ReceptionDetail = ({ id }: { id: number }) => {
       ) : (
         <section>
           <h1 className="font-bold text-2xl">
-            Имя: {data?.user.profile.full_name}
+            Имя: {data?.user?.profile?.full_name}
           </h1>
           <section className="mt-4">
-            <p>Телефон: {data?.user.profile.phone}</p>
+            <p>Телефон: {data?.user?.profile?.phone}</p>
             <p>Время: {data?.time}</p>
-            <p>Статус: {data?.status.name}</p>
+            <p>Статус: {data?.status?.name}</p>
           </section>
         </section>
       )}
