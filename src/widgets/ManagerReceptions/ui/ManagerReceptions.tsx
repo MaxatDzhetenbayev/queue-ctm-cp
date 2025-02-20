@@ -99,15 +99,19 @@ export const ManagerReceptions = () => {
                           >
                             Отменить
                           </ChangeReceptiontionStatusButton>
+                          <ReceptionDetail id={reception.id} />
                         </Flex>
                       )}
                       {reception.status.id === Statuses.WORKING && (
-                        <ChangeReceptiontionStatusButton
-                          id={reception.id}
-                          status={Statuses.DONE}
-                        >
-                          Завершить
-                        </ChangeReceptiontionStatusButton>
+                        <Flex gap={8}>
+                          <ChangeReceptiontionStatusButton
+                            id={reception.id}
+                            status={Statuses.DONE}
+                          >
+                            Завершить
+                          </ChangeReceptiontionStatusButton>
+                          <ReceptionDetail id={reception.id} />
+                        </Flex>
                       )}
                     </Table.Td>
                   </Table.Tr>
