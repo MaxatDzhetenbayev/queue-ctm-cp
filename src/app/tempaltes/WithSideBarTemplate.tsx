@@ -1,18 +1,8 @@
 "use client";
 import { LogoutButton } from "@/features";
 import { ProfileCard } from "@/widgets";
-import {
-  AppShell,
-  Button,
-  Center,
-  Flex,
-  Stack,
-  Text,
-  Tooltip,
-  UnstyledButton,
-} from "@mantine/core";
-import Link from "next/link";
-import React, { useState } from "react";
+import { AppShell, Button, Flex, Stack, Text } from "@mantine/core";
+import React from "react";
 import { FaUserTie } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 
@@ -34,9 +24,7 @@ export const WithSideBarTemplate = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [active, setActive] = useState(1);
-
-  const links = linksData.map(({ icon: Icon, href, title }, index) => (
+  const links = linksData.map(({ icon: Icon, href, title }) => (
     <Button
       key={title}
       href={href}
@@ -48,7 +36,6 @@ export const WithSideBarTemplate = ({
         gap: "20px",
       }}
       variant="white"
-      onClick={() => setActive(index)}
     >
       {Icon()}
       <Text fz="h3">{title}</Text>
@@ -65,7 +52,7 @@ export const WithSideBarTemplate = ({
           h="100%"
         >
           <Flex direction="column" align="center" gap="lg">
-            <ProfileCard />
+            <ProfileCard direction='column' />
             <Stack justify="center">{links}</Stack>
           </Flex>
           <LogoutButton />

@@ -33,16 +33,23 @@ export const AdminManagersTable = () => {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {data?.map((manager: any) => (
-                <Table.Tr key={manager.id}>
-                  <Table.Td>{manager.full_name}</Table.Td>
-                  <Table.Td>{manager.iin}</Table.Td>
-                  <Table.Td>{manager.phone}</Table.Td>
-                  <Table.Td>
-                    <ManagerDetail id={manager.id} />
-                  </Table.Td>
-                </Table.Tr>
-              ))}
+              {data?.map(
+                (manager: {
+                  id: number;
+                  full_name: string;
+                  iin: string;
+                  phone: string;
+                }) => (
+                  <Table.Tr key={manager?.id}>
+                    <Table.Td>{manager?.full_name}</Table.Td>
+                    <Table.Td>{manager?.iin}</Table.Td>
+                    <Table.Td>{manager?.phone}</Table.Td>
+                    <Table.Td>
+                      <ManagerDetail id={manager.id} />
+                    </Table.Td>
+                  </Table.Tr>
+                )
+              )}
             </Table.Tbody>
           </Table>
         )}

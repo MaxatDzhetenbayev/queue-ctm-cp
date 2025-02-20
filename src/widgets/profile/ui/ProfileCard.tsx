@@ -3,12 +3,18 @@ import React from "react";
 import { useProfile } from "../hooks/useProfile";
 import { Avatar, Flex, Skeleton, Text, Title } from "@mantine/core";
 
-export const ProfileCard = () => {
+export const ProfileCard = ({
+  direction = "column",
+}: {
+  direction: string;
+}) => {
   const { data: user, isLoading, isError } = useProfile();
 
   if (isLoading) {
     return (
-      <Flex direction="column" align="center" gap="md">
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      <Flex direction={direction} align="center" gap="md">
         <Skeleton h={60} w={60} circle />
         <Skeleton h={20} w={60} />
       </Flex>

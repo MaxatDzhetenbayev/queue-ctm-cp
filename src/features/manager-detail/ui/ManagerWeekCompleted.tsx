@@ -17,7 +17,9 @@ export const ManagerWeekCompleted = ({
   data,
   isLoading,
 }: {
-  data: any[];
+  data: {
+    [s: string]: number;
+  }[];
   isLoading: boolean;
 }) => {
   ChartJS.register(

@@ -17,7 +17,7 @@ export default async function LocaleLayout({
         >
           <Container size="xl" h="100%">
             <Flex justify="flex-end" align="center" h="60px" gap={16}>
-              <ProfileCard />
+              <ProfileCard direction="row" />
               <LogoutButton />
             </Flex>
           </Container>

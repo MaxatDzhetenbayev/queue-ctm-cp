@@ -16,7 +16,11 @@ export const ManagerWeekStats = ({
   data,
   isLoading,
 }: {
-  data: any;
+  data: {
+    total: number;
+    completed: number;
+    declined: number;
+  };
   isLoading: boolean;
 }) => {
   ChartJS.register(
