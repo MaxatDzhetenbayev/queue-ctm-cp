@@ -1,13 +1,17 @@
-import { AdminManagersTable } from "@/widgets/AdminManagersTable";
+// import { AdminManagersTable } from "@/widgets/AdminManagersTable";
 
-import { Flex } from "@mantine/core";
+import dynamic from "next/dynamic";
 
 import React from "react";
 
+const AdminApp = dynamic(
+  () => import("@/widgets/AdminManagers/ui/AdminManagers"),
+  { ssr: false }
+);
+//     <Flex p={20} direction="column" h="100vh">
+// <AdminManagersTable />
+// </Flex>
+
 export default function Page() {
-  return (
-    <Flex p={20} direction="column" h="100vh">
-      <AdminManagersTable />
-    </Flex>
-  );
+  return <AdminApp />;
 }

@@ -23,3 +23,9 @@ export const useManagerDetailStats = (id: number) => {
     queryFn: async () => (await api.get(`/kpi/id/${id}/weekday/stats`)).data,
   });
 };
+export const useManagerDetailToday = (id: number) => {
+  return useQuery({
+    queryKey: ["manager-detail-today", id],
+    queryFn: async () => (await api.get(`/kpi/id/${id}/today/summary`)).data,
+  });
+};
