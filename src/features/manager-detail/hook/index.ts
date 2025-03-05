@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 export const useManagerDetail = (id: number) => {
   return useQuery({
     queryKey: ["manager", id],
-    queryFn: async () => (await api.get(`users/managers/${id}`)).data,
+    queryFn: async () => (await api.get(`/users/managers/${id}`)).data,
     enabled: !!id,
   });
 };
