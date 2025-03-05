@@ -3,6 +3,7 @@ import React from "react";
 import { useReceptionDetail } from "../hooks";
 import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { normalizeStatus } from "@/widgets/ManagerReceptions/ui/ManagerReceptions";
 
 export const ReceptionDetail = ({ id }: { id: number }) => {
   const { data, isLoading } = useReceptionDetail(id);
@@ -20,7 +21,7 @@ export const ReceptionDetail = ({ id }: { id: number }) => {
             <section className="mt-4">
               <p>Телефон: {data?.user?.profile?.phone}</p>
               <p>Время: {data?.time}</p>
-              <p>Статус: {data?.status?.name}</p>
+              <p>Статус: {normalizeStatus(data?.status?.name)}</p>
             </section>
           </section>
         )}
