@@ -9,6 +9,22 @@ import {
 } from "@/features";
 import { Box, Flex, Skeleton, Table, Title } from "@mantine/core";
 
+
+export function normalizeStatus(status?: string) {
+  switch (status) {
+    case "pending":
+      return "На ожидании"
+    case "working":
+      return "В работе"
+    case "done":
+      return "Завершен"
+    case "canceled":
+      return "Отменен"
+    default:
+      return "Ошибка"
+  }
+}
+
 export const ManagerReceptions = () => {
   const { data, isLoading, isError } = useManagerReceptions();
 
@@ -22,6 +38,9 @@ export const ManagerReceptions = () => {
     "Статус",
     "Действия",
   ];
+
+
+
 
   return (
     <Box component="section" className="overflow-auto h-full max-h-[330px]">
@@ -75,7 +94,7 @@ export const ManagerReceptions = () => {
                     </Table.Td>
                     <Table.Td className="px-6 py-2">
                       <span className="px-2 py-1 text-xs rounded-full bg-primary-100">
-                        {reception?.status?.name}
+                        {normalizeStatus(reception?.status?.name)}
                       </span>
                     </Table.Td>
                     <Table.Td className="px-6 py-2 space-x-2">

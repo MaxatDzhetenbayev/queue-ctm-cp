@@ -54,9 +54,9 @@ export const ManagerCreate = () => {
         password: data.password,
         role: Number(data.role),
         table: Number(data.table),
+        cabinet: Number(data.cabinet),
         profile: {
           full_name: data.full_name,
-          iin: data.iin,
           phone: data.phone,
         },
         service_ids: data.service_ids || [],
@@ -67,9 +67,9 @@ export const ManagerCreate = () => {
         <PasswordInput source="password" label="Пароль" />
         <NumberInput source="role" label="Роль" defaultValue={3} />
         <NumberInput source="table" label="Стол" />
+        <NumberInput source="cabinet" label="Кабинет" />
 
         <TextInput source="full_name" label="ФИО" />
-        <TextInput source="iin" label="ИИН" />
         <TextInput source="phone" label="Телефон" />
 
         <SelectArrayInput
