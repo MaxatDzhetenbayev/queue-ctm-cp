@@ -12,7 +12,7 @@ export const LogoutButton = () => {
       style={{ cursor: "pointer" }}
       onClick={() => mutate()}
       size={40}
-      color="#9C71F8"
+      color="#000"
     />
   );
 };

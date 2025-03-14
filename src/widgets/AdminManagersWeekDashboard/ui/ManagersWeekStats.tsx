@@ -42,17 +42,17 @@ export const ManagersWeekStats = () => {
                 data?.completed ? data.completed : 0,
                 data?.declined ? data.declined : 0,
               ],
-              backgroundColor: ["#9C71F8", "#76C892", "#ED475F"],
+              backgroundColor: ["#B0B0B0", "#808080", "#404040"],
             },
           ],
         }}
         options={{
           plugins: {
             legend: {
-              position: "bottom",
+              position: "top",
               labels: {
                 font: {
-                  size: 18,
+                  size: 12,
                 },
               },
             },
