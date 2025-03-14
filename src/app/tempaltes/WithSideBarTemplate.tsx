@@ -52,7 +52,7 @@ export const WithSideBarTemplate = ({
           h="100%"
         >
           <Flex direction="column" align="center" gap="lg">
-            <ProfileCard direction="column" />
+            <ProfileCard />
             <Stack justify="center">{links}</Stack>
           </Flex>
           <LogoutButton />
