@@ -1,15 +1,13 @@
 import React from "react";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  ArcElement,
   CategoryScale,
-  Legend,
   LinearScale,
-  LineElement,
-  PointElement,
+  BarElement,
   Title,
   Tooltip,
+  Legend,
 } from "chart.js";
 import { Box, Skeleton, Title as MantineTitle } from "@mantine/core";
 
@@ -25,12 +23,10 @@ export const ManagerWeekCompleted = ({
   ChartJS.register(
     CategoryScale,
     LinearScale,
-    PointElement,
-    LineElement,
+    BarElement,
     Title,
     Tooltip,
-    Legend,
-    ArcElement
+    Legend
   );
 
   const labels: string[] = [];
@@ -43,18 +39,18 @@ export const ManagerWeekCompleted = ({
     <Skeleton h="100%" />
   ) : (
     <Box>
-      <MantineTitle order={2}>Статистики за неделю</MantineTitle>
-      <Line
-        style={{ height: "330px" }}
+      <MantineTitle order={2}>Статистика по дням</MantineTitle>
+      <Bar
+        height={200}
+        width={600}
         data={{
           labels,
           datasets: [
             {
               label: "Завершенные приемы",
               data,
-              fill: false,
-              borderColor: "#193CB8",
-              backgroundColor: "rgb(25,60,184,0.5)",
+              borderColor: "#000",
+              backgroundColor: "#000",
             },
           ],
         }}

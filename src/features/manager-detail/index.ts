@@ -1,1 +1,1 @@
-export { ManagerDetail } from "./ui/ManagerDetail";
+export { ManagerDetailModal } from "./ui/ManagerDetail";

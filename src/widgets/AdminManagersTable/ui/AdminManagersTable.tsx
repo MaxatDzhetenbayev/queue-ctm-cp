@@ -3,11 +3,11 @@
 import { Box, Card, Flex, Skeleton, Text } from "@mantine/core";
 import React from "react";
 import { useManagersList } from "../hooks";
-// import { ManagerDetail } from "@/features/manager-detail";
+import { ManagerDetailModal } from "@/features/manager-detail";
 
 export const AdminManagersTable = () => {
   const { data, isLoading } = useManagersList();
-
+  console.log(data)
   return (
     <Flex>
       <Box w="100%">
@@ -29,51 +29,30 @@ export const AdminManagersTable = () => {
               {data?.map(
                 ({
                   id,
-                  full_name,
+                  ...manager
                 }: {
                   id: number;
                   full_name: string;
                   iin: string;
                   phone: string;
                 }) => (
-                  <Card key={id} withBorder w="100%">
-                    <Box>
-                      <Text>{full_name}</Text>
-                    </Box>
-                  </Card>
+                  <ManagerDetailModal key={id} id={id} manager={manager} >
+                    <Card withBorder>
+                      <Flex justify="space-between" align="center" w="100%">
+                        <Flex align="center" gap={8}>
+                          <Box style={{ width: 8, height: 8, backgroundColor: "green", borderRadius: "50%" }}></Box>
+                          <Text>{manager.full_name}</Text>
+                        </Flex>
+                        <Text>
+                          посетителей
+                        </Text>
+                      </Flex>
+                    </Card>
+                  </ManagerDetailModal>
                 )
               )}
             </Flex>
           </Box>
-
-          // <Table>
-          //   <Table.Thead>
-          //     <Table.Tr>
-          //       {["ФИО", "ИИН", "Телефон", "Действия"].map((header) => (
-          //         <Table.Th key={header}>{header}</Table.Th>
-          //       ))}
-          //     </Table.Tr>
-          //   </Table.Thead>
-          //   <Table.Tbody>
-          //     {data?.map(
-          //       (manager: {
-          //         id: number;
-          //         full_name: string;
-          //         iin: string;
-          //         phone: string;
-          //       }) => (
-          //         <Table.Tr key={manager?.id}>
-          //           <Table.Td>{manager?.full_name}</Table.Td>
-          //           <Table.Td>{manager?.iin}</Table.Td>
-          //           <Table.Td>{manager?.phone}</Table.Td>
-          //           <Table.Td>
-          //             <ManagerDetail id={manager.id} />
-          //           </Table.Td>
-          //         </Table.Tr>
-          //       )
-          //     )}
-          //   </Table.Tbody>
-          // </Table>
         )}
       </Box>
     </Flex>

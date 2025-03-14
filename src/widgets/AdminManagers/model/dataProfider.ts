@@ -1,6 +1,6 @@
 import { api } from "@/shared";
 
-interface Manager {
+export interface Manager {
   id: number;
   login: string;
   password: string;
