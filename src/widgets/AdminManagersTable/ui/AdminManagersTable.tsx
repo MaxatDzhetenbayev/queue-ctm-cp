@@ -7,12 +7,14 @@ import {
   Input,
   Modal,
   Pagination,
+  SimpleGrid,
   Skeleton,
   Text,
 } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 import { IManager, useManagersList } from "../hooks";
 import { useDisclosure } from "@mantine/hooks";
+import { ManagerTodaySummary, useManagerTodaySummaryOne } from "@/entities";
 
 export const AdminManagersTable = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -26,9 +28,6 @@ export const AdminManagersTable = () => {
 
   const managers = data?.managers ?? [];
   const totalPages = data?.totalPages ?? 1;
-
-  const [opened, { open, close }] = useDisclosure(false);
-  // const [selectedManagerId, setSelectedManagerId] = useState<number>(null);
 
   return (
     <Flex direction="column" gap={20}>
@@ -55,33 +54,59 @@ export const AdminManagersTable = () => {
           >
             <Flex direction="column" gap={10}>
               {managers.length > 0 ? (
-                managers.map(({ id, full_name }: IManager) => (
-                  <>
-                    <Card
-                      key={id}
-                      withBorder
-                      w="100%"
-                      onClick={() => {
-                        open();
-                      }}
-                    >
-                      <Box>
-                        <Text>{full_name}</Text>
-                      </Box>
-                    </Card>
-                  </>
+                managers.map((manager: IManager) => (
+                  <ManagerCard key={manager.id} {...manager} />
                 ))
               ) : (
                 <Text>Менеджеры не найдены</Text>
               )}
             </Flex>
             <Pagination total={totalPages} value={page} onChange={setPage} />
-            <Modal opened={opened} onClose={close} size="70%">
-              123
-            </Modal>
           </Flex>
         )}
       </Box>
     </Flex>
+  );
+};
+
+const ManagerCard = ({ full_name, id }: IManager) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  return (
+    <>
+      <Card
+        key={id}
+        withBorder
+        w="100%"
+        onClick={() => {
+          open();
+        }}
+      >
+        <Box>
+          <Text>{full_name}</Text>
+        </Box>
+      </Card>
+      <Modal opened={opened} onClose={close} size="70%">
+        <ManagerTodaySummaryForModal id={id} />
+      </Modal>
+    </>
+  );
+};
+
+const ManagerTodaySummaryForModal = ({ id }: { id: number }) => {
+  const { data, isLoading, isSuccess } = useManagerTodaySummaryOne({ id });
+
+  return isLoading ? (
+    <Flex direction="column" h="100%" gap="lg">
+      <Skeleton h={35} w={200} />
+      <SimpleGrid cols={4} flex={1}>
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+      </SimpleGrid>
+    </Flex>
+  ) : (
+    isSuccess && <ManagerTodaySummary isCenter={false} {...data} />
   );
 };
