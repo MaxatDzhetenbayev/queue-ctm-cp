@@ -36,8 +36,8 @@ export const AdminManagersTable = () => {
         {isLoading ? (
           <Box mih={593}>
             <Skeleton h={35} w={150} />
-            {Array.from({ length: 7 }).map((_, i) => (
-              <Skeleton key={i} mt={5} h={45} w="100%" />
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} mt={5} h={59} w="100%" />
             ))}
           </Box>
         ) : (
