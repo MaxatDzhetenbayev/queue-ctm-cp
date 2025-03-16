@@ -2,15 +2,16 @@ import { api } from "@/shared";
 import { useQuery } from "@tanstack/react-query";
 
 interface IManagerTodaySummary {
-  totalReceptions: number;
-  problematicRate: number;
-  averageRating: number;
-  managerLoad: number;
+  completedReceptionsCount: string;
+  problematicRate: string;
+  averageRating: string;
+  managerLoad: string;
 }
 
 export const useManagerTodaySummary = () => {
   return useQuery<IManagerTodaySummary>({
     queryKey: ["manager-total-today-summary"],
-    queryFn: async () => (await api.get("/kpi/center/today/summary")).data,
+    queryFn: async () =>
+      (await api.get("/kpi/centers/managers/today/summary")).data,
   });
 };

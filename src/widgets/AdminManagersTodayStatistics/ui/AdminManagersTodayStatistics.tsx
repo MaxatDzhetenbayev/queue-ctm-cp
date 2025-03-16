@@ -23,7 +23,7 @@ export const AdminManagersTodayStatistics = () => {
         <StatCard
           title="Обслуженные клиенты"
           span="общее"
-          stat={data?.totalReceptions}
+          stat={data?.completedReceptionsCount}
         />
         <StatCard
           title="Доля проблемных записей"
@@ -38,7 +38,7 @@ export const AdminManagersTodayStatistics = () => {
         <StatCard
           title="Средняя загруженность"
           span="менеджер"
-          stat={Number(data?.managerLoad.toPrecision(2))}
+          stat={`${data?.managerLoad}%`}
         />
       </SimpleGrid>
     </Flex>
@@ -51,7 +51,7 @@ const StatCard = ({
   stat,
 }: {
   title: string;
-  stat: number | undefined;
+  stat: string | undefined;
   span: string;
 }) => {
   return (
