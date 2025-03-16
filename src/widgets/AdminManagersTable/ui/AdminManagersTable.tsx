@@ -78,6 +78,7 @@ const ManagerCard = ({ full_name, id }: IManager) => {
         key={id}
         withBorder
         w="100%"
+        style={{ cursor: "pointer" }}
         onClick={() => {
           open();
         }}
