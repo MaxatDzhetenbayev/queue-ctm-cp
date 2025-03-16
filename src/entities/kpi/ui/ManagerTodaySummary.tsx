@@ -16,22 +16,22 @@ export const ManagerTodaySummary = ({
         <StatCard
           title="Обслуженные клиенты"
           span={isCenter ? "общее" : undefined}
-          stat={completedReceptionsCount}
+          stat={completedReceptionsCount || "0"}
         />
         <StatCard
           title="Доля проблемных записей"
           span={isCenter ? "менеджер" : undefined}
-          stat={problematicRate}
+          stat={problematicRate || "0"}
         />
         <StatCard
           title="Средний рейтинг удовлетворенности"
           span={isCenter ? "менеджер" : undefined}
-          stat={averageRating}
+          stat={averageRating || "0.0"}
         />
         <StatCard
           title="Средняя загруженность"
           span={isCenter ? "менеджер" : undefined}
-          stat={`${managerLoad}%`}
+          stat={`${managerLoad || "0.0"}%`}
         />
       </SimpleGrid>
     </Flex>
