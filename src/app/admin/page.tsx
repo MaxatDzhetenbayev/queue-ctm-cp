@@ -1,6 +1,6 @@
 "use client";
 import { AdminManagersTable } from "@/widgets/AdminManagersTable";
-import { AdminManagersTodayStatistics } from "@/widgets/AdminManagersTodayStatistics";
+import { AdminManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
 import { AdminManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
 import { Box, Card, Flex, Tabs, Title } from "@mantine/core";
 
@@ -17,7 +17,7 @@ export default function Page() {
         <Tabs.Panel value="queue">
           <Flex direction="column" gap={20}>
             <Box>
-              <AdminManagersTodayStatistics />
+              <AdminManagersTodaySummary />
             </Box>
             <Box>
               <AdminManagersWeekDashBoard />

@@ -4,7 +4,7 @@ import { Flex, SimpleGrid, Skeleton } from "@mantine/core";
 import { ManagerTodaySummary } from "@/entities";
 import { useManagerTodaySummaryByCenter } from "@/entities/kpi/api";
 
-export const AdminManagersTodayStatistics = () => {
+export const AdminManagersTodaySummary = () => {
   const { data, isLoading, isSuccess } = useManagerTodaySummaryByCenter({});
 
   return isLoading ? (
