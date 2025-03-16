@@ -10,11 +10,26 @@ import {
   SimpleGrid,
   Skeleton,
   Text,
+  Title as MantineTitle,
 } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 import { IManager, useManagersList } from "../hooks";
 import { useDisclosure } from "@mantine/hooks";
-import { ManagerTodaySummary, useManagerTodaySummaryOne } from "@/entities";
+import {
+  ManagerTodaySummary,
+  useManagerTodaySummaryOne,
+  useManagerWeekdayCompletedReceptionsByOne,
+} from "@/entities";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
 export const AdminManagersTable = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -89,6 +104,7 @@ const ManagerCard = ({ full_name, id }: IManager) => {
       </Card>
       <Modal opened={opened} onClose={close} size="70%">
         <ManagerTodaySummaryForModal id={id} />
+        <ManagerWeekDayStatsForModal id={id} />
       </Modal>
     </>
   );
@@ -109,5 +125,46 @@ const ManagerTodaySummaryForModal = ({ id }: { id: number }) => {
     </Flex>
   ) : (
     isSuccess && <ManagerTodaySummary isCenter={false} {...data} />
+  );
+};
+
+const ManagerWeekDayStatsForModal = ({ id }: { id: number }) => {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+  const { data, isLoading } = useManagerWeekdayCompletedReceptionsByOne({ id });
+
+  const labels: string[] = [];
+
+  for (const item in data) {
+    labels.push(item);
+  }
+
+  return isLoading ? (
+    <Skeleton h="280px" w="100%" />
+  ) : (
+    <Box>
+      <MantineTitle order={2}>Статистика по дням</MantineTitle>
+      <Bar
+        height={200}
+        width={600}
+        data={{
+          labels,
+          datasets: [
+            {
+              label: "Завершенные приемы",
+              data,
+              borderColor: "#000",
+              backgroundColor: "#000",
+            },
+          ],
+        }}
+      />
+    </Box>
   );
 };
