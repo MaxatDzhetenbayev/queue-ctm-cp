@@ -7,29 +7,30 @@ export const ManagerTodaySummary = ({
   completedReceptionsCount,
   managerLoad,
   problematicRate,
-}: IManagerTodaySummary) => {
+  isCenter = true,
+}: IManagerTodaySummary & { isCenter?: boolean }) => {
   return (
     <Flex direction="column" gap="lg">
       <Title order={2}>Дневная статистика</Title>
       <SimpleGrid cols={4} flex={1}>
         <StatCard
           title="Обслуженные клиенты"
-          span="общее"
+          span={isCenter ? "общее" : undefined}
           stat={completedReceptionsCount}
         />
         <StatCard
           title="Доля проблемных записей"
-          span="менеджер"
+          span={isCenter ? "менеджер" : undefined}
           stat={problematicRate}
         />
         <StatCard
           title="Средний рейтинг удовлетворенности"
-          span="менеджер"
+          span={isCenter ? "менеджер" : undefined}
           stat={averageRating}
         />
         <StatCard
           title="Средняя загруженность"
-          span="менеджер"
+          span={isCenter ? "менеджер" : undefined}
           stat={`${managerLoad}%`}
         />
       </SimpleGrid>
@@ -44,11 +45,11 @@ const StatCard = ({
 }: {
   title: string;
   stat: string | undefined;
-  span: string;
+  span: string | undefined;
 }) => {
   return (
     <Card radius="md" withBorder>
-      <Flex direction="column" h="100%" justify="space-between" gap="sm">
+      <Flex direction="column" h="100%" justify="space-between" gap="md">
         <Title fz={"md"} fw="normal">
           {title}
         </Title>
@@ -60,9 +61,11 @@ const StatCard = ({
           fw="bold"
         >
           {stat}{" "}
-          <Text component="span" fz={"sm"} fw="lighter">
-            / {span}
-          </Text>
+          {span && (
+            <Text component="span" fz={"sm"} fw="lighter">
+              / {span}
+            </Text>
+          )}
         </Text>
       </Flex>
     </Card>
