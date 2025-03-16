@@ -12,7 +12,7 @@ export default function Page() {
       <Tabs defaultValue="queue">
         <Tabs.List>
           <Tabs.Tab value="queue">Очередь</Tabs.Tab>
-          <Tabs.Tab value="kpi">Статистика</Tabs.Tab>
+          <Tabs.Tab value="kpi">Менеджеры</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="queue">
           <Flex direction="column" gap={20}>
