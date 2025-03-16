@@ -5,12 +5,14 @@ import {
   Card,
   Flex,
   Input,
+  Modal,
   Pagination,
   Skeleton,
   Text,
 } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 import { IManager, useManagersList } from "../hooks";
+import { useDisclosure } from "@mantine/hooks";
 
 export const AdminManagersTable = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -24,6 +26,9 @@ export const AdminManagersTable = () => {
 
   const managers = data?.managers ?? [];
   const totalPages = data?.totalPages ?? 1;
+
+  const [opened, { open, close }] = useDisclosure(false);
+  // const [selectedManagerId, setSelectedManagerId] = useState<number>(null);
 
   return (
     <Flex direction="column" gap={20}>
@@ -51,17 +56,29 @@ export const AdminManagersTable = () => {
             <Flex direction="column" gap={10}>
               {managers.length > 0 ? (
                 managers.map(({ id, full_name }: IManager) => (
-                  <Card key={id} withBorder w="100%">
-                    <Box>
-                      <Text>{full_name}</Text>
-                    </Box>
-                  </Card>
+                  <>
+                    <Card
+                      key={id}
+                      withBorder
+                      w="100%"
+                      onClick={() => {
+                        open();
+                      }}
+                    >
+                      <Box>
+                        <Text>{full_name}</Text>
+                      </Box>
+                    </Card>
+                  </>
                 ))
               ) : (
                 <Text>Менеджеры не найдены</Text>
               )}
             </Flex>
             <Pagination total={totalPages} value={page} onChange={setPage} />
+            <Modal opened={opened} onClose={close} size="70%">
+              123
+            </Modal>
           </Flex>
         )}
       </Box>
