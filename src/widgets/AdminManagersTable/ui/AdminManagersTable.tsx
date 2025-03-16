@@ -1,79 +1,68 @@
 "use client";
 
-import { Box, Card, Flex, Skeleton, Text } from "@mantine/core";
-import React from "react";
-import { useManagersList } from "../hooks";
-// import { ManagerDetail } from "@/features/manager-detail";
+import {
+  Box,
+  Card,
+  Flex,
+  Input,
+  Pagination,
+  Skeleton,
+  Text,
+} from "@mantine/core";
+import React, { useState, useEffect } from "react";
+import { IManager, useManagersList } from "../hooks";
 
 export const AdminManagersTable = () => {
-  const { data, isLoading } = useManagersList();
+  const [fullName, setFullName] = useState<string>("");
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [fullName]);
+
+  const { data, isLoading } = useManagersList({ page, search: fullName });
+
+  const managers = data?.managers ?? [];
+  const totalPages = data?.totalPages ?? 1;
 
   return (
-    <Flex>
+    <Flex direction="column" gap={20}>
+      <Input
+        placeholder="Поиск по ФИО менеджера"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+      />
       <Box w="100%">
         {isLoading ? (
-          <Box>
+          <Box mih={593}>
             <Skeleton h={35} w={150} />
-            <Skeleton mt={20} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
+            {Array.from({ length: 7 }).map((_, i) => (
+              <Skeleton key={i} mt={5} h={45} w="100%" />
+            ))}
           </Box>
         ) : (
-          <Box w="100%">
+          <Flex
+            direction="column"
+            justify="space-between"
+            w="100%"
+            gap={10}
+            mih={593}
+          >
             <Flex direction="column" gap={10}>
-              {data?.map(
-                ({
-                  id,
-                  full_name,
-                }: {
-                  id: number;
-                  full_name: string;
-                  iin: string;
-                  phone: string;
-                }) => (
+              {managers.length > 0 ? (
+                managers.map(({ id, full_name }: IManager) => (
                   <Card key={id} withBorder w="100%">
                     <Box>
                       <Text>{full_name}</Text>
                     </Box>
                   </Card>
-                )
+                ))
+              ) : (
+                <Text>Менеджеры не найдены</Text>
               )}
             </Flex>
-          </Box>
-
-          // <Table>
-          //   <Table.Thead>
-          //     <Table.Tr>
-          //       {["ФИО", "ИИН", "Телефон", "Действия"].map((header) => (
-          //         <Table.Th key={header}>{header}</Table.Th>
-          //       ))}
-          //     </Table.Tr>
-          //   </Table.Thead>
-          //   <Table.Tbody>
-          //     {data?.map(
-          //       (manager: {
-          //         id: number;
-          //         full_name: string;
-          //         iin: string;
-          //         phone: string;
-          //       }) => (
-          //         <Table.Tr key={manager?.id}>
-          //           <Table.Td>{manager?.full_name}</Table.Td>
-          //           <Table.Td>{manager?.iin}</Table.Td>
-          //           <Table.Td>{manager?.phone}</Table.Td>
-          //           <Table.Td>
-          //             <ManagerDetail id={manager.id} />
-          //           </Table.Td>
-          //         </Table.Tr>
-          //       )
-          //     )}
-          //   </Table.Tbody>
-          // </Table>
+            <Pagination total={totalPages} value={page} onChange={setPage} />
+          </Flex>
         )}
       </Box>
     </Flex>
