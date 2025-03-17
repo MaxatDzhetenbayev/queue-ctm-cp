@@ -30,6 +30,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { ManagerChange } from "@/features";
+import { ManagerCreate } from "@/features/ManagerCreate";
 
 export const AdminManagersTable = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -51,6 +53,7 @@ export const AdminManagersTable = () => {
         value={fullName}
         onChange={(e) => setFullName(e.target.value)}
       />
+      <ManagerCreate />
       <Box w="100%">
         {isLoading ? (
           <Box mih={593}>
@@ -103,6 +106,7 @@ const ManagerCard = ({ full_name, id }: IManager) => {
         </Box>
       </Card>
       <Modal opened={opened} onClose={close} size="70%">
+        <ManagerChange id={id} />
         <ManagerTodaySummaryForModal id={id} />
         <ManagerWeekDayStatsForModal id={id} />
       </Modal>
