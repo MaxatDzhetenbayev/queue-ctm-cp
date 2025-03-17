@@ -14,6 +14,8 @@ import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export const ManagerCreate = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
   const { data: services, isLoading: isServicesLoagin } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
@@ -47,6 +49,7 @@ export const ManagerCreate = () => {
       queryClient.invalidateQueries({
         queryKey: ["managers"],
       });
+      close()
     },
   });
 
@@ -70,12 +73,11 @@ export const ManagerCreate = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      reset({ ...getValues(), center_id: user.center_id, service_ids: user.services.map((s: { id: number }) => s.id) })
+      reset({ ...getValues(), center_id: user.center_id, service_ids: user?.services?.map((s: { id: number }) => s.id) })
     }
   }, [user, reset, getValues, isLoading])
 
   const onSubmit = (data: FormData) => mutate(data);
-  const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
       <Modal opened={opened} onClose={close}>
