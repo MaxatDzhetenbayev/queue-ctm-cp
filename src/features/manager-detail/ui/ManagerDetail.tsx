@@ -1,40 +1,109 @@
 "use client";
 import React from "react";
-import { useManagerDetailCompleted, useManagerDetailStats } from "../hook";
-import { Box, Flex, Modal } from "@mantine/core";
+import { Box, Card, Flex, Modal, SimpleGrid, Skeleton, Text, Title as MantineTitle } from "@mantine/core";
+import { IManager } from "@/widgets/AdminManagersTable/hooks";
+import { ManagerChange } from "@/features/manager-change";
+import { ManagerDestroy } from "@/features/manager-destroy";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { ManagerTodaySummary, useManagerTodaySummaryOne, useManagerWeekdayCompletedReceptionsByOne } from "@/entities";
 import { useDisclosure } from "@mantine/hooks";
-import { ManagerWeekCompleted } from "./ManagerWeekCompleted";
-// import { ManagerWeekStats } from "./ManagerWeekStats";
-import { ManagerTodayStatistics } from "./ManagerTodayStatistics";
 
-export const ManagerDetailModal = ({ id, children, }: {
-  id: number, children: React.ReactNode, manager: {
-    full_name: string;
-    iin: string;
-    phone: string;
-  }
-}) => {
-  const { data: weekCompletedData, isLoading: weekCompletedLoading } =
-    useManagerDetailCompleted(id);
-  // const { data: weekStatsData, isLoading: weekStatsLoading } =
-  useManagerDetailStats(id);
-  const [opened, { open, close }] = useDisclosure(false)
+export const ManagerDetailModal = ({ full_name, id }: IManager) => {
 
+  const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
-      <Modal size="60%" opened={opened} onClose={close} >
-        <Flex gap={20} direction="column" >
-          <ManagerTodayStatistics id={id} />
-          <ManagerWeekCompleted
-            data={weekCompletedData}
-            isLoading={weekCompletedLoading}
-          />
-          {/* <ManagerWeekStats data={weekStatsData} isLoading={weekStatsLoading} /> */}
+      <Card
+        key={id}
+        withBorder
+        w="100%"
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          open();
+        }}
+      >
+        <Box>
+          <Text>{full_name}</Text>
+        </Box>
+      </Card>
+      <Modal opened={opened} onClose={close} size="70%">
+        <Flex direction="column" gap={10}>
+          <ManagerChange id={id} />
+          <ManagerDestroy id={id} />
         </Flex>
+        <ManagerTodaySummaryForModal id={id} />
+        <ManagerWeekDayStatsForModal id={id} />
       </Modal>
-      <Box onClick={open} w="100%" style={{ cursor: "pointer" }} >
-        {children}
-      </Box>
     </>
+  );
+};
+
+
+
+const ManagerTodaySummaryForModal = ({ id }: { id: number }) => {
+  const { data, isLoading, isSuccess } = useManagerTodaySummaryOne({ id });
+
+  return isLoading ? (
+    <Flex direction="column" h="100%" gap="lg">
+      <Skeleton h={35} w={200} />
+      <SimpleGrid cols={4} flex={1}>
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+      </SimpleGrid>
+    </Flex>
+  ) : (
+    isSuccess && <ManagerTodaySummary isCenter={false} {...data} />
+  );
+};
+
+const ManagerWeekDayStatsForModal = ({ id }: { id: number }) => {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+  const { data, isLoading } = useManagerWeekdayCompletedReceptionsByOne({ id });
+
+  const labels: string[] = [];
+
+  for (const item in data) {
+    labels.push(item);
+  }
+
+  return isLoading ? (
+    <Skeleton h="280px" w="100%" />
+  ) : (
+    <Box>
+      <MantineTitle order={2}>Статистика по дням</MantineTitle>
+      <Bar
+        height={200}
+        width={600}
+        data={{
+          labels,
+          datasets: [
+            {
+              label: "Завершенные приемы",
+              data,
+              borderColor: "#000",
+              backgroundColor: "#000",
+            },
+          ],
+        }}
+      />
+    </Box>
   );
 };
