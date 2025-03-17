@@ -5,3 +5,4 @@ export {
   ChangeReceptiontionStatusButton,
   Statuses,
 } from "./reception-status-change";
+export * from "./manager-change";

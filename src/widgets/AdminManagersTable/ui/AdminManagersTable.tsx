@@ -1,60 +1,174 @@
 "use client";
 
-import { Box, Card, Flex, Skeleton, Text } from "@mantine/core";
-import React from "react";
-import { useManagersList } from "../hooks";
-import { ManagerDetailModal } from "@/features/manager-detail";
+import {
+  Box,
+  Card,
+  Flex,
+  Input,
+  Modal,
+  Pagination,
+  SimpleGrid,
+  Skeleton,
+  Text,
+  Title as MantineTitle,
+} from "@mantine/core";
+import React, { useState, useEffect } from "react";
+import { IManager, useManagersList } from "../hooks";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  ManagerTodaySummary,
+  useManagerTodaySummaryOne,
+  useManagerWeekdayCompletedReceptionsByOne,
+} from "@/entities";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { ManagerChange } from "@/features";
+// import { ManagerCreate } from "@/features/ManagerCreate";
 
 export const AdminManagersTable = () => {
-  const { data, isLoading } = useManagersList();
-  console.log(data)
+  const [fullName, setFullName] = useState<string>("");
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [fullName]);
+
+  const { data, isLoading } = useManagersList({ page, search: fullName });
+
+  const managers = data?.managers ?? [];
+  const totalPages = data?.totalPages ?? 1;
+
   return (
-    <Flex>
+    <Flex direction="column" gap={20}>
+      {/* <ManagerCreate /> */}
+      <Input
+        placeholder="Поиск по ФИО менеджера"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+      />
       <Box w="100%">
         {isLoading ? (
-          <Box>
+          <Box mih={593}>
             <Skeleton h={35} w={150} />
-            <Skeleton mt={20} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
-            <Skeleton mt={5} h={45} w="100%" />
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} mt={5} h={59} w="100%" />
+            ))}
           </Box>
         ) : (
-          <Box w="100%">
+          <Flex
+            direction="column"
+            justify="space-between"
+            w="100%"
+            gap={10}
+            mih={593}
+          >
             <Flex direction="column" gap={10}>
-              {data?.map(
-                ({
-                  id,
-                  ...manager
-                }: {
-                  id: number;
-                  full_name: string;
-                  iin: string;
-                  phone: string;
-                }) => (
-                  <ManagerDetailModal key={id} id={id} manager={manager} >
-                    <Card withBorder>
-                      <Flex justify="space-between" align="center" w="100%">
-                        <Flex align="center" gap={8}>
-                          <Box style={{ width: 8, height: 8, backgroundColor: "green", borderRadius: "50%" }}></Box>
-                          <Text>{manager.full_name}</Text>
-                        </Flex>
-                        <Text>
-                          посетителей
-                        </Text>
-                      </Flex>
-                    </Card>
-                  </ManagerDetailModal>
-                )
+              {managers.length > 0 ? (
+                managers.map((manager: IManager) => (
+                  <ManagerCard key={manager.id} {...manager} />
+                ))
+              ) : (
+                <Text>Менеджеры не найдены</Text>
               )}
             </Flex>
-          </Box>
+            <Pagination total={totalPages} value={page} onChange={setPage} />
+          </Flex>
         )}
       </Box>
     </Flex>
+  );
+};
+
+const ManagerCard = ({ full_name, id }: IManager) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  return (
+    <>
+      <Card
+        key={id}
+        withBorder
+        w="100%"
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          open();
+        }}
+      >
+        <Box>
+          <Text>{full_name}</Text>
+        </Box>
+      </Card>
+      <Modal opened={opened} onClose={close} size="70%">
+        <ManagerChange id={id} />
+        <ManagerTodaySummaryForModal id={id} />
+        <ManagerWeekDayStatsForModal id={id} />
+      </Modal>
+    </>
+  );
+};
+
+const ManagerTodaySummaryForModal = ({ id }: { id: number }) => {
+  const { data, isLoading, isSuccess } = useManagerTodaySummaryOne({ id });
+
+  return isLoading ? (
+    <Flex direction="column" h="100%" gap="lg">
+      <Skeleton h={35} w={200} />
+      <SimpleGrid cols={4} flex={1}>
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+        <Skeleton p={10} />
+      </SimpleGrid>
+    </Flex>
+  ) : (
+    isSuccess && <ManagerTodaySummary isCenter={false} {...data} />
+  );
+};
+
+const ManagerWeekDayStatsForModal = ({ id }: { id: number }) => {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+  const { data, isLoading } = useManagerWeekdayCompletedReceptionsByOne({ id });
+
+  const labels: string[] = [];
+
+  for (const item in data) {
+    labels.push(item);
+  }
+
+  return isLoading ? (
+    <Skeleton h="280px" w="100%" />
+  ) : (
+    <Box>
+      <MantineTitle order={2}>Статистика по дням</MantineTitle>
+      <Bar
+        height={200}
+        width={600}
+        data={{
+          labels,
+          datasets: [
+            {
+              label: "Завершенные приемы",
+              data,
+              borderColor: "#000",
+              backgroundColor: "#000",
+            },
+          ],
+        }}
+      />
+    </Box>
   );
 };

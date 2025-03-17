@@ -4,7 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 export const useCenterManagersWeekStatics = () => {
   return useQuery({
     queryKey: ["kpi-admin-weekday-completed"],
-    queryFn: async () => (await api.get("/kpi/center/weekday/completed")).data,
+    queryFn: async () =>
+      (await api.get("/kpi/centers/managers/weekday/receptions/completed"))
+        .data,
   });
 };
 
