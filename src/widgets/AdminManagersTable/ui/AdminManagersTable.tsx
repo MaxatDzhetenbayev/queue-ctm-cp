@@ -30,8 +30,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { ManagerChange } from "@/features";
-// import { ManagerCreate } from "@/features/ManagerCreate";
+import { ManagerChange, ManagerCreate } from "@/features";
 
 export const AdminManagersTable = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -48,12 +47,16 @@ export const AdminManagersTable = () => {
 
   return (
     <Flex direction="column" gap={20}>
-      {/* <ManagerCreate /> */}
-      <Input
-        placeholder="Поиск по ФИО менеджера"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-      />
+      <Flex w="100%" gap={20} >
+        <Box flex={1}>
+          <Input
+            placeholder="Поиск по ФИО менеджера"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+        </Box>
+        <ManagerCreate />
+      </Flex>
       <Box w="100%">
         {isLoading ? (
           <Box mih={593}>

@@ -24,7 +24,6 @@ export const ManagerDetailModal = ({ id, children, }: {
     <>
       <Modal size="60%" opened={opened} onClose={close} >
         <Flex gap={20} direction="column" >
-
           <ManagerTodayStatistics id={id} />
           <ManagerWeekCompleted
             data={weekCompletedData}

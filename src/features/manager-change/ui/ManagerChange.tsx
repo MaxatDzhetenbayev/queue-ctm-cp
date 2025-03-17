@@ -5,7 +5,8 @@ import {
   Button,
   Flex,
   Input,
-  // MultiSelect
+  MultiSelect,
+  Title,
 } from "@mantine/core";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
@@ -19,13 +20,13 @@ export const ManagerChange = ({ id }: { id: number }) => {
       return res.data;
     },
   });
-  // const { data: services } = useQuery({
-  //   queryKey: ["services"],
-  //   queryFn: async () => {
-  //     const res = await api.get(`/services`);
-  //     return res.data;
-  //   },
-  // });
+  const { data: services, isLoading: isServicesLoagin } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const res = await api.get(`/services`);
+      return res.data;
+    },
+  });
 
   interface FormData {
     login: string;
@@ -64,7 +65,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
       },
       cabinet: "",
       table: "",
-      // service_ids: [],
+      service_ids: [],
     },
   });
 
@@ -74,6 +75,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
         ...managerData,
         cabinet: managerData.manager_table.cabinet,
         table: managerData.manager_table.table,
+        service_ids: managerData.services.map((s: { id: number }) => s.id)
       });
     }
   }, [managerData, reset]);
@@ -82,7 +84,8 @@ export const ManagerChange = ({ id }: { id: number }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex direction="column" gap={15}>
+      <Title order={2}>Общая информация</Title>
+      <Flex direction="column" gap={15} mt={30}>
         <Controller
           name="login"
           control={control}
@@ -113,30 +116,29 @@ export const ManagerChange = ({ id }: { id: number }) => {
           control={control}
           render={({ field }) => <Input {...field} />}
         />
-        {/* <Controller
-        name="service_ids"
-        control={control}
-        render={({ field }) => (
-          <MultiSelect
-            data={
-              services?.map((service: any) => {
-                console.log({
-                  value: service.id,
-                  label: service.name["ru"],
-                });
-                return {
-                  value: service.id,
-                  label: service.name["ru"],
-                };
-              }) || []
-            }
-            {...field}
-            placeholder="Выберите сервисы"
-            searchable
-          />
-        )}
-      /> */}
-        <Button type="submit">Изменить данные</Button>
+        <Controller
+          name="service_ids"
+          control={control}
+          render={({ field }) => (
+            <MultiSelect
+              data={
+                !isServicesLoagin && services.map((s: { id: number, name: { [key: string]: string } }) => (
+                  {
+                    value: String(s.id),
+                    label: s.name["ru"]
+                  }
+                ))
+                || []
+              }
+              {...field}
+              value={field.value?.map(String) || []}
+              onChange={(values) => field.onChange(values.map(Number))}
+              placeholder="Выберите сервисы"
+              searchable
+            />
+          )}
+        />
+        <Button bg="dark" type="submit">Изменить данные</Button>
       </Flex>
     </form>
   );

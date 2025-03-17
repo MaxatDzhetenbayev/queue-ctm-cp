@@ -6,3 +6,4 @@ export {
   Statuses,
 } from "./reception-status-change";
 export * from "./manager-change";
+export * from "./manager-create";
