@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Box, Card, Flex, Modal, SimpleGrid, Skeleton, Text, Title as MantineTitle } from "@mantine/core";
+import { Box, Card, Flex, Modal, SimpleGrid, Skeleton, Text, Title as MantineTitle, Tabs } from "@mantine/core";
 import { IManager } from "@/widgets/AdminManagersTable/hooks";
 import { ManagerChange } from "@/features/manager-change";
 import { ManagerDestroy } from "@/features/manager-destroy";
@@ -36,12 +36,22 @@ export const ManagerDetailModal = ({ full_name, id }: IManager) => {
         </Box>
       </Card>
       <Modal opened={opened} onClose={close} size="70%">
-        <Flex direction="column" gap={10}>
-          <ManagerChange id={id} />
-          <ManagerDestroy id={id} />
-        </Flex>
-        <ManagerTodaySummaryForModal id={id} />
-        <ManagerWeekDayStatsForModal id={id} />
+        <Tabs defaultValue="info">
+          <Tabs.List>
+            <Tabs.Tab value="info">Общая информация</Tabs.Tab>
+            <Tabs.Tab value="stats">Статистика</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value="info">
+            <Flex direction="column" gap={10}>
+              <ManagerChange id={id} />
+              <ManagerDestroy id={id} />
+            </Flex>
+          </Tabs.Panel>
+          <Tabs.Panel value="stats">
+            <ManagerTodaySummaryForModal id={id} />
+            <ManagerWeekDayStatsForModal id={id} />
+          </Tabs.Panel>
+        </Tabs>
       </Modal>
     </>
   );
