@@ -9,12 +9,12 @@ import React from "react";
 export default function Page() {
   return (
     <Box>
-      <Tabs defaultValue="queue">
+      <Tabs defaultValue="stats">
         <Tabs.List>
-          <Tabs.Tab value="queue">Очередь</Tabs.Tab>
-          <Tabs.Tab value="kpi">Менеджеры</Tabs.Tab>
+          <Tabs.Tab value="stats">Статистика</Tabs.Tab>
+          <Tabs.Tab value="workers">Работники</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value="queue">
+        <Tabs.Panel value="stats">
           <Flex direction="column" gap={20}>
             <Box>
               <AdminManagersTodaySummary />
@@ -24,7 +24,7 @@ export default function Page() {
             </Box>
           </Flex>
         </Tabs.Panel>
-        <Tabs.Panel value="kpi">
+        <Tabs.Panel value="workers">
           <Box>
             <Title order={2}>Управление менеджерами</Title>
             <Card withBorder mt={20}>

@@ -7,3 +7,4 @@ export {
 } from "./reception-status-change";
 export * from "./manager-change";
 export * from "./manager-create";
+export * from "./manager-destroy";

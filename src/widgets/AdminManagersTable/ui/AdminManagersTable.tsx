@@ -30,7 +30,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { ManagerChange, ManagerCreate } from "@/features";
+import { ManagerChange, ManagerCreate, ManagerDestroy } from "@/features";
 
 export const AdminManagersTable = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -109,7 +109,10 @@ const ManagerCard = ({ full_name, id }: IManager) => {
         </Box>
       </Card>
       <Modal opened={opened} onClose={close} size="70%">
-        <ManagerChange id={id} />
+        <Flex direction="column" gap={10}>
+          <ManagerChange id={id} />
+          <ManagerDestroy id={id} />
+        </Flex>
         <ManagerTodaySummaryForModal id={id} />
         <ManagerWeekDayStatsForModal id={id} />
       </Modal>
