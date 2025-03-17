@@ -31,7 +31,7 @@ import {
   Legend,
 } from "chart.js";
 import { ManagerChange } from "@/features";
-import { ManagerCreate } from "@/features/ManagerCreate";
+// import { ManagerCreate } from "@/features/ManagerCreate";
 
 export const AdminManagersTable = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -48,12 +48,12 @@ export const AdminManagersTable = () => {
 
   return (
     <Flex direction="column" gap={20}>
+      {/* <ManagerCreate /> */}
       <Input
         placeholder="Поиск по ФИО менеджера"
         value={fullName}
         onChange={(e) => setFullName(e.target.value)}
       />
-      <ManagerCreate />
       <Box w="100%">
         {isLoading ? (
           <Box mih={593}>
