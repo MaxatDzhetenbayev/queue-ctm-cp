@@ -40,6 +40,7 @@ export const ManagerDetailModal = ({ full_name, id }: IManager) => {
           <Tabs.List>
             <Tabs.Tab value="info">Общая информация</Tabs.Tab>
             <Tabs.Tab value="stats">Статистика</Tabs.Tab>
+            <Tabs.Tab value="receptions">Записи</Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="info">
             <Flex direction="column" gap={10}>
@@ -51,11 +52,17 @@ export const ManagerDetailModal = ({ full_name, id }: IManager) => {
             <ManagerTodaySummaryForModal id={id} />
             <ManagerWeekDayStatsForModal id={id} />
           </Tabs.Panel>
+          <Tabs.Panel value="receptions">
+            d
+          </Tabs.Panel>
         </Tabs>
       </Modal>
     </>
   );
 };
+
+
+
 
 
 
