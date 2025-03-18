@@ -2,17 +2,23 @@ import { IManagerTodaySummary } from "@/entities/kpi/models";
 import { api } from "@/shared";
 import { useQuery } from "@tanstack/react-query";
 
-export const useManagerTodaySummaryByCenter = ({
-  center_id,
+export const useManagerTodaySummary = ({
+  id,
+  variant
 }: {
-  center_id?: number;
+  id?: number, variant: "manager" | "center"
 }) => {
+  const option = variant === "manager"
+    ? id ? `managers/${id}` : "managers/me"
+    : id ? `centers/${id}/managers` : "centers/managers"
+
+
   return useQuery<IManagerTodaySummary>({
-    queryKey: ["manager-today-summary-center", center_id],
+    queryKey: ["manager-today-summary-center", id],
     queryFn: async () =>
       (
         await api.get(
-          `/kpi/centers/${center_id + "/" || ""}managers/today/summary`
+          `/kpi/${option}/today/summary`
         )
       ).data,
   });
@@ -37,8 +43,7 @@ export const useManagerWeekdayCompletedReceptionsByCenter = ({
     queryFn: async () =>
       (
         await api.get(
-          `/kpi/centers/${
-            center_id ? center_id + +"/" : ""
+          `/kpi/centers/${center_id ? center_id + +"/" : ""
           }managers/weekday/receptions/completed`
         )
       ).data,

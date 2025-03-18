@@ -39,9 +39,6 @@ export const ManagerReceptions = () => {
     "Действия",
   ];
 
-
-
-
   return (
     <Box component="section" className="overflow-auto h-full max-h-[330px]">
       {isLoading ? (
@@ -111,12 +108,6 @@ export const ManagerReceptions = () => {
                             status={Statuses.WORKING}
                           >
                             Принять
-                          </ChangeReceptiontionStatusButton>
-                          <ChangeReceptiontionStatusButton
-                            id={reception.id}
-                            status={Statuses.CANCELED}
-                          >
-                            Отменить
                           </ChangeReceptiontionStatusButton>
                           <ReceptionDetail id={reception.id} />
                         </Flex>

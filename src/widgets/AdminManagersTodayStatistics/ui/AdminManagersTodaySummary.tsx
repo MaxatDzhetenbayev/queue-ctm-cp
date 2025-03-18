@@ -2,10 +2,10 @@
 import React from "react";
 import { Flex, SimpleGrid, Skeleton } from "@mantine/core";
 import { ManagerTodaySummary } from "@/entities";
-import { useManagerTodaySummaryByCenter } from "@/entities/kpi/api";
+import { useManagerTodaySummary } from "@/entities/kpi/api";
 
-export const AdminManagersTodaySummary = () => {
-  const { data, isLoading, isSuccess } = useManagerTodaySummaryByCenter({});
+export const ManagersTodaySummary = ({ id, variant = "manager" }: { id?: number, variant?: "manager" | "center" }) => {
+  const { data, isLoading, isSuccess } = useManagerTodaySummary({ id, variant });
 
   return isLoading ? (
     <Flex direction="column" h="100%" gap="lg">
