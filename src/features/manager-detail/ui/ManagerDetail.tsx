@@ -14,8 +14,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { ManagerTodaySummary, useManagerTodaySummaryOne, useManagerWeekdayCompletedReceptionsByOne } from "@/entities";
+import { IReception, ManagerTodaySummary, useManagerTodaySummaryOne, useManagerWeekdayCompletedReceptionsByOne } from "@/entities";
 import { useDisclosure } from "@mantine/hooks";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/shared";
+import { ReceptionDetail } from "@/features/reception-detail";
 
 export const ManagerDetailModal = ({ full_name, id }: IManager) => {
 
@@ -53,7 +56,7 @@ export const ManagerDetailModal = ({ full_name, id }: IManager) => {
             <ManagerWeekDayStatsForModal id={id} />
           </Tabs.Panel>
           <Tabs.Panel value="receptions">
-            d
+            <ManagerReceptions id={id} />
           </Tabs.Panel>
         </Tabs>
       </Modal>
@@ -62,7 +65,51 @@ export const ManagerDetailModal = ({ full_name, id }: IManager) => {
 };
 
 
+const ManagerReceptions = ({ id }: { id: number }) => {
 
+  const { data: managerReceptions, isLoading } = useQuery({
+    queryKey: ['manager-receptions-by-id', id],
+    queryFn: async () => {
+      const res = await api.get(`/receptions/managers/${id}`)
+      return res.data
+    }
+  })
+
+  console.log(managerReceptions)
+  return (
+    <Box>
+      {
+        isLoading ? (
+          <div></div>
+        ) : (
+          <Flex mt={20} direction="column" gap={10}>
+            {managerReceptions.map((reception: IReception) => (
+              <Card withBorder key={reception.id} w="100%">
+                <Flex justify="space-between" align="center">
+                  <Flex direction="column" gap={20}>
+                    <Text>
+                      <strong>ФИО:</strong> {reception?.user?.profile.full_name}
+                    </Text>
+                    <Flex gap={20}>
+                      <Text>
+                        <strong>Дата:</strong> {reception?.date}
+                      </Text>
+                      <Text>
+                        <strong>Время:</strong> {reception?.time}
+                      </Text>
+                    </Flex>
+                  </Flex>
+
+                  <ReceptionDetail id={reception.id} />
+                </Flex>
+              </Card>
+            ))}
+          </Flex>
+        )
+      }
+    </Box >
+  )
+}
 
 
 
