@@ -10,9 +10,9 @@ import {
   Legend,
 } from "chart.js";
 import { Box, Skeleton, Title as MantineTitle } from "@mantine/core";
-import { useManagerWeekdayCompletedReceptionsByCenter } from "@/entities";
+import { useManagerWeekdayCompletedReceptions } from "@/entities";
 
-export const AdminManagersWeekDashBoard = () => {
+export const ManagersWeekDashBoard = ({ id, variant = "manager" }: { id?: number, variant?: "manager" | "center" }) => {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -22,7 +22,7 @@ export const AdminManagersWeekDashBoard = () => {
     Legend
   );
 
-  const { data, isLoading } = useManagerWeekdayCompletedReceptionsByCenter({});
+  const { data, isLoading } = useManagerWeekdayCompletedReceptions({ variant, id });
 
   const labels: string[] = [];
 

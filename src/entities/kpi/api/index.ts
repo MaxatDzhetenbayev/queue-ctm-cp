@@ -14,7 +14,7 @@ export const useManagerTodaySummary = ({
 
 
   return useQuery<IManagerTodaySummary>({
-    queryKey: ["manager-today-summary-center", id],
+    queryKey: ["manager-today-summary", id],
     queryFn: async () =>
       (
         await api.get(
@@ -24,43 +24,23 @@ export const useManagerTodaySummary = ({
   });
 };
 
-export const useManagerTodaySummaryOne = ({ id }: { id?: number }) => {
-  return useQuery<IManagerTodaySummary>({
-    queryKey: ["manager-today-summary-one", id],
-    queryFn: async () =>
-      (await api.get(`/kpi/managers/${id || "me"}/today/summary`)).data,
-  });
-};
-
-export const useManagerWeekdayCompletedReceptionsByCenter = ({
-  center_id,
-}: {
-  center_id?: number;
-}) => {
-  console.log(center_id);
-  return useQuery<{ [key: string]: string }[]>({
-    queryKey: ["manager-weekday-completed-center", center_id],
-    queryFn: async () =>
-      (
-        await api.get(
-          `/kpi/centers/${center_id ? center_id + +"/" : ""
-          }managers/weekday/receptions/completed`
-        )
-      ).data,
-  });
-};
-
-export const useManagerWeekdayCompletedReceptionsByOne = ({
+export const useManagerWeekdayCompletedReceptions = ({
   id,
+  variant
 }: {
-  id?: number;
+  id?: number, variant: "manager" | "center"
 }) => {
+
+  const option = variant === "manager"
+    ? id ? `managers/${id}` : "managers/me"
+    : id ? `centers/${id}/managers` : "centers/managers"
+
   return useQuery<{ [key: string]: string }[]>({
-    queryKey: ["manager-weekday-completed-one", id],
+    queryKey: ["manager-weekday-completed", id],
     queryFn: async () =>
       (
         await api.get(
-          `/kpi/managers/${id + "/" || "me"}weekday/receptions/completed`
+          `/kpi/${option}/weekday/receptions/completed`
         )
       ).data,
   });

@@ -1,8 +1,7 @@
 "use client"
 import { ManagerReceptions } from "@/widgets";
 import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
-// import { ManagerTodayStatistics } from "@/widgets/ManagerTodayStatistics";
-import { ManagerWeekStatistics } from "@/widgets/ManagerWeekStatistics";
+import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
 import { Box, Flex, Tabs } from "@mantine/core";
 
 import React from "react";
@@ -22,10 +21,9 @@ export default function Page() {
           <Box>
             <Box flex={1}>
               <ManagersTodaySummary variant="manager" />
-              {/* <ManagerTodayStatistics /> */}
             </Box>
             <Box flex={2} h="100%">
-              <ManagerWeekStatistics />
+              <ManagersWeekDashBoard variant="manager" />
             </Box>
           </Box>
         </Tabs.Panel>
