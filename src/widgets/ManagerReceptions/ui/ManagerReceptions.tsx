@@ -4,6 +4,7 @@ import { useManagerReceptions } from "../hooks/index";
 import { receptionTransformDto } from "../../../entities/receptions/helpers";
 import {
   ChangeReceptiontionStatusButton,
+  ReceptionCreateOffline,
   ReceptionDetail,
   Statuses,
 } from "@/features";
@@ -55,9 +56,12 @@ export const ManagerReceptions = () => {
         </Box>
       ) : (
         <>
-          <Title mb={20} order={2}>
-            Приемы
-          </Title>
+          <Flex align="center" justify="space-between">
+            <Title mb={20} order={2}>
+              Приемы
+            </Title>
+            <ReceptionCreateOffline />
+          </Flex>
           {data === undefined ? (
             <div>Нет записей</div>
           ) : (
