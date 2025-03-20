@@ -19,9 +19,27 @@ export const ReceptionDetail = ({ id }: { id: number }) => {
               Имя: {data?.user?.profile?.full_name}
             </h1>
             <section className="mt-4">
-              <p>Телефон: {data?.user?.profile?.phone}</p>
-              <p>Время: {data?.time}</p>
-              <p>Статус: {normalizeStatus(data?.status?.name)}</p>
+              <p>
+                <strong>ИИН:</strong>{data?.user?.profile?.iin}
+              </p>
+              <p>
+                <strong>Телефон:</strong> {data?.user?.profile?.phone}
+              </p>
+              <p>
+                <strong>Дата записи:</strong> {data?.date}
+              </p>
+              <p>
+                <strong>Время записи:</strong> {data?.time}
+              </p>
+              <p>
+                <strong>Статус:</strong> {normalizeStatus(data?.status?.name)}
+              </p>
+              <p>
+                <strong>Тип посетителя:</strong> {data?.user?.visitor_type?.name === "employer" ? "Работодатель" : "Соискатель"}
+              </p>
+              <p>
+                <strong>Выбранный сервис:</strong> {data?.service?.name?.["ru"]}
+              </p>
             </section>
           </section>
         )}

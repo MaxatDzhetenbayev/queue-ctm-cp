@@ -1,1 +1,1 @@
-export { AdminManagersTodayStatistics } from "./ui/AdminManagersTodayStatistics";
+export { ManagersTodaySummary } from "./ui/AdminManagersTodaySummary";

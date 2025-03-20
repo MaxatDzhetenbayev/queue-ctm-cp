@@ -10,10 +10,19 @@ export interface IReception {
   user: {
     id: number;
     profile: {
+      iin: string;
       full_name: string;
       phone: string;
     };
+    visitor_type: {
+      name: string
+    }
   };
+  service: {
+    name: {
+      [key: string]: string
+    }
+  }
 }
 
 export interface IReceptionFormated {
