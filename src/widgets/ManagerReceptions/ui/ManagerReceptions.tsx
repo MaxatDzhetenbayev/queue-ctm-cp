@@ -4,6 +4,7 @@ import { useManagerReceptions } from "../hooks/index";
 import { receptionTransformDto } from "../../../entities/receptions/helpers";
 import {
   ChangeReceptiontionStatusButton,
+  ReceptionCreateOffline,
   ReceptionDetail,
   Statuses,
 } from "@/features";
@@ -39,9 +40,6 @@ export const ManagerReceptions = () => {
     "Действия",
   ];
 
-
-
-
   return (
     <Box component="section" className="overflow-auto h-full max-h-[330px]">
       {isLoading ? (
@@ -58,9 +56,12 @@ export const ManagerReceptions = () => {
         </Box>
       ) : (
         <>
-          <Title mb={20} order={2}>
-            Приемы
-          </Title>
+          <Flex align="center" justify="space-between">
+            <Title mb={20} order={2}>
+              Приемы
+            </Title>
+            <ReceptionCreateOffline />
+          </Flex>
           {data === undefined ? (
             <div>Нет записей</div>
           ) : (
@@ -111,12 +112,6 @@ export const ManagerReceptions = () => {
                             status={Statuses.WORKING}
                           >
                             Принять
-                          </ChangeReceptiontionStatusButton>
-                          <ChangeReceptiontionStatusButton
-                            id={reception.id}
-                            status={Statuses.CANCELED}
-                          >
-                            Отменить
                           </ChangeReceptiontionStatusButton>
                           <ReceptionDetail id={reception.id} />
                         </Flex>
