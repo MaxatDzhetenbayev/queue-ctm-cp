@@ -12,7 +12,6 @@ interface FormData {
     full_name: string;
     iin: string;
     phone: string,
-    time: string,
     visitor_type_id: string,
     service_id: number;
 }
@@ -108,29 +107,6 @@ export const ReceptionCreateOffline = () => {
                                         }
                                     ))
                                         || []}
-                                />
-                            )} />
-                        <Controller
-                            name="time"
-                            control={control}
-                            render={({ field }) => (
-                                <Select
-                                    {...field}
-                                    placeholder="Выберите время записи"
-                                    data={[
-                                        {
-                                            value: "09:15:00",
-                                            label: "09:15:00"
-                                        },
-                                        {
-                                            value: "09:45:00",
-                                            label: "09:45:00",
-                                        },
-                                        {
-                                            value: "current",
-                                            label: "Записать сейчас",
-                                        },
-                                    ]}
                                 />
                             )} />
                         <Button type='submit' bg="dark">Создать запись</Button>
