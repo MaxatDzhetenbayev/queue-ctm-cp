@@ -10,19 +10,22 @@ import {
 } from "@/features";
 import { Box, Flex, Skeleton, Table, Title } from "@mantine/core";
 
-
 export function normalizeStatus(status?: string) {
   switch (status) {
     case "pending":
-      return "На ожидании"
+      return "На ожидании";
     case "working":
-      return "В работе"
+      return "В работе";
     case "done":
-      return "Завершен"
+      return "Завершен";
     case "canceled":
-      return "Отменен"
+      return "Отменен";
+    case "no-show":
+      return "Не пришел";
+    case "called":
+      return "Приглашение";
     default:
-      return "Ошибка"
+      return "Ошибка";
   }
 }
 
@@ -102,10 +105,7 @@ export const ManagerReceptions = () => {
                       {reception.status.id === Statuses.DONE && (
                         <ReceptionDetail id={reception.id} />
                       )}
-                      {reception.status.id === Statuses.CANCELED && (
-                        <ReceptionDetail id={reception.id} />
-                      )}
-                      {reception.status.id === Statuses.PENDING && (
+                      {reception.status.id === Statuses.NO_SHOW && (
                         <Flex gap={8}>
                           <ChangeReceptiontionStatusButton
                             id={reception.id}
@@ -113,6 +113,37 @@ export const ManagerReceptions = () => {
                           >
                             Принять
                           </ChangeReceptiontionStatusButton>
+                          <ReceptionDetail id={reception.id} />
+                        </Flex>
+                      )}
+                      {reception.status.id === Statuses.CANCELED && (
+                        <ReceptionDetail id={reception.id} />
+                      )}
+                      {reception.status.id === Statuses.CALLED && (
+                        <Flex gap={8}>
+                          <ChangeReceptiontionStatusButton
+                            id={reception.id}
+                            status={Statuses.WORKING}
+                          >
+                            Принять
+                          </ChangeReceptiontionStatusButton>
+                          <ChangeReceptiontionStatusButton
+                            id={reception.id}
+                            status={Statuses.NO_SHOW}
+                          >
+                            Не пришел
+                          </ChangeReceptiontionStatusButton>
+                        </Flex>
+                      )}
+                      {reception.status.id === Statuses.PENDING && (
+                        <Flex gap={8}>
+                          <ChangeReceptiontionStatusButton
+                            id={reception.id}
+                            status={Statuses.CALLED}
+                          >
+                            Позвать
+                          </ChangeReceptiontionStatusButton>
+
                           <ReceptionDetail id={reception.id} />
                         </Flex>
                       )}

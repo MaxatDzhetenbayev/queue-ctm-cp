@@ -8,7 +8,8 @@ export enum Statuses {
   WORKING = 3,
   DONE = 4,
   CANCELED = 5,
-  CHOICE = 6,
+  NO_SHOW = 6,
+  CALLED = 7,
 }
 
 export interface ChangeReceptionStatusProps {
