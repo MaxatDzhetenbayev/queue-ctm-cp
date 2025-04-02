@@ -74,7 +74,7 @@ export const ManagerCreate = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      reset({ ...getValues(), center_id: user.center_id, service_ids: user?.services?.map((s: { id: number }) => s.id) })
+      reset({ ...getValues(), center_id: user?.center_id, service_ids: user?.services?.map((s: { id: number }) => s.id) })
     }
   }, [user, reset, getValues, isLoading])
 
