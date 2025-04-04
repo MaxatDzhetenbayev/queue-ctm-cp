@@ -66,7 +66,6 @@ const ManagerReceptions = ({ id }: { id: number }) => {
     }
   })
 
-  console.log(managerReceptions)
   return (
     <Box>
       {

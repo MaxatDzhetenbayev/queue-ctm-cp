@@ -43,7 +43,6 @@ export const ManagerCreate = () => {
   const { mutate } = useMutation({
     mutationKey: ["manager-create"],
     mutationFn: async (data: FormData) => {
-      console.log(data)
       await api.post("/users", data);
     },
     onSuccess: () => {

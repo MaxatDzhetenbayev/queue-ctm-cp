@@ -36,7 +36,6 @@ export const ReceptionCreateOffline = () => {
     const { mutate } = useMutation({
         mutationKey: ["receptions-create-offline"],
         mutationFn: async (data: FormData) => {
-            console.log(data)
             await api.post("/receptions/offline", data);
         },
         onSuccess: () => {

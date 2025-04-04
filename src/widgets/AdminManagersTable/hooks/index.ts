@@ -20,7 +20,6 @@ export interface IManagerOption {
 }
 
 export const useManagersList = ({ page, search }: IManagerOption) => {
-  console.log(page, search);
   return useQuery<IManagers>({
     queryKey: ["managers", page, search],
     queryFn: async () =>
