@@ -4,8 +4,10 @@ import { queryClient } from '@/shared/providers/query-providers';
 import { Button, Flex, Input, Modal, Select, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 
 interface FormData {
@@ -31,23 +33,31 @@ export const ReceptionCreateOffline = () => {
         }
     })
 
-    const { control, handleSubmit, } = useForm<FormData>();
+    const { control, handleSubmit, reset } = useForm<FormData>();
 
     const { mutate } = useMutation({
         mutationKey: ["receptions-create-offline"],
         mutationFn: async (data: FormData) => {
-            await api.post("/receptions/offline", data);
+            const res = await api.post("/receptions/offline", data);
+            return res
         },
         onSuccess: () => {
+            reset()
             close()
             queryClient.invalidateQueries({
                 queryKey: ["receptions-list"],
             });
         },
+        onError: (error: AxiosError) => {
+            if (error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+                (error.response.data.message as string[]).forEach((msg: string) => {
+                    toast.error(msg)
+                })
+            }
+        }
     });
 
     const onSubmit = (data: FormData) => mutate(data);
-
 
     return (
         <>

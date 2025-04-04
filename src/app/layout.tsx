@@ -8,6 +8,7 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Панель управления очередью",
@@ -32,6 +33,7 @@ export default function RootLayout({
         <MantineProvider theme={theme}>
           <QueryProvider child={children} />
         </MantineProvider>
+        <ToastContainer />
       </body>
     </html>
   );
