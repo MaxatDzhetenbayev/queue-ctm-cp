@@ -23,6 +23,7 @@ export function middleware(req: NextRequest) {
     if (decoded.role === "admin" && !pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
