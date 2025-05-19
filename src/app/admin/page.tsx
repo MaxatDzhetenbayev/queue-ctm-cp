@@ -1,4 +1,5 @@
 "use client";
+import { PersonalControl } from "@/widgets";
 import { AdminManagersTable } from "@/widgets/AdminManagersTable";
 import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
 import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
@@ -13,6 +14,7 @@ export default function Page() {
         <Tabs.List>
           <Tabs.Tab value="stats">Статистика</Tabs.Tab>
           <Tabs.Tab value="workers">Работники</Tabs.Tab>
+          <Tabs.Tab value="controls">Управление</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="stats">
           <Flex direction="column" gap={20}>
@@ -29,6 +31,14 @@ export default function Page() {
             <Title order={2}>Управление менеджерами</Title>
             <Card withBorder mt={20}>
               <AdminManagersTable />
+            </Card>
+          </Box>
+        </Tabs.Panel>
+        <Tabs.Panel value="controls">
+          <Box>
+            <Title order={2}>Управление персоналом</Title>
+            <Card withBorder mt={20}>
+              <PersonalControl />
             </Card>
           </Box>
         </Tabs.Panel>
