@@ -1,7 +1,21 @@
-import { Box, Button, Card, Flex, Grid, Group, Modal, Paper, Stack, Text } from '@mantine/core';
+import { Box, Button, Card, Flex, Grid, Group, Modal, Paper, Stack, Tabs, Text, Title, useMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import React from 'react'
-
+import {
+    Bar,
+    Pie,
+    Line,
+} from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    ArcElement,
+    PointElement,
+    LineElement,
+} from 'chart.js';
+import { AdminManagersTable } from '@/widgets/AdminManagersTable';
 
 const mockData: IDepartment[] = [
     {
@@ -87,81 +101,218 @@ const DepartmentCard = (data: IDepartment): React.ReactElement => {
 }
 
 
+
+ChartJS.register(
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    ArcElement,
+    PointElement,
+    LineElement
+);
+
 const DepartmentDetailModal = ({ id }: { id: string }) => {
     const [opened, { open, close }] = useDisclosure(false);
-
-    const departmentDetailMockData = mockData.find((department) => department.id === id);
-
-
     return (
         <>
             <Button color="dark" fullWidth mt="md" radius="md" onClick={open}>
                 Детальнее
             </Button>
-            <Modal opened={opened} onClose={close} size="70%" title={`Отдел — ${id}`} centered>
-                <Stack >
-                    {/* Общее о сотрудниках */}
-                    <Paper withBorder p="md" radius="md">
-                        <Group >
-                            <Group >
-                                {/* <IconUsers size={20} /> */}
-                                <Text size="sm">Всего сотрудников:</Text>
-                            </Group>
-                            <Text >{departmentDetailMockData?.employeesСount}</Text>
-                        </Group>
-                        <Group mt="xs">
-                            <Group >
-                                {/* <IconUser size={20} /> */}
-                                <Text size="sm">Онлайн сейчас:</Text>
-                            </Group>
-                            <Text >{departmentDetailMockData?.onlineEmployeesCount}</Text>
-                        </Group>
-                    </Paper>
 
-                    {/* Обслуженные клиенты */}
-                    <Paper withBorder p="md" radius="md">
-                        <Group >
-                            <Group >
-                                {/* <IconUsers size={20} /> */}
-                                <Text size="sm">Обслужено клиентов:</Text>
-                            </Group>
-                            <Text >{departmentDetailMockData?.clientServedCount}</Text>
-                        </Group>
-                        <Group mt="xs">
-                            <Group >
-                                {/* <IconDeviceMobile size={20} /> */}
-                                <Text size="sm">Через Telegram:</Text>
-                            </Group>
-                            <Text >{departmentDetailMockData?.telegramClient}</Text>
-                        </Group>
-                        <Group mt="xs">
-                            <Group >
-                                {/* <IconBuilding size={20} /> */}
-                                <Text size="sm">Оффлайн:</Text>
-                            </Group>
-                            <Text >{departmentDetailMockData?.offlineClient}</Text>
-                        </Group>
-                    </Paper>
-
-                    {/* Время и нагрузка */}
-                    <Paper withBorder p="md" radius="md">
-                        <Group >
-                            <Group >
-                                {/* <IconClock size={20} /> */}
-                                <Text size="sm">Среднее время обслуживания:</Text>
-                            </Group>
-                            <Text >{departmentDetailMockData?.avgServiceTime}</Text>
-                        </Group>
-                        <Group mt="xs">
-                            <Group >
-                                {/* <IconActivity size={20} /> */}
-                                <Text size="sm">Средняя загрузка (время ожидания):</Text>
-                            </Group>
-                            <Text >{departmentDetailMockData?.avgLoadTime}</Text>
-                        </Group>
-                    </Paper>
-                </Stack>
+            <Modal
+                opened={opened}
+                onClose={close}
+                size="80%"
+                title={`Отдел — ${id}`}
+                centered
+                padding="lg"
+            >
+                <Tabs defaultValue="dashboard">
+                    <Tabs.List>
+                        <Tabs.Tab value="dashboard">Дашборд</Tabs.Tab>
+                        <Tabs.Tab value="employees">Сотрудники</Tabs.Tab>
+                    </Tabs.List>
+                    <Tabs.Panel value="dashboard">
+                        <DepartmentDashboard />
+                    </Tabs.Panel>
+                    <Tabs.Panel value="employees">
+                        <Box>
+                            <Title order={2}>Управление менеджерами</Title>
+                            <Card withBorder mt={20}>
+                                <AdminManagersTable />
+                            </Card>
+                        </Box>
+                    </Tabs.Panel>
+                </Tabs>
             </Modal>
         </>
     );
 };
+
+
+const DepartmentDashboard = () => {
+    const theme = useMantineTheme();
+
+    const data = {
+        clientServedTotal: 20,
+        sourceTelegram: 10,
+        sourceOffline: 20,
+        avgServiceTime: '8:16',
+        avgLoad: '40%',
+        barChart: {
+            labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт'],
+            datasets: [
+                {
+                    label: 'Клиенты',
+                    data: [3, 5, 2, 6, 4],
+                    backgroundColor: theme.colors.dark[6],
+                },
+            ],
+        },
+        pieChart: {
+            labels: ['Telegram', 'Оффлайн'],
+            datasets: [
+                {
+                    data: [10, 20],
+                    backgroundColor: [theme.colors.cyan[6], theme.colors.dark[6]],
+                },
+            ],
+        },
+        lineChart: {
+            labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
+            datasets: [
+                {
+                    label: 'Загруженность',
+                    data: [20, 35, 40, 60, 50, 40],
+                    borderColor: theme.colors.dark[6],
+                    fill: false,
+                },
+            ],
+        },
+    };
+
+    return (
+        <Grid gutter="md" mt="md">
+            <Grid.Col span={2}>
+                <Stack h="100%" flex={1} >
+                    <Paper flex={1} withBorder radius="md" p="sm">
+                        <Flex h={"100%"} direction="column" justify={"space-between"} >
+                            <Text size="sm" color="dimmed">
+                                Всего обслуженных клиентов
+                            </Text>
+                            <Title order={2}>{data.clientServedTotal}</Title>
+                            <Text size="xs" color="dimmed">за сегодня</Text>
+                        </Flex>
+                    </Paper>
+                    <Paper flex={1} withBorder radius="md" p="sm">
+                        <Flex h={"100%"} direction="column" justify={"space-between"} >
+                            <Text size="sm" color="dimmed">
+                                Источник
+                            </Text>
+                            <Title order={2}>{data.sourceOffline} / {data.sourceTelegram}</Title>
+                            <Text size="xs" color="dimmed">за сегодня</Text>
+                        </Flex>
+                    </Paper>
+                    <Paper flex={1} withBorder radius="md" p="sm">
+                        <Flex h={"100%"} direction="column" justify={"space-between"} >
+                            <Text size="sm" color="dimmed">
+                                Среднее время обслуживания
+                            </Text>
+                            <Title order={2}>{data.avgServiceTime}</Title>
+                            <Text size="xs" color="dimmed">за сегодня</Text>
+                        </Flex>
+                    </Paper>
+                    <Paper flex={1} withBorder radius="md" p="sm">
+                        <Flex h={"100%"} direction="column" justify={"space-between"} >
+                            <Text size="sm" color="dimmed">
+                                Средняя загруженность
+                            </Text>
+                            <Title order={2}>{data.avgLoad}</Title>
+                            <Text size="xs" color="dimmed">за сегодня</Text>
+                        </Flex>
+                    </Paper>
+                </Stack>
+            </Grid.Col>
+            <Grid.Col span={10} >
+                <Grid>
+                    <Grid.Col span={6}>
+                        <Paper withBorder radius="md" p="sm">
+                            <Flex h={230} flex={1} justify="center" align="center">
+                                <Bar data={data.barChart} />
+                            </Flex>
+                        </Paper>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                        <Paper withBorder radius="md" p="sm">
+                            <Flex h={230} flex={1} justify="center" align="center">
+                                <Pie data={data.pieChart} />
+                            </Flex>
+                        </Paper>
+                    </Grid.Col>
+                    <Grid.Col span={6} >
+                        <Paper h={250} withBorder radius="md" p="sm">
+                            <Flex h={230} flex={1} justify="center" align="center">
+                                <Line data={data.lineChart} />
+                            </Flex>
+                        </Paper>
+                    </Grid.Col>
+                    <Grid.Col h={"100%"} span={6} >
+                        <Flex flex={1} direction="column" gap={10}>
+                            <Flex h={"100%"} gap={10}>
+                                <Paper h={"100%"} flex={1} withBorder radius="md" p="sm">
+                                    <Flex h={"100%"} direction="column" justify={"space-between"} >
+                                        <Text size="sm" color="dimmed">
+                                            Всего обслуженных клиентов
+                                        </Text>
+                                        <Title order={2}>{data.clientServedTotal}</Title>
+                                        <Text size="xs" color="dimmed">за сегодня</Text>
+                                    </Flex>
+                                </Paper>
+                                <Paper h={"100%"} flex={1} withBorder radius="md" p="sm">
+                                    <Flex h={"100%"} direction="column" justify={"space-between"} >
+                                        <Text size="sm" color="dimmed">
+                                            Всего обслуженных клиентов
+                                        </Text>
+                                        <Title order={2}>{data.clientServedTotal}</Title>
+                                        <Text size="xs" color="dimmed">за сегодня</Text>
+                                    </Flex>
+                                </Paper>
+                            </Flex>
+                            <Flex gap={10}>
+                                <Paper h={"100%"} flex={1} withBorder radius="md" p="sm">
+                                    <Flex h={"100%"} direction="column" justify={"space-between"} >
+                                        <Text size="sm" color="dimmed">
+                                            Всего обслуженных клиентов
+                                        </Text>
+                                        <Title order={2}>{data.clientServedTotal}</Title>
+                                        <Text size="xs" color="dimmed">за сегодня</Text>
+                                    </Flex>
+                                </Paper>
+                                <Paper h={"100%"} flex={1} withBorder radius="md" p="sm">
+                                    <Flex h={"100%"} direction="column" justify={"space-between"} >
+                                        <Text size="sm" color="dimmed">
+                                            Всего обслуженных клиентов
+                                        </Text>
+                                        <Title order={2}>{data.clientServedTotal}</Title>
+                                        <Text size="xs" color="dimmed">за сегодня</Text>
+                                    </Flex>
+                                </Paper>
+                            </Flex>
+                        </Flex>
+                    </Grid.Col>
+                </Grid>
+            </Grid.Col>
+        </Grid>
+    )
+}
+
+const EmployeesList = () => {
+    return (
+        <Flex direction="column" gap={20}>
+            <Text>Список сотрудников</Text>
+            <Card withBorder>
+                <Text>Список сотрудников</Text>
+            </Card>
+        </Flex>
+    )
+}

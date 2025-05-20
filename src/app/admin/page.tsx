@@ -1,6 +1,5 @@
 "use client";
 import { PersonalControl } from "@/widgets";
-import { AdminManagersTable } from "@/widgets/AdminManagersTable";
 import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
 import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
 import { Box, Card, Flex, Tabs, Title } from "@mantine/core";
@@ -13,7 +12,6 @@ export default function Page() {
       <Tabs defaultValue="stats">
         <Tabs.List>
           <Tabs.Tab value="stats">Статистика</Tabs.Tab>
-          <Tabs.Tab value="workers">Работники</Tabs.Tab>
           <Tabs.Tab value="controls">Управление</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="stats">
@@ -25,14 +23,6 @@ export default function Page() {
               <ManagersWeekDashBoard variant="center" />
             </Box>
           </Flex>
-        </Tabs.Panel>
-        <Tabs.Panel value="workers">
-          <Box>
-            <Title order={2}>Управление менеджерами</Title>
-            <Card withBorder mt={20}>
-              <AdminManagersTable />
-            </Card>
-          </Box>
         </Tabs.Panel>
         <Tabs.Panel value="controls">
           <Box>
