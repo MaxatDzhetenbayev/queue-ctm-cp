@@ -1,4 +1,5 @@
 import { Box, Button, Card, Flex, Grid, Group, Modal, Paper, Stack, Tabs, Text, Title, useMantineTheme } from '@mantine/core';
+
 import { useDisclosure } from '@mantine/hooks';
 import React from 'react'
 import {
@@ -99,8 +100,6 @@ const DepartmentCard = (data: IDepartment): React.ReactElement => {
         </Card>
     )
 }
-
-
 
 ChartJS.register(
     BarElement,
