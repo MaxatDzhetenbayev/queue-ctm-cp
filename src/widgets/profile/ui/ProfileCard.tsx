@@ -13,7 +13,7 @@ export const ProfileCard = () => {
   if (isError) {
     return <Title order={4}>Ошибка загрузки профиля</Title>;
   }
-  if (user.userLogin) {
+  if (user?.userLogin) {
     return (
       <Flex align="center" gap="md">
         <Text fz="h4" fw="bold">
