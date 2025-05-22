@@ -11,7 +11,7 @@ export const useLogin = () => {
     mutationKey: ["login"],
     mutationFn: async (data: ILoginData) => api.post("/auth/login", data),
     onSuccess: () => {
-      window.location.href = "/dashboard";
+      window.location.href = "/";
     },
   });
 };

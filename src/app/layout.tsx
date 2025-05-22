@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "Панель управления очередью",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
