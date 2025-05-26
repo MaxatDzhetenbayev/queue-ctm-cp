@@ -9,15 +9,17 @@ export const ProfileCard = () => {
   if (isLoading) {
     return <Skeleton h={20} w={60} />;
   }
+  console.log("user", user);
 
   if (isError) {
     return <Title order={4}>Ошибка загрузки профиля</Title>;
   }
-  if (user?.userLogin) {
+
+  if (user?.profile?.fullName) {
     return (
       <Flex align="center" gap="md">
         <Text fz="h4" fw="bold">
-          {user?.userLogin}
+          {user?.profile?.fullName}
         </Text>
       </Flex>
     );
