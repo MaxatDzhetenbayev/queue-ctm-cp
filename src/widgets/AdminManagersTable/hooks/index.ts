@@ -5,6 +5,7 @@ export interface IManager {
   id: number;
   full_name: string;
   phone: string;
+  isOnline: boolean;
 }
 
 export interface IManagers {
@@ -32,5 +33,7 @@ export const useManagersList = ({ page, search }: IManagerOption) => {
           },
         })
       ).data,
+    refetchInterval: 10000,
+    refetchOnWindowFocus: true,
   });
 };

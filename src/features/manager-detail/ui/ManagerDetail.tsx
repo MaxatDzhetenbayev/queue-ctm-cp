@@ -4,7 +4,7 @@ import { Box, Card, Flex, Modal, Text, Tabs } from "@mantine/core";
 import { IManager } from "@/widgets/AdminManagersTable/hooks";
 import { ManagerChange } from "@/features/manager-change";
 import { ManagerDestroy } from "@/features/manager-destroy";
-import { IReception, } from "@/entities";
+import { IReception } from "@/entities";
 import { useDisclosure } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/shared";
@@ -12,7 +12,7 @@ import { ReceptionDetail } from "@/features/reception-detail";
 import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
 import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
 
-export const ManagerDetailModal = ({ full_name, id }: IManager) => {
+export const ManagerDetailModal = ({ full_name, id, isOnline }: IManager) => {
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
@@ -25,9 +25,18 @@ export const ManagerDetailModal = ({ full_name, id }: IManager) => {
           open();
         }}
       >
-        <Box>
+        <Flex gap="md" align="center">
+          <Flex gap="xs" align="center">
+            <Box
+              style={{
+                padding: "8px",
+                borderRadius: "8px",
+                backgroundColor: isOnline ? "green" : "red",
+              }}
+            ></Box>
+          </Flex>
           <Text>{full_name}</Text>
-        </Box>
+        </Flex>
       </Card>
       <Modal opened={opened} onClose={close} size="70%">
         <Tabs defaultValue="info">
@@ -55,48 +64,44 @@ export const ManagerDetailModal = ({ full_name, id }: IManager) => {
   );
 };
 
-
 const ManagerReceptions = ({ id }: { id: number }) => {
-
   const { data: managerReceptions, isLoading } = useQuery({
-    queryKey: ['manager-receptions-by-id', id],
+    queryKey: ["manager-receptions-by-id", id],
     queryFn: async () => {
-      const res = await api.get(`/receptions/managers/${id}`)
-      return res.data
-    }
-  })
+      const res = await api.get(`/receptions/managers/${id}`);
+      return res.data;
+    },
+  });
 
   return (
     <Box>
-      {
-        isLoading ? (
-          <div></div>
-        ) : (
-          <Flex mt={20} direction="column" gap={10}>
-            {managerReceptions.map((reception: IReception) => (
-              <Card withBorder key={reception.id} w="100%">
-                <Flex justify="space-between" align="center">
-                  <Flex direction="column" gap={20}>
+      {isLoading ? (
+        <div></div>
+      ) : (
+        <Flex mt={20} direction="column" gap={10}>
+          {managerReceptions.map((reception: IReception) => (
+            <Card withBorder key={reception.id} w="100%">
+              <Flex justify="space-between" align="center">
+                <Flex direction="column" gap={20}>
+                  <Text>
+                    <strong>ФИО:</strong> {reception?.user?.profile.full_name}
+                  </Text>
+                  <Flex gap={20}>
                     <Text>
-                      <strong>ФИО:</strong> {reception?.user?.profile.full_name}
+                      <strong>Дата:</strong> {reception?.date}
                     </Text>
-                    <Flex gap={20}>
-                      <Text>
-                        <strong>Дата:</strong> {reception?.date}
-                      </Text>
-                      <Text>
-                        <strong>Время:</strong> {reception?.time}
-                      </Text>
-                    </Flex>
+                    <Text>
+                      <strong>Время:</strong> {reception?.time}
+                    </Text>
                   </Flex>
-
-                  <ReceptionDetail id={reception.id} />
                 </Flex>
-              </Card>
-            ))}
-          </Flex>
-        )
-      }
-    </Box >
-  )
-}
+
+                <ReceptionDetail id={reception.id} />
+              </Flex>
+            </Card>
+          ))}
+        </Flex>
+      )}
+    </Box>
+  );
+};
