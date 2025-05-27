@@ -79,7 +79,7 @@ const ManagerReceptions = ({ id }: { id: number }) => {
         <div></div>
       ) : (
         <Flex mt={20} direction="column" gap={10}>
-          {managerReceptions.map((reception: IReception) => (
+          {managerReceptions?.map((reception: IReception) => (
             <Card withBorder key={reception.id} w="100%">
               <Flex justify="space-between" align="center">
                 <Flex direction="column" gap={20}>

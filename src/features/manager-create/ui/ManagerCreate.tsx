@@ -1,13 +1,7 @@
 "use client";
 import { api } from "@/shared";
 import { queryClient } from "@/shared/providers/query-providers";
-import {
-  Button,
-  Flex,
-  Input,
-  Modal,
-  MultiSelect,
-} from "@mantine/core";
+import { Button, Flex, Input, Modal, MultiSelect } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -49,7 +43,7 @@ export const ManagerCreate = () => {
       queryClient.invalidateQueries({
         queryKey: ["managers"],
       });
-      close()
+      close();
     },
   });
 
@@ -73,9 +67,13 @@ export const ManagerCreate = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      reset({ ...getValues(), center_id: user?.center_id, service_ids: user?.services?.map((s: { id: number }) => s.id) })
+      reset({
+        ...getValues(),
+        center_id: user?.center_id,
+        service_ids: user?.services?.map((s: { id: number }) => s.id),
+      });
     }
-  }, [user, reset, getValues, isLoading])
+  }, [user, reset, getValues, isLoading]);
 
   const onSubmit = (data: FormData) => mutate(data);
   return (
@@ -86,32 +84,56 @@ export const ManagerCreate = () => {
             <Controller
               name="login"
               control={control}
-              render={({ field }) => <Input placeholder="Введите логин"  {...field} />}
+              render={({ field }) => (
+                <Input placeholder="Введите логин" {...field} />
+              )}
             />
             <Controller
               name="password"
               control={control}
-              render={({ field }) => <Input placeholder="Введите пароль" type="password" {...field} />}
+              render={({ field }) => (
+                <Input
+                  placeholder="Введите пароль"
+                  type="password"
+                  {...field}
+                />
+              )}
             />
             <Controller
               name="profile.full_name"
               control={control}
-              render={({ field }) => <Input placeholder="Введите полное ФИО" {...field} />}
+              render={({ field }) => (
+                <Input placeholder="Введите полное ФИО" {...field} />
+              )}
             />
             <Controller
               name="profile.phone"
               control={control}
-              render={({ field }) => <Input placeholder="Введите сотовый телефон" {...field} />}
+              render={({ field }) => (
+                <Input placeholder="Введите сотовый телефон" {...field} />
+              )}
             />
             <Controller
               name="cabinet"
               control={control}
-              render={({ field }) => <Input placeholder="Введите кабинет работника" onChange={(e) => field.onChange(Number(e.target.value))} value={field.value} />}
+              render={({ field }) => (
+                <Input
+                  placeholder="Введите кабинет работника"
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  value={field.value}
+                />
+              )}
             />
             <Controller
               name="table"
               control={control}
-              render={({ field }) => <Input placeholder="Введите стол работника" onChange={(e) => field.onChange(Number(e.target.value))} value={field.value} />}
+              render={({ field }) => (
+                <Input
+                  placeholder="Введите стол работника"
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  value={field.value}
+                />
+              )}
             />
             <Controller
               name="service_ids"
@@ -119,13 +141,17 @@ export const ManagerCreate = () => {
               render={({ field }) => (
                 <MultiSelect
                   data={
-                    !isServicesLoagin && services.map((s: { id: number, name: { [key: string]: string } }) => (
-                      {
-                        value: String(s.id),
-                        label: s.name["ru"]
-                      }
-                    ))
-                    || []
+                    (!isServicesLoagin &&
+                      services.map(
+                        (s: {
+                          id: number;
+                          name: { [key: string]: string };
+                        }) => ({
+                          value: String(s.id),
+                          label: s.name["ru"],
+                        })
+                      )) ||
+                    []
                   }
                   {...field}
                   value={field.value?.map(String) || []}

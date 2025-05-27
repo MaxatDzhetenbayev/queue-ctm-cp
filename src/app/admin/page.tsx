@@ -1,7 +1,7 @@
 "use client";
-import { PersonalControl } from "@/widgets";
 import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
 import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
+import { DepartmentList } from "@/widgets/departments";
 import { Box, Card, Flex, Tabs, Title } from "@mantine/core";
 
 import React from "react";
@@ -28,7 +28,7 @@ export default function Page() {
           <Box>
             <Title order={2}>Управление персоналом</Title>
             <Card withBorder mt={20}>
-              <PersonalControl />
+              <DepartmentList />
             </Card>
           </Box>
         </Tabs.Panel>

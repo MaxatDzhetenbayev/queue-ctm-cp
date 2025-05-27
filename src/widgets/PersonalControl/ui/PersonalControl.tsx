@@ -55,61 +55,6 @@ const mockData: IDepartment[] = [
   },
 ];
 
-export const PersonalControl = () => {
-  return (
-    <Grid>
-      {mockData.map((department) => (
-        <Grid.Col key={department.id}>
-          <DepartmentCard {...department} />
-        </Grid.Col>
-      ))}
-    </Grid>
-  );
-};
-
-interface IDepartment {
-  id: string;
-  name: { [key: string]: string };
-  employeesСount: number;
-  onlineEmployeesCount: number;
-  clientServedCount: number;
-  telegramClient: number;
-  offlineClient: number;
-  avgServiceTime: string;
-  avgLoadTime: string;
-}
-
-const DepartmentCard = (data: IDepartment): React.ReactElement => {
-  return (
-    <Card withBorder shadow="sm" p="lg" radius="md" mt="md">
-      <Card.Section withBorder inheritPadding py="xs">
-        <Text size="lg">{data.name.ru}</Text>
-      </Card.Section>
-      <Group mt="md">
-        <Text size="sm" color="dimmed">
-          Онлайн {data.onlineEmployeesCount} / {data.employeesСount}
-        </Text>
-      </Group>
-      <Group mt="md">
-        <Text size="sm" color="dimmed">
-          Telegram: {data.telegramClient} | Оффлайн: {data.clientServedCount}
-        </Text>
-      </Group>
-      <Group mt="md">
-        <Text size="sm" color="dimmed">
-          Загрузка: {data.avgLoadTime}
-        </Text>
-      </Group>
-      <Group mt="md">
-        <Text size="sm" color="dimmed">
-          Среднее время обслуживания: {data.avgServiceTime}
-        </Text>
-      </Group>
-      <DepartmentDetailModal id={data.id} />
-    </Card>
-  );
-};
-
 ChartJS.register(
   BarElement,
   CategoryScale,
@@ -118,46 +63,6 @@ ChartJS.register(
   PointElement,
   LineElement
 );
-
-const DepartmentDetailModal = ({ id }: { id: string }) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const isMobileMedia = useMediaQuery("(max-width: 480px)");
-
-  return (
-    <>
-      <Button color="dark" fullWidth mt="md" radius="md" onClick={open}>
-        Детальнее
-      </Button>
-
-      <Modal
-        opened={opened}
-        onClose={close}
-        size={isMobileMedia ? "100%" : "80%"}
-        title={`Отдел — ${id}`}
-        centered
-        padding={isMobileMedia ? "sm" : "xl"}
-      >
-        <Tabs defaultValue="dashboard">
-          <Tabs.List>
-            <Tabs.Tab value="dashboard">Дашборд</Tabs.Tab>
-            <Tabs.Tab value="employees">Сотрудники</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="dashboard">
-            <DepartmentDashboard />
-          </Tabs.Panel>
-          <Tabs.Panel value="employees">
-            <Box>
-              <Title order={2}>Управление менеджерами</Title>
-              <Card withBorder mt={20}>
-                <AdminManagersTable />
-              </Card>
-            </Box>
-          </Tabs.Panel>
-        </Tabs>
-      </Modal>
-    </>
-  );
-};
 
 export interface IDepartmentDashboardData {
   clientServedTotal: number;

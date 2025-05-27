@@ -1,13 +1,7 @@
 "use client";
 import { api } from "@/shared";
 import { queryClient } from "@/shared/providers/query-providers";
-import {
-  Button,
-  Flex,
-  Input,
-  MultiSelect,
-  Title,
-} from "@mantine/core";
+import { Button, Flex, Input, MultiSelect, Title } from "@mantine/core";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -75,7 +69,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
         ...managerData,
         cabinet: managerData.manager_table.cabinet,
         table: managerData.manager_table.table,
-        service_ids: managerData.services.map((s: { id: number }) => s.id)
+        service_ids: managerData.services.map((s: { id: number }) => s.id),
       });
     }
   }, [managerData, reset]);
@@ -122,13 +116,14 @@ export const ManagerChange = ({ id }: { id: number }) => {
           render={({ field }) => (
             <MultiSelect
               data={
-                !isServicesLoagin && services.map((s: { id: number, name: { [key: string]: string } }) => (
-                  {
-                    value: String(s.id),
-                    label: s.name["ru"]
-                  }
-                ))
-                || []
+                (!isServicesLoagin &&
+                  services.map(
+                    (s: { id: number; name: { [key: string]: string } }) => ({
+                      value: String(s.id),
+                      label: s.name["ru"],
+                    })
+                  )) ||
+                []
               }
               {...field}
               value={field.value?.map(String) || []}
@@ -138,7 +133,9 @@ export const ManagerChange = ({ id }: { id: number }) => {
             />
           )}
         />
-        <Button bg="dark" type="submit">Изменить данные</Button>
+        <Button bg="dark" type="submit">
+          Изменить данные
+        </Button>
       </Flex>
     </form>
   );
