@@ -18,17 +18,23 @@ export interface IManagers {
 export interface IManagerOption {
   page: number;
   search: string;
+  departmentId: string;
 }
 
-export const useManagersList = ({ page, search }: IManagerOption) => {
+export const useManagersList = ({
+  page,
+  search,
+  departmentId,
+}: IManagerOption) => {
   return useQuery<IManagers>({
-    queryKey: ["managers", page, search],
+    queryKey: ["managers", page, search, departmentId],
     queryFn: async () =>
       (
         await api.get(`/users/managers/center`, {
           params: {
             search,
             page,
+            departmentId,
             limit: 8,
           },
         })
