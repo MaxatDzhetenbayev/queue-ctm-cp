@@ -28,7 +28,7 @@ export const DepartmentCard = (data: IDepartment): React.ReactElement => {
           Среднее время обслуживания: {data.avgServiceTime}
         </Text>
       </Group>
-      <DepartmentDetail id={data.id} />
+      <DepartmentDetail departmentData={data} />
     </Card>
   );
 };

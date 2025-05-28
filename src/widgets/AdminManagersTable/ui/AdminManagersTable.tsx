@@ -1,19 +1,16 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Input,
-  Pagination,
-  Skeleton,
-  Text,
-} from "@mantine/core";
+import { Box, Flex, Input, Pagination, Skeleton, Text } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 import { IManager, useManagersList } from "../hooks";
-import { ManagerCreate, } from "@/features";
+import { ManagerCreate } from "@/features";
 import { ManagerDetailModal } from "@/features/manager-detail";
 
-export const AdminManagersTable = () => {
+export const AdminManagersTable = ({
+  departmentId,
+}: {
+  departmentId: string;
+}) => {
   const [fullName, setFullName] = useState<string>("");
   const [page, setPage] = useState(1);
 
@@ -21,14 +18,18 @@ export const AdminManagersTable = () => {
     setPage(1);
   }, [fullName]);
 
-  const { data, isLoading } = useManagersList({ page, search: fullName });
+  const { data, isLoading } = useManagersList({
+    page,
+    search: fullName,
+    departmentId,
+  });
 
   const managers = data?.managers ?? [];
   const totalPages = data?.totalPages ?? 1;
 
   return (
     <Flex direction="column" gap={20}>
-      <Flex w="100%" gap={20} >
+      <Flex w="100%" gap={20}>
         <Box flex={1}>
           <Input
             placeholder="Поиск по ФИО менеджера"

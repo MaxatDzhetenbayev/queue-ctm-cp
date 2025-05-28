@@ -3,6 +3,7 @@ import { api, getHoursFromToHourEnd } from "@/shared";
 import { queryClient } from "@/shared/providers/query-providers";
 import {
   Button,
+  Checkbox,
   Flex,
   Input,
   Modal,
@@ -18,9 +19,8 @@ import { Control, Controller, useForm, UseFormSetValue } from "react-hook-form";
 interface FormData {
   name: { [key: string]: string };
   departmentFeatures: {
-    type: string;
-    value: string;
-  }[];
+    [key: string]: string;
+  };
 }
 
 const featuresData = [
@@ -49,18 +49,15 @@ export const DepartmentCreate = () => {
     control,
     handleSubmit,
     setValue: setFormValue,
-    getValues,
   } = useForm<FormData>({
     defaultValues: {
       name: {
         ru: "",
-        en: "",
+        kz: "",
       },
-      departmentFeatures: [],
+      departmentFeatures: {},
     },
   });
-
-  console.log("getValues", getValues());
 
   const onSubmit = (data: FormData) => mutate(data);
   return (
@@ -97,33 +94,6 @@ export const DepartmentCreate = () => {
                 setFormValue={setFormValue}
               />
             )}
-            {/* Uncomment when services are available */}
-            {/* <Controller
-              name="service_ids"
-              control={control}
-              render={({ field }) => (
-                <MultiSelect
-                  data={
-                    (!isServicesLoagin &&
-                      services.map(
-                        (s: {
-                          id: number;
-                          name: { [key: string]: string };
-                        }) => ({
-                          value: String(s.id),
-                          label: s.name["ru"],
-                        })
-                      )) ||
-                    []
-                  }
-                  {...field}
-                  value={field.value?.map(String) || []}
-                  onChange={(values) => field.onChange(values.map(Number))}
-                  placeholder="Выберите сервисы"
-                  searchable
-                />
-              )}
-            /> */}
             <Button type="submit" color="dark">
               Создать
             </Button>
@@ -148,9 +118,9 @@ const DepartmentFeaturesControlInput = ({
 }) => {
   const timeSlots = getHoursFromToHourEnd("09:00", "18:30");
 
-  const [departmentFeatures, setDepartmentFeatures] = useState<
-    { type: string; value: string }[]
-  >([]);
+  const [departmentFeatures, setDepartmentFeatures] = useState<{
+    [key: string]: string;
+  }>({});
 
   useEffect(() => {
     setFormValue("departmentFeatures", departmentFeatures);
@@ -158,52 +128,79 @@ const DepartmentFeaturesControlInput = ({
 
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [isShowDepartment, setIsShowDepartment] = useState(false);
+  const [isLetterDepartment, setIsLetterDepartment] = useState(false);
 
   useEffect(() => {
     if (startTime && endTime) {
       const time = `${startTime}-${endTime}`;
-      setDepartmentFeatures((prev) => [...prev, { type: "TIME", value: time }]);
+      setDepartmentFeatures((prev) => ({ ...prev, TIME: time }));
     }
   }, [startTime, endTime]);
 
-  for (const feature of features) {
-    switch (feature) {
-      case "TIME":
-        return (
-          <Flex justify="space-between">
-            <NativeSelect
-              value={startTime}
-              onChange={(e) => setStartTime(e.currentTarget.value)}
-              data={timeSlots}
-              defaultValue={timeSlots[0]}
-              label="Выберите начальное время"
-            >
-              {timeSlots.map((slot) => (
-                <option key={slot} value={slot}>
-                  {slot}
-                </option>
-              ))}
-            </NativeSelect>
-            <NativeSelect
-              value={endTime}
-              onChange={(e) => setEndTime(e.currentTarget.value)}
-              data={timeSlots}
-              label="Выберите конечное время"
-            >
-              {timeSlots.map((slot) => (
-                <option key={slot} value={slot}>
-                  {slot}
-                </option>
-              ))}
-            </NativeSelect>
-          </Flex>
-        );
-      case "LETTER":
-        return <Input placeholder="Введите букву" />;
-      case "SHOW":
-        return <Input placeholder="Введите информацию для показа" />;
-      default:
-        return null;
-    }
-  }
+  useEffect(() => {
+    setDepartmentFeatures((prev) => ({
+      ...prev,
+      SHOW: String(isShowDepartment),
+    }));
+  }, [isShowDepartment]);
+
+  useEffect(() => {
+    setDepartmentFeatures((prev) => ({
+      ...prev,
+      LETTER: String(isLetterDepartment),
+    }));
+  }, [isLetterDepartment]);
+
+  return (
+    <>
+      {features.includes("TIME") && (
+        <Flex justify="space-between">
+          <NativeSelect
+            value={startTime}
+            onChange={(e) => setStartTime(e.currentTarget.value)}
+            data={timeSlots}
+            defaultValue={timeSlots[0]}
+            label="Выберите начальное время"
+          >
+            {timeSlots.map((slot) => (
+              <option key={slot} value={slot}>
+                {slot}
+              </option>
+            ))}
+          </NativeSelect>
+          <NativeSelect
+            value={endTime}
+            onChange={(e) => setEndTime(e.currentTarget.value)}
+            data={timeSlots}
+            label="Выберите конечное время"
+          >
+            {timeSlots.map((slot) => (
+              <option key={slot} value={slot}>
+                {slot}
+              </option>
+            ))}
+          </NativeSelect>
+        </Flex>
+      )}
+      {features.includes("SHOW") && (
+        <Checkbox
+          checked={isShowDepartment}
+          onChange={(e) => {
+            setIsShowDepartment(e.currentTarget.checked);
+          }}
+          label="Не показывать отдел в базе телеграм"
+        />
+      )}
+      {features.includes("LETTER") && (
+        <Checkbox
+          checked={isLetterDepartment}
+          onChange={(e) => {
+            setIsLetterDepartment(e.currentTarget.checked);
+          }}
+          label="Принимать людей по алфавиту (по буквам) в телеграмме"
+        />
+      )}
+    </>
+  );
 };
