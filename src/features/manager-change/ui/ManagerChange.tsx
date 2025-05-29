@@ -14,6 +14,8 @@ export const ManagerChange = ({ id }: { id: number }) => {
       return res.data;
     },
   });
+  console.log(managerData);
+
   const { data: services, isLoading: isServicesLoagin } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
@@ -26,7 +28,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
     login: string;
     password_hash: string;
     profile: {
-      full_name: string;
+      fullName: string;
       phone: string;
     };
     cabinet: string;
@@ -54,7 +56,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
       login: "",
       password_hash: "",
       profile: {
-        full_name: "",
+        fullName: "",
         phone: "",
       },
       cabinet: "",
@@ -91,7 +93,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
           render={({ field }) => <Input type="password" {...field} />}
         />
         <Controller
-          name="profile.full_name"
+          name="profile.fullName"
           control={control}
           render={({ field }) => <Input {...field} />}
         />

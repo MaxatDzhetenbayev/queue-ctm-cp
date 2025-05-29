@@ -5,13 +5,13 @@ import { Button, Flex, Input, Modal, MultiSelect } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 
-export const ManagerCreate = () => {
+export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { data: services, isLoading: isServicesLoagin } = useQuery({
+  const { data: services, isLoading: isServicesLoading } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
       const res = await api.get(`/services`);
@@ -21,17 +21,18 @@ export const ManagerCreate = () => {
 
   interface FormData {
     login: string;
+    email: string;
     password: string;
     profile: {
-      full_name: string;
+      fullName: string;
       phone: string;
     };
     cabinet: number;
     table: number;
     role: string;
-    center_id: number;
+    department_id: string;
     auth_type: string;
-    service_ids: number[];
+    service_ids: string[];
   }
 
   const { mutate } = useMutation({
@@ -47,33 +48,20 @@ export const ManagerCreate = () => {
     },
   });
 
-  const { data: user, isLoading } = useQuery({
-    queryKey: ["user-profile"],
-    queryFn: async () => (await api.get(`/users/profile`)).data,
-  });
-
-  const { control, handleSubmit, reset, getValues } = useForm<FormData>({
+  const { control, handleSubmit } = useForm<FormData>({
     defaultValues: {
       login: "",
       password: "",
+      email: "",
       profile: {
-        full_name: "",
+        fullName: "",
         phone: "",
       },
-      auth_type: "default",
-      role: "manager",
+      auth_type: "CREDENTIALS",
+      role: "MANAGER",
+      department_id: departmentId,
     },
   });
-
-  useEffect(() => {
-    if (!isLoading) {
-      reset({
-        ...getValues(),
-        center_id: user?.center_id,
-        service_ids: user?.services?.map((s: { id: number }) => s.id),
-      });
-    }
-  }, [user, reset, getValues, isLoading]);
 
   const onSubmit = (data: FormData) => mutate(data);
   return (
@@ -85,32 +73,38 @@ export const ManagerCreate = () => {
               name="login"
               control={control}
               render={({ field }) => (
-                <Input placeholder="Введите логин" {...field} />
+                <Input placeholder="Введите логин работника" {...field} />
+              )}
+            />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <Input placeholder="Введите email работника" {...field} />
               )}
             />
             <Controller
               name="password"
               control={control}
               render={({ field }) => (
-                <Input
-                  placeholder="Введите пароль"
-                  type="password"
-                  {...field}
-                />
+                <Input placeholder="Введите пароль работника" {...field} />
               )}
             />
             <Controller
-              name="profile.full_name"
+              name="profile.fullName"
               control={control}
               render={({ field }) => (
-                <Input placeholder="Введите полное ФИО" {...field} />
+                <Input placeholder="Введите полное ФИО работника" {...field} />
               )}
             />
             <Controller
               name="profile.phone"
               control={control}
               render={({ field }) => (
-                <Input placeholder="Введите сотовый телефон" {...field} />
+                <Input
+                  placeholder="Введите сотовый телефон работника"
+                  {...field}
+                />
               )}
             />
             <Controller
@@ -141,22 +135,22 @@ export const ManagerCreate = () => {
               render={({ field }) => (
                 <MultiSelect
                   data={
-                    (!isServicesLoagin &&
+                    (!isServicesLoading &&
                       services.map(
                         (s: {
-                          id: number;
-                          name: { [key: string]: string };
+                          id: string;
+                          name: { ru: string; kz: string };
                         }) => ({
-                          value: String(s.id),
+                          value: s.id, // уже строка
                           label: s.name["ru"],
                         })
                       )) ||
                     []
                   }
                   {...field}
-                  value={field.value?.map(String) || []}
-                  onChange={(values) => field.onChange(values.map(Number))}
-                  placeholder="Выберите сервисы"
+                  value={field.value || []}
+                  onChange={(values) => field.onChange(values)}
+                  placeholder="Выберите сервисы за которые будет отвечать работник"
                   searchable
                 />
               )}

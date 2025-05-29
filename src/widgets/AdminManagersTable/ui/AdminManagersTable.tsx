@@ -37,7 +37,7 @@ export const AdminManagersTable = ({
             onChange={(e) => setFullName(e.target.value)}
           />
         </Box>
-        <ManagerCreate />
+        <ManagerCreate departmentId={departmentId} />
       </Flex>
       <Box w="100%">
         {isLoading ? (
