@@ -10,7 +10,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
   const { data: managerData } = useQuery({
     queryKey: ["manager", id],
     queryFn: async () => {
-      const res = await api.get(`/users/managers/${id}`);
+      const res = await api.get(`/users/${id}`);
       return res.data;
     },
   });
@@ -33,7 +33,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
     };
     cabinet: string;
     table: string;
-    service_ids: never[];
+    service_ids: string[];
   }
 
   const { mutate } = useMutation({
@@ -69,9 +69,9 @@ export const ManagerChange = ({ id }: { id: number }) => {
     if (managerData) {
       reset({
         ...managerData,
-        cabinet: managerData.manager_table.cabinet,
-        table: managerData.manager_table.table,
-        service_ids: managerData.services.map((s: { id: number }) => s.id),
+        cabinet: managerData.employeeInfo.cabinet,
+        table: managerData.employeeInfo.table,
+        service_ids: managerData.employeeServices.map((s: { id: string }) => s.id),
       });
     }
   }, [managerData, reset]);
