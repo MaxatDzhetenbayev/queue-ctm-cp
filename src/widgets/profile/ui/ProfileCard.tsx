@@ -9,7 +9,6 @@ export const ProfileCard = () => {
   if (isLoading) {
     return <Skeleton h={20} w={60} />;
   }
-  console.log("user", user);
 
   if (isError) {
     return <Title order={4}>Ошибка загрузки профиля</Title>;
