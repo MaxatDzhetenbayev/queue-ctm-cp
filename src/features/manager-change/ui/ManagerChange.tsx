@@ -16,7 +16,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
   });
   console.log(managerData);
 
-  const { data: services, isLoading: isServicesLoagin } = useQuery({
+  const { data: services, isLoading: isServicesLoading } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
       const res = await api.get(`/services`);
@@ -24,9 +24,11 @@ export const ManagerChange = ({ id }: { id: number }) => {
     },
   });
 
+  console.log(services);
+
   interface FormData {
     login: string;
-    password_hash: string;
+    password: string;
     profile: {
       fullName: string;
       phone: string;
@@ -54,7 +56,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
   const { control, reset, handleSubmit } = useForm<FormData>({
     defaultValues: {
       login: "",
-      password_hash: "",
+      password: "",
       profile: {
         fullName: "",
         phone: "",
@@ -88,7 +90,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
           render={({ field }) => <Input {...field} />}
         />
         <Controller
-          name="password_hash"
+          name="password"
           control={control}
           render={({ field }) => <Input type="password" {...field} />}
         />
@@ -118,19 +120,22 @@ export const ManagerChange = ({ id }: { id: number }) => {
           render={({ field }) => (
             <MultiSelect
               data={
-                (!isServicesLoagin &&
+                (!isServicesLoading &&
                   services.map(
-                    (s: { id: number; name: { [key: string]: string } }) => ({
-                      value: String(s.id),
-                      label: s.name["ru"],
+                    (s: {
+                      id: string;
+                      name: { ru: string; kz: string };
+                    }) => ({
+                      value: s.id,
+                      label: s.name.ru,
                     })
                   )) ||
                 []
               }
               {...field}
-              value={field.value?.map(String) || []}
-              onChange={(values) => field.onChange(values.map(Number))}
-              placeholder="Выберите сервисы"
+              value={field.value || []}
+              onChange={(values) => field.onChange(values)}
+              placeholder="Выберите сервисы за которые будет отвечать работник"
               searchable
             />
           )}
