@@ -9,7 +9,7 @@ export default async function Page() {
     .join("; ");
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}users/profile`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profile`,
     {
       method: "GET",
       headers: {
@@ -21,7 +21,6 @@ export default async function Page() {
   const data = res.ok ? await res.json() : null;
   const user = data;
 
-  console.log(user.role);
 
   if (user || user?.role === "ADMIN") {
     redirect("/admin");
