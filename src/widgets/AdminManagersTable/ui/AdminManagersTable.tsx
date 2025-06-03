@@ -53,7 +53,7 @@ export const AdminManagersTable = ({
             justify="space-between"
             w="100%"
             gap={10}
-            mih={593}
+            mih={450}
           >
             <Flex direction="column" gap={10}>
               {managers.length > 0 ? (
