@@ -14,7 +14,6 @@ export const ManagerChange = ({ id }: { id: number }) => {
       return res.data;
     },
   });
-  console.log(managerData);
 
   const { data: services, isLoading: isServicesLoading } = useQuery({
     queryKey: ["services"],
@@ -23,8 +22,6 @@ export const ManagerChange = ({ id }: { id: number }) => {
       return res.data;
     },
   });
-
-  console.log(services);
 
   interface FormData {
     login: string;
@@ -67,16 +64,25 @@ export const ManagerChange = ({ id }: { id: number }) => {
     },
   });
 
+  // Обновляем значения формы, только когда managerData и services загружены
   useEffect(() => {
-    if (managerData) {
+    if (managerData && services && !isServicesLoading) {
       reset({
-        ...managerData,
+        login: managerData.login,
+        password: "", // Пароль не возвращается, поэтому оставим пустым
+        profile: {
+          fullName: managerData.profile.fullName,
+          phone: managerData.profile.phone,
+        },
         cabinet: managerData.employeeInfo.cabinet,
         table: managerData.employeeInfo.table,
-        service_ids: managerData.employeeServices.map((s: { id: string }) => s.id),
+        service_ids: managerData.employeeServices.map(
+          (s: { serviceId: string }) => s.serviceId
+        ),
       });
     }
-  }, [managerData, reset]);
+  }, [managerData, services, isServicesLoading, reset]);
+
 
   const onSubmit = (data: FormData) => mutate(data);
 
@@ -120,22 +126,19 @@ export const ManagerChange = ({ id }: { id: number }) => {
           render={({ field }) => (
             <MultiSelect
               data={
-                (!isServicesLoading &&
-                  services.map(
-                    (s: {
-                      id: string;
-                      name: { ru: string; kz: string };
-                    }) => ({
-                      value: s.id,
-                      label: s.name.ru,
-                    })
-                  )) ||
-                []
+                services?.map(
+                  (s: {
+                    id: string;
+                    name: { ru: string; kz: string };
+                  }) => ({
+                    value: s.id,
+                    label: s.name.ru,
+                  })
+                ) || []
               }
-              {...field}
               value={field.value || []}
               onChange={(values) => field.onChange(values)}
-              placeholder="Выберите сервисы за которые будет отвечать работник"
+              placeholder="Выберите сервисы, за которые будет отвечать работник"
               searchable
             />
           )}
