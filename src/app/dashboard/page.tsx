@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ManagerReceptions } from "@/widgets";
 import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
 import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
@@ -12,12 +12,12 @@ export default function Page() {
       <Tabs defaultValue="receptions">
         <Tabs.List>
           <Tabs.Tab value="receptions">Записи</Tabs.Tab>
-          <Tabs.Tab value="stats">Статистика</Tabs.Tab>
+          {/* <Tabs.Tab value="stats">Статистика</Tabs.Tab> */}
         </Tabs.List>
         <Tabs.Panel value="receptions">
           <ManagerReceptions />
         </Tabs.Panel>
-        <Tabs.Panel value="stats">
+        {/* <Tabs.Panel value="stats">
           <Box>
             <Box flex={1}>
               <ManagersTodaySummary variant="manager" />
@@ -26,8 +26,8 @@ export default function Page() {
               <ManagersWeekDashBoard variant="manager" />
             </Box>
           </Box>
-        </Tabs.Panel>
+        </Tabs.Panel> */}
       </Tabs>
-    </Flex >
+    </Flex>
   );
 }

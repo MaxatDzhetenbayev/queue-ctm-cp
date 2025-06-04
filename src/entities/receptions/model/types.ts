@@ -9,20 +9,21 @@ export interface IReception {
   };
   user: {
     id: number;
+    authType: string;
     profile: {
       iin: string;
-      full_name: string;
+      fullName: string;
       phone: string;
     };
     visitor_type: {
-      name: string
-    }
+      name: string;
+    };
   };
   service: {
     name: {
-      [key: string]: string
-    }
-  }
+      [key: string]: string;
+    };
+  };
 }
 
 export interface IReceptionFormated {
@@ -30,7 +31,7 @@ export interface IReceptionFormated {
     id: number;
   };
   profile: {
-    full_name: string;
+    fullName: string;
     phone: string;
   };
   id: number;

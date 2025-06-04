@@ -1,12 +1,82 @@
 "use client";
 import { api } from "@/shared";
 import { queryClient } from "@/shared/providers/query-providers";
-import { Button, Flex, Input, Modal, MultiSelect } from "@mantine/core";
+import { Button, Flex, Input, Modal, MultiSelect, Select } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm, UseFormSetValue } from "react-hook-form";
+
+interface DepartmentFeature {
+  id: string;
+  type: string;
+  value: string;
+}
+
+interface FormData {
+  login: string;
+  email: string;
+  password: string;
+  profile: {
+    fullName: string;
+    phone: string;
+  };
+  cabinet: number;
+  table: number;
+  role: string;
+  department_id: string;
+  auth_type: string;
+  service_ids: string[];
+  employee_features?: {
+    [key: string]: string;
+  };
+}
+
+const kazakhAlphabet = [
+  "А",
+  "Ә",
+  "Б",
+  "В",
+  "Г",
+  "Ғ",
+  "Д",
+  "Е",
+  "Ё",
+  "Ж",
+  "З",
+  "И",
+  "Й",
+  "К",
+  "Қ",
+  "Л",
+  "М",
+  "Н",
+  "Ң",
+  "О",
+  "Ө",
+  "П",
+  "Р",
+  "С",
+  "Т",
+  "У",
+  "Ұ",
+  "Ү",
+  "Ф",
+  "Х",
+  "Һ",
+  "Ц",
+  "Ч",
+  "Ш",
+  "Щ",
+  "Ъ",
+  "Ы",
+  "І",
+  "Ь",
+  "Э",
+  "Ю",
+  "Я",
+];
 
 export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -19,21 +89,13 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
     },
   });
 
-  interface FormData {
-    login: string;
-    email: string;
-    password: string;
-    profile: {
-      fullName: string;
-      phone: string;
-    };
-    cabinet: number;
-    table: number;
-    role: string;
-    department_id: string;
-    auth_type: string;
-    service_ids: string[];
-  }
+  const { data: departmentFeatures } = useQuery<DepartmentFeature[]>({
+    queryKey: ["department-features", departmentId],
+    queryFn: async () => {
+      const res = await api.get(`/departments/${departmentId}/features`);
+      return res.data;
+    },
+  });
 
   const { mutate } = useMutation({
     mutationKey: ["manager-create"],
@@ -48,7 +110,12 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
     },
   });
 
-  const { control, handleSubmit } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    setValue: setFormValue,
+    getValues,
+  } = useForm<FormData>({
     defaultValues: {
       login: "",
       password: "",
@@ -63,6 +130,7 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
     },
   });
 
+  console.log(getValues());
   const onSubmit = (data: FormData) => mutate(data);
   return (
     <>
@@ -155,6 +223,12 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
                 />
               )}
             />
+            {departmentFeatures && (
+              <EmployeeFeaturesForm
+                departmentFeatures={departmentFeatures}
+                setFormValue={setFormValue}
+              />
+            )}
             <Button type="submit">Создать</Button>
           </Flex>
         </form>
@@ -163,5 +237,60 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
         Создать менеджера
       </Button>
     </>
+  );
+};
+
+const EmployeeFeaturesForm = ({
+  departmentFeatures,
+  setFormValue,
+}: {
+  departmentFeatures: DepartmentFeature[];
+  setFormValue: UseFormSetValue<FormData>;
+}) => {
+  const [startLetter, setStartLetter] = useState<string>();
+  const [endLetter, setEndLetter] = useState<string>();
+
+  useEffect(() => {
+    if (startLetter && endLetter) {
+      const letters = `${startLetter}-${endLetter}`;
+      setFormValue("employee_features", {
+        LETTER: letters,
+      });
+    }
+  }, [startLetter, endLetter, setFormValue]);
+
+  return (
+    <Flex>
+      <Flex direction="column" gap={10}>
+        {departmentFeatures.some((feature) => feature.type === "LETTER") && (
+          <>
+            Выберите буквы за которые отвечает работник
+            <Select
+              label="С какой буквы"
+              data={kazakhAlphabet}
+              value={startLetter}
+              onChange={(value) => {
+                setStartLetter(value || "");
+                setEndLetter(""); // сброс endLetter при смене начала
+              }}
+              placeholder="Начальная буква"
+            />
+            <Select
+              label="По какую букву"
+              data={kazakhAlphabet.filter(
+                (letter) =>
+                  startLetter &&
+                  kazakhAlphabet.indexOf(letter) >
+                    kazakhAlphabet.indexOf(startLetter)
+              )}
+              value={endLetter}
+              onChange={(value) => setEndLetter(value || "")}
+              placeholder="Конечная буква"
+              disabled={!startLetter}
+            />
+          </>
+        )}
+      </Flex>
+    </Flex>
   );
 };

@@ -30,8 +30,8 @@ export const ManagerChange = ({ id }: { id: number }) => {
       fullName: string;
       phone: string;
     };
-    cabinet: string;
-    table: string;
+    cabinet: number | null;
+    table: number | null;
     service_ids: string[];
   }
 
@@ -52,14 +52,12 @@ export const ManagerChange = ({ id }: { id: number }) => {
 
   const { control, reset, handleSubmit } = useForm<FormData>({
     defaultValues: {
-      login: "",
-      password: "",
       profile: {
         fullName: "",
         phone: "",
       },
-      cabinet: "",
-      table: "",
+      cabinet: null,
+      table: null,
       service_ids: [],
     },
   });
@@ -82,7 +80,6 @@ export const ManagerChange = ({ id }: { id: number }) => {
       });
     }
   }, [managerData, services, isServicesLoading, reset]);
-
 
   const onSubmit = (data: FormData) => mutate(data);
 
@@ -113,12 +110,24 @@ export const ManagerChange = ({ id }: { id: number }) => {
         <Controller
           name="cabinet"
           control={control}
-          render={({ field }) => <Input {...field} />}
+          render={({ field }) => (
+            <Input
+              type="number"
+              {...field}
+              value={field.value === null ? "" : field.value}
+            />
+          )}
         />
         <Controller
           name="table"
           control={control}
-          render={({ field }) => <Input {...field} />}
+          render={({ field }) => (
+            <Input
+              type="number"
+              {...field}
+              value={field.value === null ? "" : field.value}
+            />
+          )}
         />
         <Controller
           name="service_ids"
@@ -127,10 +136,7 @@ export const ManagerChange = ({ id }: { id: number }) => {
             <MultiSelect
               data={
                 services?.map(
-                  (s: {
-                    id: string;
-                    name: { ru: string; kz: string };
-                  }) => ({
+                  (s: { id: string; name: { ru: string; kz: string } }) => ({
                     value: s.id,
                     label: s.name.ru,
                   })

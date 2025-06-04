@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Box, Card, Flex, Modal, Text, Tabs } from "@mantine/core";
+import { Box, Card, Flex, Modal, Text, Tabs, Badge } from "@mantine/core";
 import { IManager } from "@/widgets/AdminManagersTable/hooks";
 import { ManagerChange } from "@/features/manager-change";
 import { ManagerDestroy } from "@/features/manager-destroy";
@@ -42,7 +42,7 @@ export const ManagerDetailModal = ({ full_name, id, isOnline }: IManager) => {
         <Tabs defaultValue="info">
           <Tabs.List>
             <Tabs.Tab value="info">Общая информация</Tabs.Tab>
-            <Tabs.Tab value="stats">Статистика</Tabs.Tab>
+            {/* <Tabs.Tab value="stats">Статистика</Tabs.Tab> */}
             <Tabs.Tab value="receptions">Записи</Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="info">
@@ -51,10 +51,10 @@ export const ManagerDetailModal = ({ full_name, id, isOnline }: IManager) => {
               <ManagerDestroy id={id} />
             </Flex>
           </Tabs.Panel>
-          <Tabs.Panel value="stats">
+          {/* <Tabs.Panel value="stats">
             <ManagersTodaySummary id={id} variant="manager" />
             <ManagersWeekDashBoard id={id} variant="manager" />
-          </Tabs.Panel>
+          </Tabs.Panel> */}
           <Tabs.Panel value="receptions">
             <ManagerReceptions id={id} />
           </Tabs.Panel>
@@ -82,21 +82,38 @@ const ManagerReceptions = ({ id }: { id: number }) => {
           {managerReceptions?.map((reception: IReception) => (
             <Card withBorder key={reception.id} w="100%">
               <Flex justify="space-between" align="center">
-                <Flex direction="column" gap={20}>
-                  <Text>
-                    <strong>ФИО:</strong> {reception?.user?.profile.full_name}
-                  </Text>
-                  <Flex gap={20}>
-                    <Text>
-                      <strong>Дата:</strong> {reception?.date}
-                    </Text>
-                    <Text>
-                      <strong>Время:</strong> {reception?.time}
-                    </Text>
+                <Flex direction="column" gap={10}>
+                  <Badge color="dark">
+                    {reception?.user?.authType === "TELEGRAM"
+                      ? "Телеграм"
+                      : "Оффлайн"}
+                  </Badge>
+                  <Flex direction="column" gap={10}>
+                    <Flex gap={30}>
+                      <Text>
+                        <strong>ФИО:</strong>{" "}
+                        {reception?.user?.profile.fullName}
+                      </Text>
+                      <Text>
+                        <strong>ИИН:</strong> {reception?.user?.profile.iin}
+                      </Text>
+                    </Flex>
+                    <Flex gap={30}>
+                      <Text>
+                        <strong>Телефон:</strong>
+                        {reception?.user?.profile.phone}
+                      </Text>
+                      <Flex gap={20}>
+                        <Text>
+                          <strong>Дата:</strong> {reception?.date}
+                        </Text>
+                        <Text>
+                          <strong>Время:</strong> {reception?.time}
+                        </Text>
+                      </Flex>
+                    </Flex>
                   </Flex>
                 </Flex>
-
-                <ReceptionDetail id={reception.id} />
               </Flex>
             </Card>
           ))}
