@@ -5,6 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 export const useManagerReceptions = () => {
   return useQuery<IReception[]>({
     queryKey: ["receptions-list"],
-    queryFn: async () => (await api.get("/receptions")).data,
+    queryFn: async () => (await api.get("/receptions/managers/me")).data,
   });
 };
