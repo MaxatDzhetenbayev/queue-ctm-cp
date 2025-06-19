@@ -13,7 +13,7 @@ interface FormData {
   full_name: string;
   iin: string;
   phone: string;
-  serviceId: number;
+  serviceId: string;
 }
 
 export const ReceptionCreateOffline = () => {
@@ -51,7 +51,7 @@ export const ReceptionCreateOffline = () => {
     if (isUserFindSuccess) {
       reset((prev) => ({
         ...prev,
-        full_name: userByIin.full_name,
+        full_name: userByIin.fullName,
         phone: userByIin.phone,
         serviceId: userByIin.serviceId,
       }));
@@ -105,7 +105,7 @@ export const ReceptionCreateOffline = () => {
                   <>
                     <Input
                       disabled
-                      value={userByIin.full_name}
+                      value={userByIin.fullName}
                       placeholder="Введите полное ФИО"
                     />
                     <Input
@@ -118,20 +118,21 @@ export const ReceptionCreateOffline = () => {
                       control={control}
                       render={({ field }) => (
                         <Select
-                          value={String(field.value)}
-                          onChange={(value) => field.onChange(Number(value))}
+                          value={field.value}
+                          onChange={(value) => field.onChange(value)}
                           placeholder="Выберите сервис"
                           data={
                             (!isServicesLoading &&
                               managerServices.map(
                                 (s: {
-                                  id: number;
+                                  id: string;
                                   name: { [key: string]: string };
                                 }) => ({
-                                  value: String(s.id),
+                                  value: s.id,
                                   label: s.name["ru"],
                                 })
-                              )) || []
+                              )) ||
+                            []
                           }
                         />
                       )}
@@ -162,7 +163,7 @@ export const ReceptionCreateOffline = () => {
                       control={control}
                       render={({ field }) => (
                         <Select
-                          value={String(field.value)}
+                          value={field.value}
                           onChange={(value) => field.onChange(value)}
                           placeholder="Выберите сервис"
                           data={
@@ -172,7 +173,7 @@ export const ReceptionCreateOffline = () => {
                                   id: string;
                                   name: { [key: string]: string };
                                 }) => ({
-                                  value: String(s.id),
+                                  value: s.id,
                                   label: s.name["ru"],
                                 })
                               )) ||
