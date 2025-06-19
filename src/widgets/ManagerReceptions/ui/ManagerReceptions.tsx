@@ -10,19 +10,19 @@ import {
 } from "@/features";
 import { Box, Flex, Skeleton, Table, Title } from "@mantine/core";
 
-export function normalizeStatus(status?: string) {
+export function normalizeStatus(status?: Statuses) {
   switch (status) {
-    case "pending":
+    case Statuses.PENDING:
       return "На ожидании";
-    case "working":
+    case Statuses.WORKING:
       return "В работе";
-    case "done":
+    case Statuses.DONE:
       return "Завершен";
-    case "canceled":
+    case Statuses.CANCELED:
       return "Отменен";
-    case "no-show":
+    case Statuses.NO_SHOW:
       return "Не пришел";
-    case "called":
+    case Statuses.CALLED:
       return "Приглашение";
     default:
       return "Ошибка";
@@ -98,14 +98,14 @@ export const ManagerReceptions = () => {
                     </Table.Td>
                     <Table.Td className="px-6 py-2">
                       <span className="px-2 py-1 text-xs rounded-full bg-primary-100">
-                        {normalizeStatus(reception?.status?.name)}
+                        {normalizeStatus(reception?.status)}
                       </span>
                     </Table.Td>
                     <Table.Td className="px-6 py-2 space-x-2">
-                      {reception.status.id === Statuses.DONE && (
+                      {reception.status === Statuses.DONE && (
                         <ReceptionDetail id={reception.id} />
                       )}
-                      {reception.status.id === Statuses.NO_SHOW && (
+                      {reception.status === Statuses.NO_SHOW && (
                         <Flex gap={8}>
                           <ChangeReceptiontionStatusButton
                             id={reception.id}
@@ -116,10 +116,10 @@ export const ManagerReceptions = () => {
                           <ReceptionDetail id={reception.id} />
                         </Flex>
                       )}
-                      {reception.status.id === Statuses.CANCELED && (
+                      {reception.status === Statuses.CANCELED && (
                         <ReceptionDetail id={reception.id} />
                       )}
-                      {reception.status.id === Statuses.CALLED && (
+                      {reception.status === Statuses.CALLED && (
                         <Flex gap={8}>
                           <ChangeReceptiontionStatusButton
                             id={reception.id}
@@ -135,7 +135,7 @@ export const ManagerReceptions = () => {
                           </ChangeReceptiontionStatusButton>
                         </Flex>
                       )}
-                      {reception.status.id === Statuses.PENDING && (
+                      {reception.status === Statuses.PENDING && (
                         <Flex gap={8}>
                           <ChangeReceptiontionStatusButton
                             id={reception.id}
@@ -147,7 +147,7 @@ export const ManagerReceptions = () => {
                           <ReceptionDetail id={reception.id} />
                         </Flex>
                       )}
-                      {reception.status.id === Statuses.WORKING && (
+                      {reception.status === Statuses.WORKING && (
                         <Flex gap={8}>
                           <ChangeReceptiontionStatusButton
                             id={reception.id}

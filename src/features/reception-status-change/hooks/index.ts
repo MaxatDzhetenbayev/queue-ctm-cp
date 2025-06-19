@@ -4,12 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 
 export enum Statuses {
   ASSIGMENT = 1,
-  PENDING = 2,
-  WORKING = 3,
-  DONE = 4,
-  CANCELED = 5,
-  NO_SHOW = 6,
-  CALLED = 7,
+  PENDING = "PENDING",
+  WORKING = "WORKING",
+  DONE = "DONE",
+  CANCELED = "CANCELED",
+  NO_SHOW = "NOSHOW",
+  CALLED = "CALLED",
 }
 
 export interface ChangeReceptionStatusProps {

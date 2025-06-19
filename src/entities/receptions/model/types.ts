@@ -1,12 +1,11 @@
+import { Statuses } from "@/features";
+
 export interface IReception {
   id: number;
   date: string;
   time: string;
   rating: number | null;
-  status: {
-    id: number;
-    name: string;
-  };
+  status: Statuses;
   user: {
     id: number;
     authType: string;
@@ -14,9 +13,6 @@ export interface IReception {
       iin: string;
       fullName: string;
       phone: string;
-    };
-    visitor_type: {
-      name: string;
     };
   };
   service: {
@@ -37,6 +33,6 @@ export interface IReceptionFormated {
   id: number;
   date: string;
   time: string;
-  status: { name: string; id: number };
+  status: Statuses;
   rating: number | null;
 }
