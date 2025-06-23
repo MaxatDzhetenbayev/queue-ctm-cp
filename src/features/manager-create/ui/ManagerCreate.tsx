@@ -114,7 +114,6 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
     control,
     handleSubmit,
     setValue: setFormValue,
-    getValues,
   } = useForm<FormData>({
     defaultValues: {
       login: "",
@@ -130,7 +129,6 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
     },
   });
 
-  console.log(getValues());
   const onSubmit = (data: FormData) => mutate(data);
   return (
     <>

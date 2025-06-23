@@ -1,8 +1,12 @@
 "use client";
 import { ManagerReceptions } from "@/widgets";
-import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
-import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
-import { Box, Flex, Tabs } from "@mantine/core";
+// import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
+// import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
+import {
+  // Box,
+  Flex,
+  Tabs,
+} from "@mantine/core";
 
 import React from "react";
 
