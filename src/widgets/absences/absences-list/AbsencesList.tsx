@@ -30,19 +30,19 @@ export interface Absence {
 }
 
 export enum AbsenceType {
-  VACATION = "VACATION",
   SICK_LEAVE = "SICK_LEAVE",
-  OTHER = "OTHER",
+  HOLIDAY = "HOLIDAY",
+  PERSONAL = "PERSONAL",
 }
 
 export const getAbsenceTypeText = (type: AbsenceType): string => {
   switch (type) {
-    case AbsenceType.VACATION:
+    case AbsenceType.HOLIDAY:
       return "Отпуск";
     case AbsenceType.SICK_LEAVE:
       return "Больничный";
-    case AbsenceType.OTHER:
-      return "Другое";
+    case AbsenceType.PERSONAL:
+      return "Личное";
     default:
       return "Другое";
   }
@@ -53,7 +53,6 @@ export const AbsencesList = () => {
     queryKey: ["absences"],
     queryFn: async () => (await api.get("leaves/center")).data,
   });
-
 
   return (
     <Paper withBorder p={20}>
