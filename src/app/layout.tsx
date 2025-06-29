@@ -8,6 +8,7 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
 import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
