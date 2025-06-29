@@ -9,7 +9,7 @@ import React from "react";
 
 export default function AbsencesPage() {
   return (
-    <Grid columns={9} gutter="xl">
+    <Grid columns={9} gutter="lg">
       <Grid.Col span={6}>
         <AbsencesList />
       </Grid.Col>
