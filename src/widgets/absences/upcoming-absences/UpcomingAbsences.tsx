@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Box, Flex, Paper, Pill, Stack, Title } from "@mantine/core";
+import { Avatar, Flex, Paper, Pill, Stack, Text, Title } from "@mantine/core";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
 export const UpcomingAbsences = () => {
@@ -29,7 +29,7 @@ const UpcomingAbsenceItem = () => {
       </Flex>
       <Flex mt={10} align="center" gap={10}>
         <FaRegCalendarAlt />
-        <Box>29.06.2025 - 12.07.2025</Box>
+        <Text mt={4}>29.06.2025 - 12.07.2025</Text>
       </Flex>
     </Paper>
   );
