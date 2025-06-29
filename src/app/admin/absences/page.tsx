@@ -1,6 +1,10 @@
 "use client";
-import { AbsencesList, AbsencesTypeProgress } from "@/widgets";
-import { Grid, Space } from "@mantine/core";
+import {
+  AbsencesList,
+  AbsencesTypeProgress,
+  UpcomingAbsences,
+} from "@/widgets";
+import { Grid } from "@mantine/core";
 import React from "react";
 
 export default function AbsencesPage() {
@@ -13,7 +17,7 @@ export default function AbsencesPage() {
         <AbsencesTypeProgress />
       </Grid.Col>
       <Grid.Col span={6}>
-        <Space p={"md"}>sdfsdf</Space>
+        <UpcomingAbsences />
       </Grid.Col>
     </Grid>
   );

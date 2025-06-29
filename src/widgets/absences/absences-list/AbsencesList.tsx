@@ -1,11 +1,11 @@
 import React from "react";
-import { Box, Button, Flex, Table, Title } from "@mantine/core";
+import { Button, Flex, Paper, Table, Title } from "@mantine/core";
 import { FaPlus } from "react-icons/fa";
 import { AbsencesItem } from "./ui/absences-item/AbsencesItem";
 
 export const AbsencesList = () => {
   return (
-    <Box component="section">
+    <Paper withBorder p={20}>
       <Flex justify="space-between" align="center">
         <Title order={2}>Список отсутствий</Title>
         <Button variant="filled" color="dark" size="md">
@@ -28,6 +28,6 @@ export const AbsencesList = () => {
         <AbsencesItem />
         <AbsencesItem />
       </Table>
-    </Box>
+    </Paper>
   );
 };

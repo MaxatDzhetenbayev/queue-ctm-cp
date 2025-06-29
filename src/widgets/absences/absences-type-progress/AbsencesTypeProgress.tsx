@@ -1,9 +1,9 @@
-import { Box, Flex, Progress, Stack, Text, Title } from "@mantine/core";
+import { Box, Flex, Paper, Progress, Stack, Text, Title } from "@mantine/core";
 import React from "react";
 
 export const AbsencesTypeProgress = () => {
   return (
-    <Box component="section">
+    <Paper withBorder p={20}>
       <Title order={2}>Статистика</Title>
       <Stack gap="md" mt={20}>
         <Box>
@@ -35,6 +35,6 @@ export const AbsencesTypeProgress = () => {
           <Progress value={50} color="blue" />
         </Box>
       </Stack>
-    </Box>
+    </Paper>
   );
 };
