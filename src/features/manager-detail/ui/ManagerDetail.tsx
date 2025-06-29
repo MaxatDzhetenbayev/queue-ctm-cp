@@ -105,10 +105,19 @@ const ManagerReceptions = ({ id }: { id: number }) => {
                       </Text>
                       <Flex gap={20}>
                         <Text>
-                          <strong>Дата:</strong> {reception?.date}
+                          <strong>Дата:</strong>{" "}
+                          {new Date(
+                            reception?.date as string
+                          ).toLocaleDateString("ru-RU")}
                         </Text>
                         <Text>
-                          <strong>Время:</strong> {reception?.time}
+                          <strong>Время:</strong>{" "}
+                          {new Date(
+                            reception?.time as string
+                          ).toLocaleTimeString("ru-RU", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </Text>
                       </Flex>
                     </Flex>
