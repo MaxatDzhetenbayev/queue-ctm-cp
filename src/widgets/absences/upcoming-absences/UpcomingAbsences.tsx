@@ -1,12 +1,16 @@
 import React from "react";
 import { Avatar, Flex, Paper, Pill, Stack, Text, Title } from "@mantine/core";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import { Absence, getAbsenceTypeText } from "../absences-list/AbsencesList";
+import {
+  Absence,
+  AbsenceResponse,
+  getAbsenceTypeText,
+} from "../absences-list/AbsencesList";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/shared";
 
 export const UpcomingAbsences = () => {
-  const { data } = useQuery<Absence[]>({
+  const { data } = useQuery<AbsenceResponse>({
     queryKey: ["absences-upcoming"],
     queryFn: async () =>
       (
@@ -24,7 +28,7 @@ export const UpcomingAbsences = () => {
     <Paper withBorder p={20} radius="md">
       <Title order={3}>Ближайшие отсутствия</Title>
       <Stack mt={20} gap={10}>
-        {data?.map((item) => (
+        {data?.data?.map((item) => (
           <UpcomingAbsenceItem key={item.id} {...item} />
         ))}
       </Stack>
