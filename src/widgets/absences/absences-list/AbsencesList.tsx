@@ -22,7 +22,7 @@ export const AbsencesList = () => {
   return (
     <Paper withBorder p={20}>
       <Flex justify="space-between" align="center">
-        <Title order={2}>Список отсутствий</Title>
+        <Title order={3}>Список отсутствий</Title>
         <CreateAbsenceModal />
       </Flex>
       <Table mt={20} stickyHeader stickyHeaderOffset={60}>
@@ -40,7 +40,9 @@ export const AbsencesList = () => {
         <AbsencesItem />
       </Table>
       <Flex justify="space-between" align={"center"} mt={10}>
-        <Text>Показано 1-10 из 24 записей</Text>
+        <Text c="dimmed" size="sm">
+          Показано 1-10 из 24 записей
+        </Text>
         <Pagination total={10} />
       </Flex>
     </Paper>

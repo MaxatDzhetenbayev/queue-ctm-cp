@@ -5,7 +5,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 export const UpcomingAbsences = () => {
   return (
     <Paper withBorder p={20} radius="md">
-      <Title order={2}>Ближайшие отсутствия</Title>
+      <Title order={3}>Ближайшие отсутствия</Title>
       <Stack mt={20} gap={10}>
         <UpcomingAbsenceItem />
         <UpcomingAbsenceItem />
@@ -29,7 +29,9 @@ const UpcomingAbsenceItem = () => {
       </Flex>
       <Flex mt={10} align="center" gap={10}>
         <FaRegCalendarAlt />
-        <Text mt={4}>29.06.2025 - 12.07.2025</Text>
+        <Text c="dimmed" mt={4}>
+          29.06.2025 - 12.07.2025
+        </Text>
       </Flex>
     </Paper>
   );

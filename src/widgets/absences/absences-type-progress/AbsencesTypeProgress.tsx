@@ -4,37 +4,25 @@ import React from "react";
 export const AbsencesTypeProgress = () => {
   return (
     <Paper withBorder p={20}>
-      <Title order={2}>Статистика</Title>
+      <Title order={3}>Статистика</Title>
       <Stack gap="md" mt={20}>
-        <Box>
-          <Flex justify="space-between" align="center">
-            <Text>Отпуск</Text>
-            <Text>50%</Text>
-          </Flex>
-          <Progress value={50} color="blue" />
-        </Box>
-        <Box>
-          <Flex justify="space-between" align="center">
-            <Text>Отпуск</Text>
-            <Text>50%</Text>
-          </Flex>
-          <Progress value={50} color="blue" />
-        </Box>
-        <Box>
-          <Flex justify="space-between" align="center">
-            <Text>Отпуск</Text>
-            <Text>50%</Text>
-          </Flex>
-          <Progress value={50} color="blue" />
-        </Box>
-        <Box>
-          <Flex justify="space-between" align="center">
-            <Text>Отпуск</Text>
-            <Text>50%</Text>
-          </Flex>
-          <Progress value={50} color="blue" />
-        </Box>
+        <AbsencesTypeItem />
+        <AbsencesTypeItem />
+        <AbsencesTypeItem />
+        <AbsencesTypeItem />
       </Stack>
     </Paper>
+  );
+};
+
+const AbsencesTypeItem = () => {
+  return (
+    <Box>
+      <Flex justify="space-between" align="center">
+        <Text>Отпуск</Text>
+        <Text c="dimmed">50%</Text>
+      </Flex>
+      <Progress value={50} color="blue" />
+    </Box>
   );
 };
