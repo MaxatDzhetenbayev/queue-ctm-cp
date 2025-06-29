@@ -96,7 +96,7 @@ const CreateAbsenceModal = () => {
                 onChange={setValue}
               />
             </Flex>
-            <Button type="submit" mt="md">
+            <Button variant="filled" color="dark" type="submit" mt="md">
               Добавить
             </Button>
           </Stack>
