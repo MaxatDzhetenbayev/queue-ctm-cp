@@ -1,18 +1,21 @@
 import { Avatar, Button, Flex, Pill, Table } from "@mantine/core";
 import React from "react";
+import { Absence, getAbsenceTypeText } from "../../AbsencesList";
 
-export const AbsencesItem = () => {
+export const AbsencesItem = (data: Absence) => {
   return (
     <Table.Tr>
       <Table.Td style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <Avatar name={"Максат Джетенбаев"} color="initials" />
-        Максат Джетенбаев
+        {data.employeeName}
       </Table.Td>
       <Table.Td>
-        <Pill>Отпуск</Pill>
+        <Pill>{getAbsenceTypeText(data.type)}</Pill>
       </Table.Td>
-      <Table.Td>29.06.2025 - 12.07.2025</Table.Td>
-
+      <Table.Td>
+        {new Date(data?.startDate).toLocaleDateString("ru-RU")} -{" "}
+        {new Date(data?.endDate).toLocaleDateString("ru-RU")}
+      </Table.Td>
       <Table.Td>
         <Flex gap={10}>
           <Button p={5} variant="outline" color="red">

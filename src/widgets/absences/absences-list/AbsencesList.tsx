@@ -17,8 +17,45 @@ import { FaPlus } from "react-icons/fa";
 import { AbsencesItem } from "./ui/absences-item/AbsencesItem";
 import { useDisclosure } from "@mantine/hooks";
 import { DatePickerInput } from "@mantine/dates";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/shared";
+
+export interface Absence {
+  id: string;
+  employeeName: string;
+  type: AbsenceType;
+  startDate: Date;
+  endDate: Date;
+  comment: string;
+}
+
+export enum AbsenceType {
+  VACATION = "VACATION",
+  SICK_LEAVE = "SICK_LEAVE",
+  OTHER = "OTHER",
+}
+
+export const getAbsenceTypeText = (type: AbsenceType): string => {
+  switch (type) {
+    case AbsenceType.VACATION:
+      return "Отпуск";
+    case AbsenceType.SICK_LEAVE:
+      return "Больничный";
+    case AbsenceType.OTHER:
+      return "Другое";
+    default:
+      return "Другое";
+  }
+};
 
 export const AbsencesList = () => {
+  const { data, isLoading } = useQuery<Absence[]>({
+    queryKey: ["absences"],
+    queryFn: async () => (await api.get("leaves/center")).data,
+  });
+
+  console.log(data);
+
   return (
     <Paper withBorder p={20}>
       <Flex justify="space-between" align="center">
@@ -34,10 +71,17 @@ export const AbsencesList = () => {
             <Table.Th>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
-        <AbsencesItem />
-        <AbsencesItem />
-        <AbsencesItem />
-        <AbsencesItem />
+        <Table.Tbody>
+          {isLoading ? (
+            <></>
+          ) : (
+            <>
+              {data?.map((item) => (
+                <AbsencesItem key={item.id} {...item} />
+              ))}
+            </>
+          )}
+        </Table.Tbody>
       </Table>
       <Flex justify="space-between" align={"center"} mt={10}>
         <Text c="dimmed" size="sm">
@@ -53,7 +97,6 @@ const CreateAbsenceModal = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
-  console.log(value);
 
   return (
     <>
