@@ -9,7 +9,6 @@ import {
   Select,
   Stack,
   Table,
-  Text,
   Textarea,
   Title,
 } from "@mantine/core";
@@ -27,6 +26,11 @@ export interface Absence {
   startDate: Date;
   endDate: Date;
   comment: string;
+}
+
+export interface AbsenceResponse {
+  total: number;
+  data: Absence[];
 }
 
 export enum AbsenceType {
@@ -49,9 +53,20 @@ export const getAbsenceTypeText = (type: AbsenceType): string => {
 };
 
 export const AbsencesList = () => {
-  const { data, isLoading } = useQuery<Absence[]>({
-    queryKey: ["absences"],
-    queryFn: async () => (await api.get("leaves/center")).data,
+  const [page, setPage] = useState(1);
+  const [limit] = useState(5);
+
+  const { data, isLoading } = useQuery<AbsenceResponse>({
+    queryKey: ["absences", page, limit],
+    queryFn: async () =>
+      (
+        await api.get("leaves/center", {
+          params: {
+            page: page,
+            limit: limit,
+          },
+        })
+      ).data,
   });
 
   return (
@@ -74,7 +89,7 @@ export const AbsencesList = () => {
             <></>
           ) : (
             <>
-              {data?.map((item) => (
+              {data?.data?.map((item) => (
                 <AbsencesItem key={item.id} {...item} />
               ))}
             </>
@@ -82,10 +97,11 @@ export const AbsencesList = () => {
         </Table.Tbody>
       </Table>
       <Flex justify="space-between" align={"center"} mt={10}>
-        <Text c="dimmed" size="sm">
-          Показано 1-10 из 24 записей
-        </Text>
-        <Pagination total={10} />
+        <Pagination
+          total={Math.ceil((data?.total || 0) / limit)}
+          value={page}
+          onChange={setPage}
+        />
       </Flex>
     </Paper>
   );
