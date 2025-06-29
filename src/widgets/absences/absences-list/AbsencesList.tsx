@@ -1,5 +1,13 @@
 import React from "react";
-import { Button, Flex, Paper, Table, Title } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Pagination,
+  Paper,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
 import { FaPlus } from "react-icons/fa";
 import { AbsencesItem } from "./ui/absences-item/AbsencesItem";
 
@@ -19,7 +27,6 @@ export const AbsencesList = () => {
             <Table.Th>Сотрудник</Table.Th>
             <Table.Th>Тип</Table.Th>
             <Table.Th>Период</Table.Th>
-            <Table.Th>Статус</Table.Th>
             <Table.Th>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -28,6 +35,10 @@ export const AbsencesList = () => {
         <AbsencesItem />
         <AbsencesItem />
       </Table>
+      <Flex justify="space-between" align={"center"} mt={10}>
+        <Text>Показано 1-10 из 24 записей</Text>
+        <Pagination total={10} />
+      </Flex>
     </Paper>
   );
 };
