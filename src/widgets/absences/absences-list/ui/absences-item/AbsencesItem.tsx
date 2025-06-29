@@ -6,7 +6,7 @@ export const AbsencesItem = (data: Absence) => {
   return (
     <Table.Tr>
       <Table.Td style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <Avatar name={"Максат Джетенбаев"} color="initials" />
+        <Avatar name={data.employeeName} color="initials" />
         {data.employeeName}
       </Table.Td>
       <Table.Td>

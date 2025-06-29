@@ -54,7 +54,6 @@ export const AbsencesList = () => {
     queryFn: async () => (await api.get("leaves/center")).data,
   });
 
-  console.log(data);
 
   return (
     <Paper withBorder p={20}>
