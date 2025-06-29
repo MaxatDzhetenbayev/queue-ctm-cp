@@ -16,7 +16,7 @@ export const UpcomingAbsences = () => {
       (
         await api.get("leaves/center", {
           params: {
-            limit: 1,
+            limit: 3,
             sort: "asc",
             upcoming: true,
           },
