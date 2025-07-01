@@ -31,7 +31,7 @@ export default async function LocaleLayout({
   }
 
   return (
-    <Container size="lg" px={20} mt={40}>
+    <Container size={1400} px={20} mt={40}>
       <Flex mb={20} align="center" justify="space-between">
         <Box>
           <Title order={1}> Центр Мобильного Трудоустройства</Title>
