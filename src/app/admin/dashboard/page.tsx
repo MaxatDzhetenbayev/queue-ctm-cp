@@ -21,8 +21,8 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
-import { Bar, Line, Pie } from "react-chartjs-2";
-import { UpcomingAbsences } from "@/widgets";
+import { Bar, Line } from "react-chartjs-2";
+import { AnalyticsServiceTypes, UpcomingAbsences } from "@/widgets";
 import { ProgressStats } from "@/entities";
 import { ProgressType } from "@/shared";
 
@@ -133,38 +133,7 @@ export default function DashboardPage() {
         </Paper>
       </Grid.Col>
       <Grid.Col span={6}>
-        <Paper shadow="md">
-          <Flex w="100%" p={20} justify="space-between" align="center">
-            <Title order={3}>Типы услуг</Title>
-            <Text c="dimmed">Процентное соотношение</Text>
-          </Flex>
-          <Center mt={20} h={420} p={10}>
-            <Pie
-              data={{
-                labels: dashboardData.typeStats.map((stat) => stat.label),
-                datasets: [
-                  {
-                    data: dashboardData.typeStats.map((stat) => stat.value),
-                    backgroundColor: dashboardData.typeStats.map(
-                      (stat) => stat.color
-                    ),
-                  },
-                ],
-              }}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: "bottom",
-                    labels: {
-                      color: theme.colors.dark[3],
-                    },
-                  },
-                },
-              }}
-            />
-          </Center>
-        </Paper>
+        <AnalyticsServiceTypes />
       </Grid.Col>
       <Grid.Col span={4}>
         <ProgressStats

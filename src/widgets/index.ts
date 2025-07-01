@@ -4,3 +4,4 @@ export {} from "./AdminManagersWeekDashboard";
 export * from "./PersonalControl";
 export * from "./departments";
 export * from "./absences";
+export * from "./analytics";
