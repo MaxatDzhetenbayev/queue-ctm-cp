@@ -52,7 +52,7 @@ export const AnalyticsServiceTypes = () => {
       </Flex>
       <Center mt={20} h={420} p={10}>
         {isLoading ? (
-          <Text>Загрузка...</Text>
+          <Title order={3}>Загрузка данных ...</Title>
         ) : (
           <>
             {isSuccess && data && data.length > 0 ? (
