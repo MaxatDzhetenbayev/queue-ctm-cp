@@ -3,7 +3,7 @@ import React from "react";
 import { useReceptionDetail } from "../hooks";
 import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { normalizeStatus } from "@/widgets/ManagerReceptions/ui/ManagerReceptions";
+import { normalizeStatus } from '@/shared';
 
 export const ReceptionDetail = ({ id }: { id: number }) => {
   const { data, isLoading } = useReceptionDetail(id);

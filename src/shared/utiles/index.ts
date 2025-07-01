@@ -1,3 +1,5 @@
+import { Statuses } from "@/features";
+
 /**
  * @param startTime - время начала в формате "HH:mm"
  * @param endTime - время конца в формате "HH:mm"
@@ -27,4 +29,23 @@ export function getHoursFromToHourEnd(
   }
 
   return result;
+}
+
+export function normalizeStatus(status?: Statuses) {
+  switch (status) {
+    case Statuses.PENDING:
+      return "На ожидании";
+    case Statuses.WORKING:
+      return "В работе";
+    case Statuses.DONE:
+      return "Завершен";
+    case Statuses.CANCELED:
+      return "Отменен";
+    case Statuses.NO_SHOW:
+      return "Не пришел";
+    case Statuses.CALLED:
+      return "Приглашение";
+    default:
+      return "Ошибка";
+  }
 }

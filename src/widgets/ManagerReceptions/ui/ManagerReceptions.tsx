@@ -9,25 +9,7 @@ import {
   Statuses,
 } from "@/features";
 import { Box, Flex, Skeleton, Table, Title } from "@mantine/core";
-
-export function normalizeStatus(status?: Statuses) {
-  switch (status) {
-    case Statuses.PENDING:
-      return "На ожидании";
-    case Statuses.WORKING:
-      return "В работе";
-    case Statuses.DONE:
-      return "Завершен";
-    case Statuses.CANCELED:
-      return "Отменен";
-    case Statuses.NO_SHOW:
-      return "Не пришел";
-    case Statuses.CALLED:
-      return "Приглашение";
-    default:
-      return "Ошибка";
-  }
-}
+import { normalizeStatus } from "@/shared";
 
 export const ManagerReceptions = () => {
   const { data, isLoading, isError } = useManagerReceptions();
