@@ -57,15 +57,12 @@ export const DepartmentCreate = () => {
     control,
     handleSubmit,
     setValue: setFormValue,
-    getValues,
     reset,
   } = useForm<FormData>({
     defaultValues: {
       departmentFeatures: {},
     },
   });
-
-  console.log("getValues", getValues());
 
   const onSubmit = (data: FormData) => mutate(data);
   return (
@@ -104,15 +101,16 @@ export const DepartmentCreate = () => {
   );
 };
 
-const DepartmentFeaturesControlInput = ({
+export const DepartmentFeaturesControlInput = ({
   setFormValue,
+  features = null,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<FormData, any>;
+  features?: { [key: string]: string } | null;
   setFormValue: UseFormSetValue<FormData>;
 }) => {
   const timeSlots = getHoursFromToHourEnd("09:00", "18:30");
-
   const [departmentFeatures, setDepartmentFeatures] = useState<{
     [key: string]: string;
   }>({});
@@ -125,6 +123,16 @@ const DepartmentFeaturesControlInput = ({
   const [endTime, setEndTime] = useState("");
   const [isShowDepartment, setIsShowDepartment] = useState(false);
   const [isLetterDepartment, setIsLetterDepartment] = useState(false);
+
+  useEffect(() => {
+    if (features) {
+      setDepartmentFeatures(features);
+      setStartTime(features.TIME?.split("-")[0] || "");
+      setEndTime(features.TIME?.split("-")[1] || "");
+      setIsShowDepartment(Boolean(features.SHOW === "true"));
+      setIsLetterDepartment(Boolean(features.LETTER === "true"));
+    }
+  }, [features]);
 
   useEffect(() => {
     if (startTime && endTime) {

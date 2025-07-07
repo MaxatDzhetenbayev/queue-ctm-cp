@@ -3,6 +3,7 @@ import { IDepartment } from "@/widgets/departments/model/types";
 import { Box, Button, Card, Modal, Tabs, Title } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import React from "react";
+import { DepartmentUpdate } from "../../department-update/ui/DepartmentUpdate";
 
 export const DepartmentDetail = ({
   departmentData,
@@ -26,18 +27,18 @@ export const DepartmentDetail = ({
         centered
         padding={isMobileMedia ? "sm" : "xl"}
       >
-        <Tabs defaultValue="employees">
+        <Tabs defaultValue="info">
           <Tabs.List>
-            {/* <Tabs.Tab value="dashboard">Дашборд</Tabs.Tab> */}
+            <Tabs.Tab value="info">Общая информация</Tabs.Tab>
             <Tabs.Tab value="employees">Сотрудники</Tabs.Tab>
           </Tabs.List>
-          <Tabs.Panel value="dashboard">
-            sdfsfd
-            {/* <DepartmentDashboard /> */}
+          <Tabs.Panel value="info">
+            <Title order={2}>Управление отделом</Title>
+            <DepartmentUpdate id={departmentData.id} />
           </Tabs.Panel>
           <Tabs.Panel value="employees">
             <Box>
-              <Title order={2}>Управление менеджерами</Title>
+              <Title order={2}>Управление сотрудниками</Title>
               <Card withBorder mt={20}>
                 <AdminManagersTable departmentId={departmentData.id} />
               </Card>
