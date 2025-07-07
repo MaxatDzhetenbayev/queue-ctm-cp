@@ -7,14 +7,15 @@ import {
   Flex,
   Input,
   Modal,
-  MultiSelect,
   NativeSelect,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { Control, Controller, useForm, UseFormSetValue } from "react-hook-form";
+import { toast } from "react-toastify";
 
 interface FormData {
   name: { [key: string]: string };
@@ -23,15 +24,8 @@ interface FormData {
   };
 }
 
-const featuresData = [
-  { value: "TIME", label: "Установка своего времени" },
-  { value: "LETTER", label: "Принимать по буквам" },
-  { value: "SHOW", label: "Убрать из базы телеграмма" },
-];
-
 export const DepartmentCreate = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [features, setFeatures] = React.useState<string[]>();
   const { mutate } = useMutation({
     mutationKey: ["department-create"],
     mutationFn: async (data: FormData) => {
@@ -41,7 +35,21 @@ export const DepartmentCreate = () => {
       queryClient.invalidateQueries({
         queryKey: ["departments"],
       });
+      reset({
+        departmentFeatures: {},
+      });
       close();
+    },
+    onError: (error: AxiosError) => {
+      if (
+        error.response?.data &&
+        typeof error.response.data === "object" &&
+        "message" in error.response.data
+      ) {
+        (error.response.data.message as string[]).forEach((msg: string) => {
+          toast.error(msg.split(".")[1] || msg);
+        });
+      }
     },
   });
 
@@ -49,15 +57,15 @@ export const DepartmentCreate = () => {
     control,
     handleSubmit,
     setValue: setFormValue,
+    getValues,
+    reset,
   } = useForm<FormData>({
     defaultValues: {
-      name: {
-        ru: "",
-        kz: "",
-      },
       departmentFeatures: {},
     },
   });
+
+  console.log("getValues", getValues());
 
   const onSubmit = (data: FormData) => mutate(data);
   return (
@@ -79,21 +87,10 @@ export const DepartmentCreate = () => {
                 <Input placeholder="Введите название (KZ)" {...field} />
               )}
             />
-
-            <MultiSelect
-              label="Особенности отдела"
-              placeholder="Выберите особенности"
-              data={featuresData}
-              onChange={(values) => setFeatures(values)}
-              value={features}
+            <DepartmentFeaturesControlInput
+              control={control}
+              setFormValue={setFormValue}
             />
-            {features && (
-              <DepartmentFeaturesControlInput
-                features={features}
-                control={control}
-                setFormValue={setFormValue}
-              />
-            )}
             <Button type="submit" color="dark">
               Создать
             </Button>
@@ -108,10 +105,8 @@ export const DepartmentCreate = () => {
 };
 
 const DepartmentFeaturesControlInput = ({
-  features,
   setFormValue,
 }: {
-  features: string[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<FormData, any>;
   setFormValue: UseFormSetValue<FormData>;
@@ -154,53 +149,47 @@ const DepartmentFeaturesControlInput = ({
 
   return (
     <>
-      {features.includes("TIME") && (
-        <Flex justify="space-between">
-          <NativeSelect
-            value={startTime}
-            onChange={(e) => setStartTime(e.currentTarget.value)}
-            data={timeSlots}
-            defaultValue={timeSlots[0]}
-            label="Выберите начальное время"
-          >
-            {timeSlots.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </NativeSelect>
-          <NativeSelect
-            value={endTime}
-            onChange={(e) => setEndTime(e.currentTarget.value)}
-            data={timeSlots}
-            label="Выберите конечное время"
-          >
-            {timeSlots.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </NativeSelect>
-        </Flex>
-      )}
-      {features.includes("SHOW") && (
-        <Checkbox
-          checked={isShowDepartment}
-          onChange={(e) => {
-            setIsShowDepartment(e.currentTarget.checked);
-          }}
-          label="Не показывать отдел в базе телеграм"
-        />
-      )}
-      {features.includes("LETTER") && (
-        <Checkbox
-          checked={isLetterDepartment}
-          onChange={(e) => {
-            setIsLetterDepartment(e.currentTarget.checked);
-          }}
-          label="Принимать людей по алфавиту (по буквам) в телеграмме"
-        />
-      )}
+      <Flex justify="space-between">
+        <NativeSelect
+          value={startTime}
+          onChange={(e) => setStartTime(e.currentTarget.value)}
+          data={timeSlots}
+          defaultValue={timeSlots[0]}
+          label="Выберите начальное время"
+        >
+          {timeSlots.map((slot) => (
+            <option key={slot} value={slot}>
+              {slot}
+            </option>
+          ))}
+        </NativeSelect>
+        <NativeSelect
+          value={endTime}
+          onChange={(e) => setEndTime(e.currentTarget.value)}
+          data={timeSlots}
+          label="Выберите конечное время"
+        >
+          {timeSlots.map((slot) => (
+            <option key={slot} value={slot}>
+              {slot}
+            </option>
+          ))}
+        </NativeSelect>
+      </Flex>
+      <Checkbox
+        checked={isShowDepartment}
+        onChange={(e) => {
+          setIsShowDepartment(e.currentTarget.checked);
+        }}
+        label="Не показывать отдел в базе телеграм"
+      />
+      <Checkbox
+        checked={isLetterDepartment}
+        onChange={(e) => {
+          setIsLetterDepartment(e.currentTarget.checked);
+        }}
+        label="Принимать людей по алфавиту (по буквам) в телеграмме"
+      />
     </>
   );
 };
