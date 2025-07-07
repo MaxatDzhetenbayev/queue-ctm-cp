@@ -18,16 +18,6 @@ export const DepartmentCard = (data: IDepartment): React.ReactElement => {
           Telegram: {data.telegramClient} | Оффлайн: {data.clientServedCount}
         </Text>
       </Group>
-      <Group mt="md">
-        <Text size="sm" color="dimmed">
-          Загрузка: {data.avgLoadTime}
-        </Text>
-      </Group>
-      <Group mt="md">
-        <Text size="sm" color="dimmed">
-          Среднее время обслуживания: {data.avgServiceTime}
-        </Text>
-      </Group>
       <DepartmentDetail departmentData={data} />
     </Card>
   );
