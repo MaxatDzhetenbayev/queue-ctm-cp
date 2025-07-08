@@ -45,6 +45,8 @@ export function normalizeStatus(status?: Statuses) {
       return "Не пришел";
     case Statuses.CALLED:
       return "Приглашение";
+    case Statuses.TRANSFERRED:
+      return "Перенесен";
     default:
       return "Ошибка";
   }

@@ -10,6 +10,7 @@ export enum Statuses {
   CANCELED = "CANCELED",
   NO_SHOW = "NOSHOW",
   CALLED = "CALLED",
+  TRANSFERRED = "TRANSFERRED",
 }
 
 export interface ChangeReceptionStatusProps {

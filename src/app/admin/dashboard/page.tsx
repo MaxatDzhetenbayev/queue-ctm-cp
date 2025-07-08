@@ -5,8 +5,9 @@ import { Grid } from "@mantine/core";
 
 import {
   AnaliticsActivityStats,
+  AnalyticsReceptionStatuses,
   AnalyticsServiceTypes,
-  UpcomingAbsences,
+  // UpcomingAbsences,
 } from "@/widgets";
 import { ProgressStats } from "@/entities";
 import { ProgressType } from "@/shared";
@@ -21,17 +22,7 @@ export default function DashboardPage() {
         <AnalyticsServiceTypes />
       </Grid.Col>
       <Grid.Col span={6}>
-        <ProgressStats
-          title="Статусы заявок"
-          type={ProgressType.NUMBER}
-          data={[
-            { title: "В ожидании", value: 10 },
-            { title: "В обработке", value: 5 },
-            { title: "Завершенные", value: 15 },
-            { title: "Отмененные", value: 15 },
-            { title: "Не явился", value: 15 },
-          ]}
-        />
+        <AnalyticsReceptionStatuses />
       </Grid.Col>
       <Grid.Col span={6}>
         <ProgressStats
@@ -82,9 +73,9 @@ export default function DashboardPage() {
           />
         </Paper>
       </Grid.Col> */}
-      <Grid.Col span={12}>
+      {/* <Grid.Col span={12}>
         <UpcomingAbsences />
-      </Grid.Col>
+      </Grid.Col> */}
     </Grid>
   );
 }
