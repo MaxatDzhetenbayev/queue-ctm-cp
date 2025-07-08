@@ -27,13 +27,13 @@ export const DepartmentDetail = ({
         centered
         padding={isMobileMedia ? "sm" : "xl"}
       >
-        <Tabs defaultValue="info">
+        <Tabs defaultValue="employees">
           <Tabs.List>
-            <Tabs.Tab value="info">Общая информация</Tabs.Tab>
             <Tabs.Tab value="employees">Сотрудники</Tabs.Tab>
+            <Tabs.Tab value="settings">Настройки</Tabs.Tab>
           </Tabs.List>
-          <Tabs.Panel value="info">
-            <Title order={2}>Управление отделом</Title>
+          <Tabs.Panel value="settings">
+            <Title order={2}>Настройки отдела</Title>
             <DepartmentUpdate id={departmentData.id} />
           </Tabs.Panel>
           <Tabs.Panel value="employees">
