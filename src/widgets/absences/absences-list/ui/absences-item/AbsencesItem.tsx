@@ -1,6 +1,11 @@
 import { Avatar, Button, Flex, Pill, Table } from "@mantine/core";
 import React from "react";
-import { Absence, getAbsenceTypeText } from "../../AbsencesList";
+import {
+  Absence,
+  getAbsenceStatusText,
+  getAbsenceTypeText,
+} from "../../AbsencesList";
+import { AbsencesUpdateStatusButton } from "@/features";
 
 export const AbsencesItem = (data: Absence) => {
   return (
@@ -13,14 +18,15 @@ export const AbsencesItem = (data: Absence) => {
         <Pill>{getAbsenceTypeText(data.type)}</Pill>
       </Table.Td>
       <Table.Td>
-        {new Date(data?.startDate).toLocaleDateString("ru-RU")} -{" "}
-        {new Date(data?.endDate).toLocaleDateString("ru-RU")}
+        <Pill>{getAbsenceStatusText(data.status)}</Pill>
+      </Table.Td>
+      <Table.Td>
+        {new Date(data?.startDate).toLocaleDateString()} -{" "}
+        {new Date(data?.endDate).toLocaleDateString()}
       </Table.Td>
       <Table.Td>
         <Flex gap={10}>
-          <Button p={5} variant="outline" color="red">
-            Удалить
-          </Button>
+          <AbsencesUpdateStatusButton leaveId={data.id} status={data.status} />
           <Button p={5} variant="outline" color="blue">
             Изменить
           </Button>

@@ -22,11 +22,13 @@ import { api } from "@/shared";
 import { Controller, useForm } from "react-hook-form";
 import { queryClient } from "@/shared/providers/query-providers";
 import { IManagers } from "@/widgets/AdminManagersTable/hooks";
+import { AbsenceStatus } from "@/features/absences/AbsencesUpdateStatusButton";
 
 export interface Absence {
   id: string;
   employeeName: string;
   type: AbsenceType;
+  status: AbsenceStatus;
   startDate: Date;
   endDate: Date;
   comment: string;
@@ -53,6 +55,15 @@ export const getAbsenceTypeText = (type: AbsenceType): string => {
       return "Личное";
     default:
       return "Другое";
+  }
+};
+
+export const getAbsenceStatusText = (status: AbsenceStatus): string => {
+  switch (status) {
+    case AbsenceStatus.WORKING:
+      return "Работает";
+    case AbsenceStatus.ARCHIVED:
+      return "Архивирован";
   }
 };
 
@@ -86,6 +97,7 @@ export const AbsencesList = () => {
               <Table.Tr>
                 <Table.Th>Сотрудник</Table.Th>
                 <Table.Th>Тип</Table.Th>
+                <Table.Th>Статус</Table.Th>
                 <Table.Th>Период</Table.Th>
                 <Table.Th>Действия</Table.Th>
               </Table.Tr>
