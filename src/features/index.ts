@@ -10,3 +10,4 @@ export * from "./manager-create";
 export * from "./manager-destroy";
 export * from "./reception-create-offline";
 export * from "./department";
+export * from "./absences";
