@@ -5,6 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 export const useManagerReceptions = () => {
   return useQuery<IReception[]>({
     queryKey: ["receptions-list"],
-    queryFn: async () => (await api.get("/receptions/managers/me")).data,
+    queryFn: async () =>
+      (
+        await api.get("/receptions/managers/me", {
+          params: {
+            date: new Date().toISOString(),
+          },
+        })
+      ).data,
   });
 };
