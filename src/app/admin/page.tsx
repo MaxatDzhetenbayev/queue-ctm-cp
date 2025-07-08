@@ -36,72 +36,7 @@ export default function Page() {
             ]}
           />
         </Grid.Col>
-        {/* <Grid.Col span={4}>
-				<Paper withBorder p={20} h={320}>
-					<Title order={3}>Воронка заявок</Title>
-					<Bar
-						height={200}
-						data={{
-							labels: [
-								"В ожидании",
-								"В обработке",
-								"Завершенные",
-								"Отмененные",
-								"Не явился",
-							],
-							datasets: [
-								{
-									label: "Количество заявок",
-									data: [50, 30, 20, 10, 5],
-									backgroundColor: theme.colors.blue[6],
-								},
-							],
-						}}
-						options={{
-							indexAxis: "y",
-							responsive: true,
-							plugins: {
-								legend: {
-									position: "bottom",
-									labels: {
-										color: theme.colors.dark[3],
-									},
-								},
-							},
-						}}
-					/>
-				</Paper>
-			</Grid.Col> */}
-        {/* <Grid.Col span={12}>
-				<UpcomingAbsences />
-			</Grid.Col> */}
       </Grid>
     </Box>
   );
 }
-
-// <Tabs defaultValue="controls">
-//         <Tabs.List>
-//           <Tabs.Tab value="stats">Статистика</Tabs.Tab>
-//           <Tabs.Tab value="controls">Управление</Tabs.Tab>
-//         </Tabs.List>
-//         <Tabs.Panel value="stats">
-//           <Paper></Paper>
-//           {/* <Flex direction="column" gap={20}>
-//             <Box>
-//               <ManagersTodaySummary variant="center" />
-//             </Box>
-//             <Box>
-//               <ManagersWeekDashBoard variant="center" />
-//             </Box>
-//           </Flex> */}
-//         </Tabs.Panel>
-//         <Tabs.Panel value="controls">
-//           <Box>
-//             <Title order={2}>Управление персоналом</Title>
-//             <Card withBorder mt={20}>
-//               <DepartmentList />
-//             </Card>
-//           </Box>
-//         </Tabs.Panel>
-//       </Tabs>
