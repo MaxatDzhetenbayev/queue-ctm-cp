@@ -11,7 +11,7 @@ export const LogoutButton = () => {
     <IoLogOut
       style={{ cursor: "pointer" }}
       onClick={() => mutate()}
-      size={40}
+      size={30}
       color="#000"
     />
   );
