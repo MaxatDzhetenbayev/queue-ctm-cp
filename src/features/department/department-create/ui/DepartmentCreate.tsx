@@ -189,7 +189,7 @@ export const DepartmentFeaturesControlInput = ({
         onChange={(e) => {
           setIsShowDepartment(e.currentTarget.checked);
         }}
-        label="Не показывать отдел в базе телеграм"
+        label="Показывать отдел в базе телеграм"
       />
       <Checkbox
         checked={isLetterDepartment}
