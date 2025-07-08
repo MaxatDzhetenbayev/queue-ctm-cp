@@ -67,7 +67,6 @@ export const ManagerChange = ({ id }: { id: number }) => {
     if (managerData && services && !isServicesLoading) {
       reset({
         login: managerData.login,
-        password: "", // Пароль не возвращается, поэтому оставим пустым
         profile: {
           fullName: managerData.profile.fullName,
           phone: managerData.profile.phone,
