@@ -1,6 +1,6 @@
 import { LogoutButton } from "@/features";
-import { ProfileCard } from "@/widgets";
-import { Box, Container, Flex, Title } from "@mantine/core";
+import { ProfileCard, Navigation } from "@/widgets";
+import { Card, Container, Flex } from "@mantine/core";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 // import { WithSideBarTemplate } from "../tempaltes/WithSideBarTemplate";
@@ -32,18 +32,15 @@ export default async function LocaleLayout({
 
   return (
     <Container size={1400} px={20} mt={40}>
-      <Flex mb={20} align="center" justify="space-between">
-        <Box>
-          <Title order={1}> Центр Мобильного Трудоустройства</Title>
-          <Title size="md" c="gray" fw="normal">
-            Система управления онлайн очередью
-          </Title>
-        </Box>
-        <Flex align="center" gap={20}>
-          <ProfileCard />
-          <LogoutButton />
+      <Card withBorder mb={20}>
+        <Flex align="center" justify="space-between">
+          <Navigation />
+          <Flex align="center" gap={20}>
+            <ProfileCard />
+            <LogoutButton />
+          </Flex>
         </Flex>
-      </Flex>
+      </Card>
       {children}
     </Container>
   );
