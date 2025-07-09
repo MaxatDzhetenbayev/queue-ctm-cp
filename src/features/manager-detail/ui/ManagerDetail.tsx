@@ -8,9 +8,6 @@ import { IReception } from "@/entities";
 import { useDisclosure } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/shared";
-import { ReceptionDetail } from "@/features/reception-detail";
-import { ManagersTodaySummary } from "@/widgets/AdminManagersTodayStatistics";
-import { ManagersWeekDashBoard } from "@/widgets/AdminManagersWeekDashboard/ui/AdminManagersWeekDashBoard";
 
 export const ManagerDetailModal = ({ full_name, id, isOnline }: IManager) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -51,10 +48,7 @@ export const ManagerDetailModal = ({ full_name, id, isOnline }: IManager) => {
               <ManagerDestroy id={id} />
             </Flex>
           </Tabs.Panel>
-          {/* <Tabs.Panel value="stats">
-            <ManagersTodaySummary id={id} variant="manager" />
-            <ManagersWeekDashBoard id={id} variant="manager" />
-          </Tabs.Panel> */}
+
           <Tabs.Panel value="receptions">
             <ManagerReceptions id={id} />
           </Tabs.Panel>
