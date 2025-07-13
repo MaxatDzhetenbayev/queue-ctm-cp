@@ -16,7 +16,7 @@ interface DepartmentFeature {
 
 interface FormData {
   login: string;
-  email: string;
+  // email: string;
   password: string;
   profile: {
     fullName: string;
@@ -118,7 +118,7 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
     defaultValues: {
       login: "",
       password: "",
-      email: "",
+      // email: "",
       profile: {
         fullName: "",
         phone: "",
@@ -142,13 +142,13 @@ export const ManagerCreate = ({ departmentId }: { departmentId: string }) => {
                 <Input placeholder="Введите логин работника" {...field} />
               )}
             />
-            <Controller
+            {/* <Controller
               name="email"
               control={control}
               render={({ field }) => (
                 <Input placeholder="Введите email работника" {...field} />
               )}
-            />
+            /> */}
             <Controller
               name="password"
               control={control}
