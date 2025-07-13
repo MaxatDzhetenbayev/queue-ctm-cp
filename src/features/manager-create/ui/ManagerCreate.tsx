@@ -260,7 +260,9 @@ const EmployeeFeaturesForm = ({
   return (
     <Flex>
       <Flex direction="column" gap={10}>
-        {departmentFeatures.some((feature) => feature.type === "LETTER") && (
+        {departmentFeatures.some(
+          (feature) => feature.type === "LETTER" && feature.value === "true"
+        ) && (
           <>
             Выберите буквы за которые отвечает работник
             <Select
