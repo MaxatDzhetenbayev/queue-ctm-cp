@@ -119,7 +119,7 @@ export const DepartmentFeaturesControlInput = ({
     setFormValue("departmentFeatures", departmentFeatures);
   }, [departmentFeatures, setFormValue]);
 
-  const [startTime, setStartTime] = useState("");
+  const [startTime, setStartTime] = useState("9:00");
   const [endTime, setEndTime] = useState("");
   const [isShowDepartment, setIsShowDepartment] = useState(false);
   const [isLetterDepartment, setIsLetterDepartment] = useState(false);
