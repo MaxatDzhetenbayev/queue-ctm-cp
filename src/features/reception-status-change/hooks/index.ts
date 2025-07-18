@@ -16,14 +16,17 @@ export enum Statuses {
 export interface ChangeReceptionStatusProps {
   id: number;
   status: Statuses;
+  comment?: string;
 }
 
 export const useChangeReceptionStatus = () => {
   return useMutation({
-    mutationFn: async ({ id, status }: ChangeReceptionStatusProps) => {
+    mutationFn: async ({ id, status, comment }: ChangeReceptionStatusProps) => {
       return await api.patch(
         `/receptions/${id}/status`,
-        {},
+        {
+          comment: comment || "",
+        },
         {
           params: {
             status,
