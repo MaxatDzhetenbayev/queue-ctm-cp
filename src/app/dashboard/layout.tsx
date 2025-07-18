@@ -1,35 +1,14 @@
 import { LogoutButton } from "@/features";
+import { checkAuth } from "@/features/auth";
 import { ProfileCard } from "@/widgets";
 import { Box, Container, Flex, Paper } from "@mantine/core";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function LocaleLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookie = cookies().toString();
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profile`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookie,
-      },
-      credentials: "include",
-    }
-  );
-  const user = await res.json();
-
-  if (!user) {
-    redirect("/login");
-  }
-  if (user.role !== "MANAGER") {
-    redirect("/403");
-  }
+  checkAuth();
 
   return (
     <Box bg="gray.0" h="100vh">

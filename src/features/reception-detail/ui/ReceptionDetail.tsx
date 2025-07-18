@@ -44,7 +44,7 @@ export const ReceptionDetail = ({ id }: { id: number }) => {
                 <strong>Выбранный сервис:</strong> {data?.service?.name?.["ru"]}
               </p>
               {data?.comment && (
-                <div className='mt-4'>
+                <div className="mt-4">
                   <Text>Комментарий:</Text>
                   <Text>{data.comment}</Text>
                 </div>
