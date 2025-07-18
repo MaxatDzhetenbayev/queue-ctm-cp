@@ -24,6 +24,9 @@ export default async function LocaleLayout({
   );
   const user = await res.json();
 
+  if (!user) {
+    redirect("/login");
+  }
   if (user.role !== "MANAGER") {
     redirect("/403");
   }
