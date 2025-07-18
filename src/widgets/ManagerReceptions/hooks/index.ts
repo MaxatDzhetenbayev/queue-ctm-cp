@@ -13,5 +13,6 @@ export const useManagerReceptions = () => {
           },
         })
       ).data,
+    refetchInterval: 15000,
   });
 };
