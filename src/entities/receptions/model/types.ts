@@ -6,6 +6,7 @@ export interface IReception {
   time: string;
   rating: number | null;
   status: Statuses;
+  comment?: string;
   user: {
     id: number;
     authType: string;

@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useReceptionDetail } from "../hooks";
-import { Button, Modal } from "@mantine/core";
+import { Button, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { normalizeStatus } from '@/shared';
+import { normalizeStatus } from "@/shared";
 
 export const ReceptionDetail = ({ id }: { id: number }) => {
   const { data, isLoading } = useReceptionDetail(id);
@@ -43,6 +43,12 @@ export const ReceptionDetail = ({ id }: { id: number }) => {
               <p>
                 <strong>Выбранный сервис:</strong> {data?.service?.name?.["ru"]}
               </p>
+              {data?.comment && (
+                <div className='mt-4'>
+                  <Text>Комментарий:</Text>
+                  <Text>{data.comment}</Text>
+                </div>
+              )}
             </section>
           </section>
         )}
