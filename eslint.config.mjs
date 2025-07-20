@@ -1,5 +1,10 @@
+// import boundaries from "eslint-plugin-boundaries";
+import eslintJsDoc from "eslint-plugin-jsdoc";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import sonarJs from "eslint-plugin-sonarjs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+
 import { FlatCompat } from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -11,6 +16,105 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    ignores: ["**/.next/**"],
+  },
+  {
+    plugins: {
+      // boundaries,
+      eslintJsDoc,
+      sonarjs: sonarJs,
+      "simple-import-sort": simpleImportSort,
+    },
+    settings: {
+      "import/resolver": {
+        typescript: {
+          project: "./tsconfig.json",
+        },
+      },
+      // "boundaries/elements": [
+      //   { type: "app", pattern: "src/app/**" },
+      //   { type: "features", pattern: "src/features/**" },
+      //   { type: "shared", pattern: "src/shared/**" },
+      // ],
+      // "boundaries/resolve": {
+      //   alias: {
+      //     "@": "./src",
+      //   },
+      //   extensions: [".ts", ".tsx", ".js", ".jsx"],
+      // },
+    },
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "no-console": "warn",
+      "no-debugger": "warn",
+
+      // sonarjs rules
+      "sonarjs/no-duplicate-string": "warn",
+      "sonarjs/no-identical-functions": "warn",
+      "sonarjs/no-duplicated-branches": "warn",
+      "sonarjs/no-identical-conditions": "warn",
+      "sonarjs/no-small-switch": "warn",
+      "sonarjs/no-inverted-boolean-check": "warn",
+      "sonarjs/no-use-of-empty-return-value": "warn",
+      "sonarjs/prefer-single-boolean-return": "warn",
+      "sonarjs/no-nested-switch": "warn",
+      "sonarjs/cognitive-complexity": ["error", 15],
+
+      "simple-import-sort/imports": [
+        "error",
+        {
+          groups: [
+            // Внешние библиотеки
+            ["^\\w"],
+            // Абсолютные импорты
+            ["^@/"],
+            // Относительные импорты
+            ["^\\./"],
+          ],
+        },
+      ],
+      // "boundaries/element-types": [
+      //   "error",
+      //   {
+      //     default: "allow",
+      //     rules: [
+      //       {
+      //         from: "shared",
+      //         disallow: ["features", "app"],
+      //         message:
+      //           "Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})",
+      //       },
+      //       {
+      //         from: "features",
+      //         disallow: ["app"],
+      //         message:
+      //           "Модуль нижележащего слоя (${file.type}) не может импортировать модуль вышележащего слоя (${dependency.type})",
+      //       },
+      //     ],
+      //   },
+      // ],
+      // "boundaries/entry-point": [
+      //   2,
+      //   {
+      //     default: "disallow",
+      //     message:
+      //       "Модуль (${file.type}) должен импортироваться через public API. Прямой импорт из ${dependency.source} запрещен",
+
+      //     rules: [
+      //       {
+      //         target: ["shared", "app"],
+      //         allow: "**",
+      //       },
+      //       {
+      //         target: ["features"],
+      //         allow: "index.(ts|tsx)",
+      //       },
+      //     ],
+      //   },
+      // ],
+    },
+  },
 ];
 
 export default eslintConfig;
