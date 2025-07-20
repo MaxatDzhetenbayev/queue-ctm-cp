@@ -7,9 +7,8 @@ import { useUpdateUserProfile } from "../application/use-cases/update-user-profi
 import { IUser } from "../types";
 
 export const UpdateUserForm = () => {
-  const { mutate } = useUpdateUserProfile();
-
-  const { register, handleSubmit } = useForm<IUser>();
+  const { register, handleSubmit, reset } = useForm<IUser>();
+  const { mutate } = useUpdateUserProfile({ reset });
 
   return (
     <form
