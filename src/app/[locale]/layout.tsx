@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 
 import { QueryProvider } from "@/shared/providers";
 
+import "@/shared/configs";
 import "@/styles/globals.css";
 import { routing } from "@i18/";
 
