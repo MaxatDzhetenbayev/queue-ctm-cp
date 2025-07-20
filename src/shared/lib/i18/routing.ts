@@ -1,6 +1,7 @@
 import { defineRouting } from "next-intl/routing";
+import { defaultLocale, locales } from "@/shared/";
 
 export const routing = defineRouting({
-  locales: ["kz", "ru", "en"],
-  defaultLocale: "kz",
+  locales: locales,
+  defaultLocale: defaultLocale,
 });
