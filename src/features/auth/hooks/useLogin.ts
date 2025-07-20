@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/shared";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export interface ILoginData {
@@ -23,9 +22,7 @@ export const useLogin = () => {
   });
 };
 
-export const checkAuth = async () => {
-  const cookie = cookies().toString();
-
+export const checkAuth = async (cookie: string) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profile`,
     {

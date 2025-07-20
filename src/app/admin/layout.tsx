@@ -2,14 +2,15 @@ import { LogoutButton } from "@/features";
 import { checkAuth } from "@/features/auth";
 import { ProfileCard, Navigation } from "@/widgets";
 import { Card, Container, Flex } from "@mantine/core";
-// import { WithSideBarTemplate } from "../tempaltes/WithSideBarTemplate";
+import { cookies } from 'next/headers';
 
 export default async function LocaleLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  checkAuth();
+  const cookie = cookies().toString();
+  checkAuth(cookie);
 
   return (
     <Container size={1400} px={20} mt={40}>

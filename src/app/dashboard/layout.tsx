@@ -2,13 +2,16 @@ import { LogoutButton } from "@/features";
 import { checkAuth } from "@/features/auth";
 import { ProfileCard } from "@/widgets";
 import { Box, Container, Flex, Paper } from "@mantine/core";
+import { cookies } from "next/headers";
 
 export default async function LocaleLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  checkAuth();
+  const cookie = cookies().toString();
+
+  checkAuth(cookie);
 
   return (
     <Box bg="gray.0" h="100vh">
