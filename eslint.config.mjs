@@ -22,7 +22,7 @@ const eslintConfig = [
   {
     plugins: {
       // boundaries,
-      eslintJsDoc,
+      jsdoc: eslintJsDoc,
       sonarjs: sonarJs,
       "simple-import-sort": simpleImportSort,
     },
@@ -60,6 +60,22 @@ const eslintConfig = [
       "sonarjs/prefer-single-boolean-return": "warn",
       "sonarjs/no-nested-switch": "warn",
       "sonarjs/cognitive-complexity": ["error", 15],
+
+      // jsdoc rules
+      "jsdoc/require-jsdoc": [
+        "warn",
+        {
+          require: {
+            FunctionDeclaration: true,
+            MethodDefinition: true,
+            ClassDeclaration: true,
+          },
+        },
+      ],
+      "jsdoc/require-returns": "warn",
+      "jsdoc/require-param": "warn",
+      "jsdoc/check-param-names": "error",
+      "jsdoc/check-tag-names": "error",
 
       "simple-import-sort/imports": [
         "error",
@@ -113,6 +129,12 @@ const eslintConfig = [
       //     ],
       //   },
       // ],
+    },
+  },
+  {
+    files: ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
+    rules: {
+      "jsdoc/require-jsdoc": "off",
     },
   },
 ];
