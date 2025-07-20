@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { ToastContainer } from "react-toastify";
 
 import { QueryProvider } from "@/shared/providers";
 
@@ -45,6 +46,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           <QueryProvider>{children}</QueryProvider>
         </NextIntlClientProvider>
+        <ToastContainer />
       </body>
     </html>
   );
