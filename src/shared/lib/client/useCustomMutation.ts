@@ -17,6 +17,8 @@ import { useMutation, UseMutationOptions } from "@tanstack/react-query";
  * @param {Object} [mutationFn.toastConfig] - Конфигурация для уведомлений toast, содержащая сообщения для успеха и ошибки.
  * @param {string|function(TData): string} [mutationFn.toastConfig.successMessage] - Сообщение для успешной мутации.
  * @param {string|function(TError): string} [mutationFn.toastConfig.errorMessage] - Сообщение для ошибки мутации.
+ * @param mutationFn.customConfig.onSuccess - Функция, вызываемая при успешной мутации.
+ * @param mutationFn.customConfig.onError	 - Функция, вызываемая при ошибке мутации.
  * @returns Объект мутации, содержащий методы и состояние, связанные с мутацией.
  */
 export function useCustomMutation<
@@ -33,6 +35,8 @@ export function useCustomMutation<
   mutationFn: (variables: TVariables) => Promise<TData>;
   mutationConfig?: UseMutationOptions<TData, TError, TVariables, TContext>;
   customConfig?: {
+    onSuccess?: (data: TData, variables: TVariables, context: TContext) => void;
+    onError?: (error: TError, variables: TVariables) => void;
     invalidateQueries?: Array<Array<unknown>>;
   };
   toastConfig?: {
@@ -60,9 +64,9 @@ export function useCustomMutation<
         toast.success("Успешная мутация!");
       }
 
-      mutationConfig?.onSuccess?.(data, variables, context);
+      customConfig?.onSuccess?.(data, variables, context);
     },
-    onError: (error, variables, context) => {
+    onError: (error, variables) => {
       const axiosError = error as AxiosError;
 
       const rawMessage = (
@@ -84,7 +88,7 @@ export function useCustomMutation<
         toast.error(axiosError.message ?? "Произошла ошибка");
       }
 
-      mutationConfig?.onError?.(error, variables, context);
+      customConfig?.onError?.(error, variables);
     },
     ...mutationConfig,
   });
