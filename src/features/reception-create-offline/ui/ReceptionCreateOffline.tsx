@@ -58,7 +58,7 @@ export const ReceptionCreateOffline = () => {
     }
   }, [userByIin, isUserFindSuccess, reset]);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["receptions-create-offline"],
     mutationFn: async (data: FormData) => {
       const res = await api.post("/receptions/offline", data);
@@ -187,7 +187,12 @@ export const ReceptionCreateOffline = () => {
               </>
             )}
 
-            <Button type="submit" bg="dark">
+            <Button
+              type="submit"
+              bg="dark"
+              loaderProps={{ variant: "dots" }}
+              loading={isPending}
+            >
               Создать запись
             </Button>
           </Flex>
