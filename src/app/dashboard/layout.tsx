@@ -1,4 +1,4 @@
-import { LogoutButton } from "@/features";
+import { LogoutButton, ManagerStartWork } from "@/features";
 import { checkAuth } from "@/features/auth";
 import { ProfileCard } from "@/widgets";
 import { Box, Container, Flex, Paper } from "@mantine/core";
@@ -43,6 +43,7 @@ export default async function LocaleLayout({
           </Paper>
         </Box>
       </Flex>
+      <ManagerStartWork />
     </Box>
   );
 }
