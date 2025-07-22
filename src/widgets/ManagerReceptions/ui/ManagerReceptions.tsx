@@ -50,101 +50,103 @@ export const ManagerReceptions = () => {
           {data === undefined ? (
             <div>Нет записей</div>
           ) : (
-            <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  {receptionTableHeader.map((header) => (
-                    <Table.Th
-                      key={header}
-                      className="px-6 py-3 text-left text-sm font-medium"
-                    >
-                      {header}
-                    </Table.Th>
-                  ))}
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody className="divide-y divide-neutral-200">
-                {receptionTransformDto(data).map((reception) => (
-                  <Table.Tr
-                    key={reception.id}
-                    className="hover:bg-neutral-50 transition-colors"
-                  >
-                    <Table.Td className="px-6 py-2 text-sm">
-                      {reception?.profile?.fullName}
-                    </Table.Td>
-                    <Table.Td className="px-6 py-2 text-sm">
-                      {reception?.profile?.phone}
-                    </Table.Td>
-                    <Table.Td className="px-6 py-2 text-sm">
-                      {reception?.time}
-                    </Table.Td>
-                    <Table.Td className="px-6 py-2">
-                      <span className="px-2 py-1 text-xs rounded-full bg-primary-100">
-                        {normalizeStatus(reception?.status)}
-                      </span>
-                    </Table.Td>
-                    <Table.Td className="px-6 py-2 space-x-2">
-                      {reception.status === Statuses.DONE && (
-                        <ReceptionDetail id={reception.id} />
-                      )}
-                      {reception.status === Statuses.NO_SHOW && (
-                        <Flex gap={8}>
-                          <ChangeReceptiontionStatusButton
-                            id={reception.id}
-                            status={Statuses.WORKING}
-                          >
-                            Принять
-                          </ChangeReceptiontionStatusButton>
-                          <ReceptionDetail id={reception.id} />
-                        </Flex>
-                      )}
-                      {reception.status === Statuses.CANCELED && (
-                        <ReceptionDetail id={reception.id} />
-                      )}
-                      {reception.status === Statuses.CALLED && (
-                        <Flex gap={8}>
-                          <ChangeReceptiontionStatusButton
-                            id={reception.id}
-                            status={Statuses.WORKING}
-                          >
-                            Принять
-                          </ChangeReceptiontionStatusButton>
-                          <ChangeReceptiontionStatusButton
-                            id={reception.id}
-                            status={Statuses.NO_SHOW}
-                          >
-                            Не пришел
-                          </ChangeReceptiontionStatusButton>
-                        </Flex>
-                      )}
-                      {reception.status === Statuses.PENDING && (
-                        <Flex gap={8}>
-                          <ChangeReceptiontionStatusButton
-                            id={reception.id}
-                            status={Statuses.CALLED}
-                          >
-                            Позвать
-                          </ChangeReceptiontionStatusButton>
-
-                          <ReceptionDetail id={reception.id} />
-                        </Flex>
-                      )}
-                      {reception.status === Statuses.WORKING && (
-                        <Flex gap={8}>
-                          <ChangeReceptiontionStatusButton
-                            id={reception.id}
-                            status={Statuses.DONE}
-                          >
-                            Завершить
-                          </ChangeReceptiontionStatusButton>
-                          <ReceptionDetail id={reception.id} />
-                        </Flex>
-                      )}
-                    </Table.Td>
+            <Table.ScrollContainer minWidth={500} maxHeight={700} type="native">
+              <Table>
+                <Table.Thead>
+                  <Table.Tr>
+                    {receptionTableHeader.map((header) => (
+                      <Table.Th
+                        key={header}
+                        className="px-6 py-3 text-left text-sm font-medium"
+                      >
+                        {header}
+                      </Table.Th>
+                    ))}
                   </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
+                </Table.Thead>
+                <Table.Tbody className="divide-y divide-neutral-200">
+                  {receptionTransformDto(data).map((reception) => (
+                    <Table.Tr
+                      key={reception.id}
+                      className="hover:bg-neutral-50 transition-colors"
+                    >
+                      <Table.Td className="px-6 py-2 text-sm">
+                        {reception?.profile?.fullName}
+                      </Table.Td>
+                      <Table.Td className="px-6 py-2 text-sm">
+                        {reception?.profile?.phone}
+                      </Table.Td>
+                      <Table.Td className="px-6 py-2 text-sm">
+                        {reception?.time}
+                      </Table.Td>
+                      <Table.Td className="px-6 py-2">
+                        <span className="px-2 py-1 text-xs rounded-full bg-primary-100">
+                          {normalizeStatus(reception?.status)}
+                        </span>
+                      </Table.Td>
+                      <Table.Td className="px-6 py-2 space-x-2">
+                        {reception.status === Statuses.DONE && (
+                          <ReceptionDetail id={reception.id} />
+                        )}
+                        {reception.status === Statuses.NO_SHOW && (
+                          <Flex gap={8}>
+                            <ChangeReceptiontionStatusButton
+                              id={reception.id}
+                              status={Statuses.WORKING}
+                            >
+                              Принять
+                            </ChangeReceptiontionStatusButton>
+                            <ReceptionDetail id={reception.id} />
+                          </Flex>
+                        )}
+                        {reception.status === Statuses.CANCELED && (
+                          <ReceptionDetail id={reception.id} />
+                        )}
+                        {reception.status === Statuses.CALLED && (
+                          <Flex gap={8}>
+                            <ChangeReceptiontionStatusButton
+                              id={reception.id}
+                              status={Statuses.WORKING}
+                            >
+                              Принять
+                            </ChangeReceptiontionStatusButton>
+                            <ChangeReceptiontionStatusButton
+                              id={reception.id}
+                              status={Statuses.NO_SHOW}
+                            >
+                              Не пришел
+                            </ChangeReceptiontionStatusButton>
+                          </Flex>
+                        )}
+                        {reception.status === Statuses.PENDING && (
+                          <Flex gap={8}>
+                            <ChangeReceptiontionStatusButton
+                              id={reception.id}
+                              status={Statuses.CALLED}
+                            >
+                              Позвать
+                            </ChangeReceptiontionStatusButton>
+
+                            <ReceptionDetail id={reception.id} />
+                          </Flex>
+                        )}
+                        {reception.status === Statuses.WORKING && (
+                          <Flex gap={8}>
+                            <ChangeReceptiontionStatusButton
+                              id={reception.id}
+                              status={Statuses.DONE}
+                            >
+                              Завершить
+                            </ChangeReceptiontionStatusButton>
+                            <ReceptionDetail id={reception.id} />
+                          </Flex>
+                        )}
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
           )}
         </>
       )}
