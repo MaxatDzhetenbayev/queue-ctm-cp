@@ -8,7 +8,11 @@ Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
   integrations: [
-    Sentry.replayIntegration(),
+    Sentry.replayIntegration({
+      maskAllText: false,
+      maskAllInputs: false,
+      blockAllMedia: false,
+    }),
     Sentry.browserProfilingIntegration(),
     Sentry.browserTracingIntegration(),
     Sentry.browserProfilingIntegration(),
