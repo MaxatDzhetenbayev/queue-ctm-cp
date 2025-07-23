@@ -1,29 +1,34 @@
 "use client";
 
+import { api } from "@/shared";
 import { Button, Modal, Stack, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const ManagerStartWork = () => {
   const [opened, { close }] = useDisclosure(true);
-  const [hasStarted, setHasStarted] = useState<boolean | null>(null); // null = пока не знаем
 
-  useEffect(() => {
-    const value = localStorage.getItem("manager_start_work");
-    setHasStarted(value === "true");
-  }, []);
+  const { data, isLoading } = useQuery<{
+    isOnline: boolean;
+  }>({
+    queryKey: ["manager-online-check"],
+    queryFn: async () => {
+      const res = await api.get("/users/managers/online-check");
+      return res.data;
+    },
+  });
 
-  function setManagerStartWork() {
-    localStorage.setItem("manager_start_work", "true");
-    setHasStarted(true);
-    close();
-  }
+  const { mutate: startWork } = useMutation({
+    mutationFn: async () => {
+      await api.patch("/users/managers/start-work");
+    },
+    onSuccess: () => {
+      close();
+    },
+  });
 
-  // Пока не знаем, что в localStorage — ничего не рендерим
-  if (hasStarted === null) return null;
-
-  // Если уже начал работу — ничего не показываем
-  if (hasStarted) return null;
+  if (isLoading) return;
+  if (data?.isOnline === true) return null;
 
   return (
     <Modal onClose={() => {}} opened={opened} centered size="lg">
@@ -31,8 +36,8 @@ export const ManagerStartWork = () => {
         <Title order={3} mb="md">
           Добро пожаловать в панель управления очередью!
         </Title>
-        <Button onClick={setManagerStartWork} color="dark">
-          Начать работу
+        <Button onClick={() => startWork()} color="dark">
+          Приступить к работе
         </Button>
       </Stack>
     </Modal>

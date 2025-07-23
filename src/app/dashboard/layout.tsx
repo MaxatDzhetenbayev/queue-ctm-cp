@@ -22,13 +22,14 @@ export default async function LocaleLayout({
       credentials: "include",
     }
   );
+
   const user = await res.json();
 
   if (!user) {
     redirect("/login");
   }
 
-  if (user.role === "ADMIN") {
+  if (user?.role === "ADMIN") {
     redirect("/admin");
   }
 
