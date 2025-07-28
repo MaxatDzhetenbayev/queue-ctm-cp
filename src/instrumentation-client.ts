@@ -16,8 +16,11 @@ Sentry.init({
     Sentry.browserProfilingIntegration(),
     Sentry.browserTracingIntegration(),
     Sentry.browserProfilingIntegration(),
+    Sentry.consoleLoggingIntegration({ levels: ["log", "error", "warn"] }),
   ],
-
+  _experiments: {
+    enableLogs: true,
+  },
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
 
