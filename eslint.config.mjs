@@ -132,7 +132,11 @@ const eslintConfig = [
     },
   },
   {
-    files: ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
+    files: [
+      "src/app/**/page.tsx",
+      "src/app/**/layout.tsx",
+      "src/shared/**/*.tsx",
+    ],
     rules: {
       "jsdoc/require-jsdoc": "off",
     },
