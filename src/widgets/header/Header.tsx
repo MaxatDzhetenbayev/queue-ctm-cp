@@ -5,7 +5,7 @@ import { Link } from "@/shared/configs/i18";
 
 const navigation = [
   { name: "Главная", href: "/admin", icon: Home },
-  { name: "Персонал", href: "/admin/personnel", icon: Users },
+  { name: "Персонал", href: "/admin/employee", icon: Users },
 ];
 
 export const Header = () => {
