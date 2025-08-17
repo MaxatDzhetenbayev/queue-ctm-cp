@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { ToastContainer } from "react-toastify";
 
 import { QueryProvider } from "@/shared/providers";
+import { Header } from "@/widgets";
 
 import "@/shared/configs";
 import "@/styles/globals.css";
@@ -42,7 +43,12 @@ export default async function LocaleLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <Header />
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              {children}
+            </main>
+          </QueryProvider>
         </NextIntlClientProvider>
         <ToastContainer />
       </body>
