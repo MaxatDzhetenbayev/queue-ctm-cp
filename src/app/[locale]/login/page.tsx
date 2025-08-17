@@ -1,4 +1,4 @@
-import { LoginForm } from "@/modules/auth/ui/LoginForm";
+import { LoginForm } from "@/modules/auth/ui";
 
 export default function Home() {
   return (
