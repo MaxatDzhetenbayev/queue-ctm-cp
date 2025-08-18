@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import {
   useEmployeePagination,
@@ -15,6 +15,7 @@ import { CustomPagination } from "@/widgets";
 import { EmployeeCards } from "./employee-cards/EmployeeCards";
 import { EmployeeFilters } from "./EmployeeFilters";
 import { EmployeeHeaderTitle } from "./EmployeeHeaderTitle";
+import { EmployeeModal } from "./EmployeeModal";
 import { EmployeeQuery } from "./EmployeeQuery";
 
 export const EmployeeList = () => {
@@ -36,11 +37,14 @@ export const EmployeeList = () => {
     page: Number(selectedPage) || 1,
   });
 
-	const { currentPage, totalPages, goToPage } = useEmployeePagination(
-		Number(selectedPage),
-		(page: string) => setPathParams("page", page),
-		employeeList?.totalPages
-	);
+  const { currentPage, totalPages, goToPage } = useEmployeePagination(
+    Number(selectedPage),
+    (page: string) => setPathParams("page", page),
+    employeeList?.totalPages
+  );
+
+  const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <div className="space-y-6 mt-6">
@@ -66,6 +70,8 @@ export const EmployeeList = () => {
 
       <EmployeeCards
         employeeList={employeeList!}
+        onOpen={setOpenModal}
+        selectedEmployee={setSelectedEmployee}
         employeeListLoading={employeeListLoading}
         employeeListError={employeeListError}
       />
@@ -73,6 +79,11 @@ export const EmployeeList = () => {
         page={currentPage}
         totalPages={totalPages}
         handlePageChange={(page: string) => goToPage(page)}
+      />
+      <EmployeeModal
+        open={openModal}
+        selectedEmployee={selectedEmployee}
+        onOpenChange={() => setOpenModal(false)}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Briefcase, MapPin, Phone, Users } from "lucide-react";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 import { EmployeeType } from "@/modules/users/domain/schemas";
 
@@ -10,13 +10,22 @@ interface EmployeeCardsProps {
   employeeListLoading: boolean;
   employeeListError: boolean;
   employeeList: EmployeeType;
+  selectedEmployee: Dispatch<SetStateAction<string | null>>;
+  onOpen: (open: boolean) => void;
 }
 
 export const EmployeeCards = ({
   employeeListLoading,
   employeeListError,
   employeeList,
+  onOpen,
+  selectedEmployee,
 }: EmployeeCardsProps) => {
+  const handleClickToCard = (employeeId: string): void => {
+    selectedEmployee(employeeId);
+    onOpen(true);
+  };
+
   return (
     <div>
       {employeeListLoading ? (
@@ -43,6 +52,7 @@ export const EmployeeCards = ({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {employeeList?.managers.map((employee) => (
                 <div
+                  onClick={() => handleClickToCard(employee.id)}
                   key={employee.id}
                   className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
                 >
@@ -83,7 +93,6 @@ export const EmployeeCards = ({
                       </div>
                     </div>
 
-                    {/* Services */}
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <p className="text-xs font-medium text-gray-500 mb-2">
                         Услуги:
