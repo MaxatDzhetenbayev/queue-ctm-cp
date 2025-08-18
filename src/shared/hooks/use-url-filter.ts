@@ -35,6 +35,10 @@ export function useUrlFilter<const T extends readonly string[]>(
       params.delete(key);
     }
 
+    if (key !== "page" && params.has("page")) {
+      params.delete("page");
+    }
+
     router.replace(`?${params.toString()}`);
   };
 
