@@ -98,7 +98,7 @@ export const EmployeeList = () => {
           </h1>
         </div>
         <div className="text-sm text-gray-500">
-          Всего сотрудников: {filteredEmployees.length}
+          Всего сотрудников: {employeeList?.total || 0}
         </div>
       </div>
 
