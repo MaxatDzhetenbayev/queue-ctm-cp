@@ -3,12 +3,12 @@
 import React from "react";
 
 import {
-  useEmployeeFilter,
   useEmployeeQuery,
   useGetDepartmentList,
   useGetEmployeeList,
   useGetServiceList,
 } from "@/modules/users/application/use-cases";
+import { useUrlFilter } from "@/shared/hooks";
 
 import { EmployeeCards } from "./employee-cards/EmployeeCards";
 import { EmployeeFilters } from "./EmployeeFilters";
@@ -16,13 +16,14 @@ import { EmployeeHeaderTitle } from "./EmployeeHeaderTitle";
 import { EmployeeQuery } from "./EmployeeQuery";
 
 export const EmployeeList = () => {
-  const { selectedDepartment, selectedService, setPathParams } =
-    useEmployeeFilter();
+  const { selectedDepartment, selectedService, setPathParams } = useUrlFilter([
+    "department",
+    "service",
+  ]);
+  const { inputValue, setInputValue, debouncedQuery } = useEmployeeQuery();
 
   const { data: departments } = useGetDepartmentList();
   const { data: services } = useGetServiceList();
-  const { inputValue, setInputValue, debouncedQuery } = useEmployeeQuery();
-
   const {
     data: employeeList,
     isLoading: employeeListLoading,
