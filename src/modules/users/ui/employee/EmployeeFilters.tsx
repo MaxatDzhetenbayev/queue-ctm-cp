@@ -1,5 +1,15 @@
 import React from "react";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+
 import { DepartmentType, ServiceType } from "../../domain/schemas";
 
 interface EmployeeFiltersProps {
@@ -19,30 +29,44 @@ export const EmployeeFilters = ({
 }: EmployeeFiltersProps) => {
   return (
     <>
-      <select
-        className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      <Select
         value={selectedDepartment ?? ""}
-        onChange={(e) => setPathParams("department", e.target.value)}
+        onValueChange={(value) => setPathParams("department", value)}
       >
-        <option value="">Все отделы</option>
-        {departments?.map((dept) => (
-          <option key={dept.id} value={dept.id}>
-            {dept.name.ru}
-          </option>
-        ))}
-      </select>
-      <select
-        className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Выберите отдел" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Все отделы</SelectLabel>
+            <SelectItem value="all">Все отделы</SelectItem>
+            {departments?.map((dept) => (
+              <SelectItem key={dept.id} value={dept.id}>
+                {dept.name.ru}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <Select
         value={selectedService ?? ""}
-        onChange={(e) => setPathParams("service", e.target.value)}
+        onValueChange={(value) => setPathParams("service", value)}
       >
-        <option value="">Все услуги</option>
-        {services?.map((service) => (
-          <option key={service.id} value={service.id}>
-            {service.name.ru}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Выберите отдел" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Все сервисы</SelectLabel>
+            <SelectItem value="all">Все сервисы</SelectItem>
+            {services?.map((service) => (
+              <SelectItem key={service.id} value={service.id}>
+                {service.name.ru}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </>
   );
 };
