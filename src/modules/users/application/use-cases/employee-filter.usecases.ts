@@ -18,7 +18,7 @@ export const useEmployeeFilter = (): EmployeeFilterReturnType => {
   const setPathParams = (key: "department" | "service", value: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (value && value.trim() !== "") {
+    if (value && value.trim() !== "" && value.trim() !== "all") {
       params.set(key, value);
     } else {
       params.delete(key);
