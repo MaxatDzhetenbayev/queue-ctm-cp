@@ -1,13 +1,21 @@
-"use client"
+"use client";
 
+import clsx from "clsx";
 import { Briefcase, MapPin, Phone, Search, Users } from "lucide-react";
 import React, { useState } from "react";
+
+import { EmployeeCardSkeleton } from "./EmployeeCardSkeleton";
+
+import { useGetEmployeeList } from "../../application/use-cases/get-employee-list";
 
 export const EmployeeList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCenter, setSelectedCenter] = useState<string>("");
   const [selectedService, setSelectedService] = useState<string>("");
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
+
+  const { data: employeeList, isLoading: employeeListLoading } =
+    useGetEmployeeList();
 
   const centers = [
     {
@@ -155,67 +163,77 @@ export const EmployeeList = () => {
 
       {/* Employee Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredEmployees.map((employee) => (
-          <div
-            key={employee.id}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
-          >
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                    {employee.lastName} {employee.firstName}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-2">
-                    {employee.middleName}
-                  </p>
-                  <p className="text-sm font-medium text-blue-600">
-                    {employee.position}
-                  </p>
-                </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 font-medium text-lg">
-                    {employee.firstName.charAt(0)}
-                  </span>
+        {employeeListLoading ? (
+          <>
+            {Array.from({ length: 9 }).map((_, index) => (
+              <EmployeeCardSkeleton key={index} />
+            ))}
+          </>
+        ) : (
+          <>
+            {employeeList?.managers.map((employee) => (
+              <div
+                key={employee.id}
+                className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div
+                      className={clsx("rounded-full p-2 mr-3", {
+                        "bg-green-500": employee.employeeInfo.isOnline,
+                        "bg-red-500": !employee.employeeInfo.isOnline,
+                      })}
+                    ></div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {employee.profile.fullName}
+                      </h3>
+                    </div>
+                    <div className="ml-2 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-600 font-medium text-lg">
+                        {employee.profile.fullName.charAt(0)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Phone className="h-4 w-4 mr-2 flex-shrink-0" />
+                      <span>{employee.profile.phone}</span>
+                    </div>
+
+                    <div className="flex items-start text-sm text-gray-600">
+                      <MapPin className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5" />
+                      <span>{employee.employeeInfo.center.name.ru}</span>
+                    </div>
+
+                    <div className="flex items-start text-sm text-gray-600">
+                      <Briefcase className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5" />
+                      <span>{employee.employeeInfo.department.name.ru}</span>
+                    </div>
+                  </div>
+
+                  {/* Services */}
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <p className="text-xs font-medium text-gray-500 mb-2">
+                      Услуги:
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {employee.employeeServices.map(({ service }, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full"
+                        >
+                          {service.name.ru}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center text-sm text-gray-600">
-                  <Phone className="h-4 w-4 mr-2 flex-shrink-0" />
-                  <span>{employee.phone}</span>
-                </div>
-
-                <div className="flex items-start text-sm text-gray-600">
-                  <MapPin className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>{employee.center}</span>
-                </div>
-
-                <div className="flex items-start text-sm text-gray-600">
-                  <Briefcase className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>{employee.department}</span>
-                </div>
-              </div>
-
-              {/* Services */}
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-xs font-medium text-gray-500 mb-2">
-                  Услуги:
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  {employee.services.map((service, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+            ))}
+          </>
+        )}
       </div>
 
       {filteredEmployees.length === 0 && (
