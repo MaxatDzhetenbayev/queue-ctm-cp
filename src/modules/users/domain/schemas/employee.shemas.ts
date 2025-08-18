@@ -1,23 +1,12 @@
 import { z } from "zod";
 
-const LanguageSchema = z.object({
+import { CenterSchema } from "./center.shemas";
+import { DepartmentSchema } from "./department.shemas";
+import { ServiceSchema } from "./service.shemas";
+
+export const LanguageSchema = z.object({
   kz: z.string(),
   ru: z.string(),
-});
-
-const CenterSchema = z.object({
-  id: z.string(),
-  name: LanguageSchema,
-});
-
-const DepartmentSchema = z.object({
-  id: z.string(),
-  name: LanguageSchema,
-});
-
-const ServiceSchema = z.object({
-  id: z.string(),
-  name: LanguageSchema,
 });
 
 const EmployeeProfileSchema = z.object({
@@ -56,6 +45,5 @@ export type EmployeeType = z.infer<typeof EmployeeSchema>;
 export type EmployeeProfileType = z.infer<typeof EmployeeProfileSchema>;
 export type EmployeeInfoType = z.infer<typeof EmployeeInfoSchema>;
 export type ServiceType = z.infer<typeof ServiceSchema>;
-export type CenterType = z.infer<typeof CenterSchema>;
 export type DepartmentType = z.infer<typeof DepartmentSchema>;
 export type EmployeeOneType = z.infer<typeof EmployeeOneSchema>;
