@@ -39,6 +39,8 @@ const EmployeeOneSchema = z.object({
 export const EmployeeSchema = z.object({
   managers: z.array(EmployeeOneSchema),
   total: z.number(),
+  page: z.number(),
+  totalPages: z.number(),
 });
 
 export type EmployeeType = z.infer<typeof EmployeeSchema>;

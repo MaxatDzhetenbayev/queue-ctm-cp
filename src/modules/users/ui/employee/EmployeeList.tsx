@@ -3,12 +3,14 @@
 import React from "react";
 
 import {
+  useEmployeePagination,
   useEmployeeQuery,
   useGetDepartmentList,
   useGetEmployeeList,
   useGetServiceList,
 } from "@/modules/users/application/use-cases";
 import { useUrlFilter } from "@/shared/hooks";
+import { CustomPagination } from "@/widgets";
 
 import { EmployeeCards } from "./employee-cards/EmployeeCards";
 import { EmployeeFilters } from "./EmployeeFilters";
@@ -16,23 +18,29 @@ import { EmployeeHeaderTitle } from "./EmployeeHeaderTitle";
 import { EmployeeQuery } from "./EmployeeQuery";
 
 export const EmployeeList = () => {
-  const { selectedDepartment, selectedService, setPathParams } = useUrlFilter([
-    "department",
-    "service",
-  ]);
+  const { selectedDepartment, selectedService, selectedPage, setPathParams } =
+    useUrlFilter(["department", "service", "page"]);
   const { inputValue, setInputValue, debouncedQuery } = useEmployeeQuery();
 
+	
   const { data: departments } = useGetDepartmentList();
   const { data: services } = useGetServiceList();
   const {
-    data: employeeList,
+		data: employeeList,
     isLoading: employeeListLoading,
     isError: employeeListError,
   } = useGetEmployeeList({
-    departmentId: selectedDepartment,
+		departmentId: selectedDepartment,
     serviceId: selectedService,
     query: debouncedQuery,
+    page: Number(selectedPage) || 1,
   });
+
+	const { currentPage, totalPages, goToPage } = useEmployeePagination(
+		Number(selectedPage),
+		(page: string) => setPathParams("page", page),
+		employeeList?.totalPages
+	);
 
   return (
     <div className="space-y-6 mt-6">
@@ -60,6 +68,11 @@ export const EmployeeList = () => {
         employeeList={employeeList!}
         employeeListLoading={employeeListLoading}
         employeeListError={employeeListError}
+      />
+      <CustomPagination
+        page={currentPage}
+        totalPages={totalPages}
+        handlePageChange={(page: string) => goToPage(page)}
       />
     </div>
   );
