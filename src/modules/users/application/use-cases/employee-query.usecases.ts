@@ -17,6 +17,10 @@ export const useEmployeeQuery = (delay: number = 500) => {
 
       if (inputValue.trim()) {
         params.set("query", inputValue);
+
+        if (params.has("page")) {
+          params.delete("page");
+        }
       } else {
         params.delete("query");
       }
