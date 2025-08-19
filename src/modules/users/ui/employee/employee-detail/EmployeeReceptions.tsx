@@ -80,8 +80,15 @@ export const EmployeeReceptions = ({
                 >
                   {appointment.user.profile.fullName}
                 </button>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full`}>
+                <span
+                  className={`px-2 py-1 text-xs font-medium rounded-full bg-gray-500  text-white`}
+                >
                   {normalizeStatus(appointment.status)}
+                </span>
+                <span
+                  className={`px-2 py-1 text-xs font-medium rounded-full bg-gray-500  text-white`}
+                >
+                  {appointment.user.authType}
                 </span>
               </div>
             </div>
