@@ -20,7 +20,10 @@ import { EmployeeQuery } from "./EmployeeQuery";
 export const EmployeeList = () => {
   const { selectedDepartment, selectedService, selectedPage, setPathParams } =
     useUrlFilter(["department", "service", "page"]);
-  const { inputValue, setInputValue, debouncedQuery } = useSearchQuery();
+  const { inputValue, setInputValue, debouncedQuery } = useSearchQuery({
+    searchKey: "query",
+    deleteKeys: ["page"],
+  });
 
   const { data: departments } = useGetDepartmentList();
   const { data: services } = useGetServiceList();
