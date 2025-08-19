@@ -4,12 +4,11 @@ import React, { useState } from "react";
 
 import {
   useEmployeePagination,
-  useEmployeeQuery,
   useGetDepartmentList,
   useGetEmployeeList,
   useGetServiceList,
 } from "@/modules/users/application/use-cases";
-import { useUrlFilter } from "@/shared/hooks";
+import { useSearchQuery, useUrlFilter } from "@/shared/hooks";
 import { CustomPagination } from "@/widgets";
 
 import { EmployeeCards } from "./employee-cards/EmployeeCards";
@@ -21,7 +20,7 @@ import { EmployeeQuery } from "./EmployeeQuery";
 export const EmployeeList = () => {
   const { selectedDepartment, selectedService, selectedPage, setPathParams } =
     useUrlFilter(["department", "service", "page"]);
-  const { inputValue, setInputValue, debouncedQuery } = useEmployeeQuery();
+  const { inputValue, setInputValue, debouncedQuery } = useSearchQuery();
 
   const { data: departments } = useGetDepartmentList();
   const { data: services } = useGetServiceList();

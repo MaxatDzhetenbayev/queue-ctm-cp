@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const useEmployeeQuery = (delay: number = 500) => {
+export const useSearchQuery = (delay: number = 500) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
