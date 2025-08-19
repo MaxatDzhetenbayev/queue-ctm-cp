@@ -13,9 +13,9 @@ import { useUrlFilter } from "@/shared/hooks";
 import { CustomPagination } from "@/widgets";
 
 import { EmployeeCards } from "./employee-cards/EmployeeCards";
+import { EmployeeDetail } from "./EmployeeDetail";
 import { EmployeeFilters } from "./EmployeeFilters";
 import { EmployeeHeaderTitle } from "./EmployeeHeaderTitle";
-import { EmployeeModal } from "./EmployeeModal";
 import { EmployeeQuery } from "./EmployeeQuery";
 
 export const EmployeeList = () => {
@@ -23,15 +23,14 @@ export const EmployeeList = () => {
     useUrlFilter(["department", "service", "page"]);
   const { inputValue, setInputValue, debouncedQuery } = useEmployeeQuery();
 
-	
   const { data: departments } = useGetDepartmentList();
   const { data: services } = useGetServiceList();
   const {
-		data: employeeList,
+    data: employeeList,
     isLoading: employeeListLoading,
     isError: employeeListError,
   } = useGetEmployeeList({
-		departmentId: selectedDepartment,
+    departmentId: selectedDepartment,
     serviceId: selectedService,
     query: debouncedQuery,
     page: Number(selectedPage) || 1,
@@ -80,7 +79,7 @@ export const EmployeeList = () => {
         totalPages={totalPages}
         handlePageChange={(page: string) => goToPage(page)}
       />
-      <EmployeeModal
+      <EmployeeDetail
         open={openModal}
         selectedEmployee={selectedEmployee}
         onOpenChange={() => setOpenModal(false)}

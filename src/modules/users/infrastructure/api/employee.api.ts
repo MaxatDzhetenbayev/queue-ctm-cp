@@ -1,6 +1,6 @@
 import { axiosApi } from "@/shared/lib/client";
 
-import { EmployeeType } from "../../domain/schemas";
+import { EmployeeOneType, EmployeeType } from "../../domain/schemas";
 
 /**
  * API для работы с пользователями.
@@ -37,5 +37,18 @@ export async function fetchEmployeeList(
   const response = await axiosApi.get<EmployeeType>("/users/managers/center", {
     params,
   });
+  return response.data;
+}
+
+/**
+ * Получение  сотрудников по id.
+ *
+ * @param id - ID сотрудника
+ *
+ * @returns {Promise<EmployeeOneType>} Данные пользователей.
+ *
+ */
+export async function fetchEmployeeById(id: string): Promise<EmployeeOneType> {
+  const response = await axiosApi.get<EmployeeOneType>(`/users/${id}`);
   return response.data;
 }
