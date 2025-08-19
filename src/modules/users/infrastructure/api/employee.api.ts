@@ -52,3 +52,20 @@ export async function fetchEmployeeById(id: string): Promise<EmployeeOneType> {
   const response = await axiosApi.get<EmployeeOneType>(`/users/${id}`);
   return response.data;
 }
+
+/**
+ * Получение  записей сотрудника по id.
+ *
+ * @param id - ID сотрудника
+ *
+ * @returns {Promise<EmployeeOneType>} Данные записей сотрудника.
+ *
+ */
+export async function fetchEmployeeReceptions(
+  id: string
+): Promise<EmployeeOneType> {
+  const response = await axiosApi.get<EmployeeOneType>(
+    `/receptions/managers/${id}`
+  );
+  return response.data;
+}

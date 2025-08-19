@@ -13,7 +13,7 @@ import { useUrlFilter } from "@/shared/hooks";
 import { CustomPagination } from "@/widgets";
 
 import { EmployeeCards } from "./employee-cards/EmployeeCards";
-import { EmployeeDetail } from "./EmployeeDetail";
+import { EmployeeDetail } from "./employee-detail/EmployeeDetail";
 import { EmployeeFilters } from "./EmployeeFilters";
 import { EmployeeHeaderTitle } from "./EmployeeHeaderTitle";
 import { EmployeeQuery } from "./EmployeeQuery";

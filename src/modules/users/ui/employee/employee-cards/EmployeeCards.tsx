@@ -97,7 +97,7 @@ export const EmployeeCards = ({
                       <p className="text-xs font-medium text-gray-500 mb-2">
                         Услуги:
                       </p>
-                      <div className="flex flex-wrap gap-1">
+                      <div className="flex flex-wrap gap-2">
                         {employee.employeeServices.map(({ service }, index) => (
                           <span
                             key={index}

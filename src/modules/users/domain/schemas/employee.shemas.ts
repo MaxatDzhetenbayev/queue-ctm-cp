@@ -3,17 +3,11 @@ import { z } from "zod";
 import { CenterSchema } from "./center.shemas";
 import { DepartmentSchema } from "./department.shemas";
 import { ServiceSchema } from "./service.shemas";
+import { UserProfileSchema } from "./user.shemas";
 
 export const LanguageSchema = z.object({
   kz: z.string(),
   ru: z.string(),
-});
-
-const EmployeeProfileSchema = z.object({
-  id: z.string(),
-  fullName: z.string(),
-  iin: z.string().optional(),
-  phone: z.string().optional(),
 });
 
 const EmployeeInfoSchema = z.object({
@@ -27,7 +21,7 @@ const EmployeeInfoSchema = z.object({
 
 const EmployeeOneSchema = z.object({
   id: z.string(),
-  profile: EmployeeProfileSchema,
+  profile: UserProfileSchema,
   employeeInfo: EmployeeInfoSchema,
   employeeServices: z.array(
     z.object({
@@ -44,7 +38,6 @@ export const EmployeeSchema = z.object({
 });
 
 export type EmployeeType = z.infer<typeof EmployeeSchema>;
-export type EmployeeProfileType = z.infer<typeof EmployeeProfileSchema>;
 export type EmployeeInfoType = z.infer<typeof EmployeeInfoSchema>;
 export type ServiceType = z.infer<typeof ServiceSchema>;
 export type DepartmentType = z.infer<typeof DepartmentSchema>;
