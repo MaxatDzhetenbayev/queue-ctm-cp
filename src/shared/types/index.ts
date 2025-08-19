@@ -3,3 +3,4 @@
  */
 
 export * from "./locale.type";
+export * from "./statuses.type";

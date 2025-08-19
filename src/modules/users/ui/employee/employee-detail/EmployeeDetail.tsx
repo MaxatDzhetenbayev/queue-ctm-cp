@@ -94,7 +94,7 @@ export const EmployeeDetail = ({
         </DialogHeader>
         <div className="max-h-[60vh] overflow-y-auto">
           <Tabs defaultValue="info">
-            <TabsList className="bg-transparent mb-3">
+            <TabsList className="bg-transparent mb-3 px-4">
               <TabsTrigger value="info" className="rounded-none">
                 Информация
               </TabsTrigger>
@@ -111,7 +111,7 @@ export const EmployeeDetail = ({
               />
             </TabsContent>
             <TabsContent value="employee-receptions">
-              <EmployeeReceptions managerId={selectedEmployee!} />
+              <EmployeeReceptions managerId={selectedEmployee!} isModalOpen={open} />
             </TabsContent>
           </Tabs>
         </div>

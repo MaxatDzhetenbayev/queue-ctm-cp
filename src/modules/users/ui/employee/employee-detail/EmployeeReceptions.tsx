@@ -1,17 +1,71 @@
-import { Calendar, Clock, FileText, Phone, User } from "lucide-react";
-import React from "react";
+import { Calendar, Clock, FileText, Phone, Search, User } from "lucide-react";
+import React, { useEffect } from "react";
 
 import { useGetReceptionsByEmployeeIdList } from "@/modules/users/application/use-cases";
+import { StatusesType } from "@/modules/users/domain/schemas";
+import { Input } from "@/shared/components/ui/input";
+import { useSearchQuery, useUrlFilter } from "@/shared/hooks";
+import { normalizeStatus } from "@/shared/lib";
 
-export const EmployeeReceptions = ({ managerId }: { managerId: string }) => {
-  const { data, isLoading, error } =
-    useGetReceptionsByEmployeeIdList(managerId);
+import { EmployeeReceptionsFilter } from "./EmployeeReceptionsFilter";
+
+export const EmployeeReceptions = ({
+  managerId,
+  isModalOpen,
+}: {
+  managerId: string;
+  isModalOpen: boolean;
+}) => {
+  const {
+    selectedReceptionDate,
+    selectedReceptionStatus,
+    setPathParams,
+    handleClearUrlFilters,
+  } = useUrlFilter(["receptionDate", "receptionStatus"]);
+
+  useEffect(() => {
+    if (isModalOpen === false) {
+      handleClearUrlFilters();
+    }
+  }, [isModalOpen, handleClearUrlFilters]);
+
+  const { inputValue, setInputValue, debouncedQuery } = useSearchQuery({
+    searchKey: "receptionQuery",
+  });
+
+  const { data, isLoading, error } = useGetReceptionsByEmployeeIdList(
+    managerId,
+    debouncedQuery,
+    selectedReceptionStatus as StatusesType,
+    selectedReceptionDate
+  );
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading receptions</div>;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex px-4 flex-col gap-4">
+      <div className="pt-6 ">
+        <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Поиск посетителя по ФИО..."
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+            <EmployeeReceptionsFilter
+              selectedReceptionDate={selectedReceptionDate}
+              selectedReceptionStatus={selectedReceptionStatus}
+              setPathParams={setPathParams}
+            />
+          </div>
+        </div>
+      </div>
       {data?.map((appointment) => (
         <div
           key={appointment.id}
@@ -26,20 +80,16 @@ export const EmployeeReceptions = ({ managerId }: { managerId: string }) => {
                 >
                   {appointment.user.profile.fullName}
                 </button>
-                {/* <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                    appointment.status
-                  )}`}
-                >
-                  {getStatusText(appointment.status)}
-                </span> */}
+                <span className={`px-2 py-1 text-xs font-medium rounded-full`}>
+                  {normalizeStatus(appointment.status)}
+                </span>
               </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
             <div className="flex items-center space-x-2 text-gray-600">
               <User className="h-4 w-4" />
-              <span>ИИН: {appointment.user.profile.iin}</span>
+              <span>ИИН\БИН: {appointment.user.profile.iin}</span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
               <Phone className="h-4 w-4" />
