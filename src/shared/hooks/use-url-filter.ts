@@ -6,6 +6,7 @@ type ParamKeys<T extends readonly string[]> = {
   [K in T[number] as `selected${Capitalize<K>}`]: string | null;
 } & {
   setPathParams: (key: T[number], value: string) => void;
+  handleClearUrlFilters: () => void;
 };
 
 /**
@@ -42,8 +43,17 @@ export function useUrlFilter<const T extends readonly string[]>(
     router.replace(`?${params.toString()}`);
   };
 
+  const handleClearUrlFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    keys.forEach((key) => {
+      params.delete(key);
+    });
+    router.replace(`?${params.toString()}`);
+  };
+
   return {
     ...selectedValues,
     setPathParams,
+    handleClearUrlFilters,
   } as ParamKeys<T>;
 }
