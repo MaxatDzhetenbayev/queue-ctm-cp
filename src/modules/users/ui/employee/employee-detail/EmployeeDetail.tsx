@@ -34,7 +34,6 @@ export const EmployeeDetail = ({
   selectedEmployee: string | null;
   onOpenChange: (open: boolean) => void;
 }) => {
-  const [activeTab, setActiveTab] = useState<"info" | "appointments">("info");
   const [isEditing, setIsEditing] = useState(false);
   const [editedEmployee, setEditedEmployee] = useState<any | null>(null);
 
