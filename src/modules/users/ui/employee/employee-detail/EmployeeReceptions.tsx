@@ -1,13 +1,19 @@
 import { Calendar, Clock, FileText, Phone, Search, User } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useGetReceptionsByEmployeeIdList } from "@/modules/users/application/use-cases";
 import { StatusesType } from "@/modules/users/domain/schemas";
 import { Input } from "@/shared/components/ui/input";
 import { useSearchQuery, useUrlFilter } from "@/shared/hooks";
-import { normalizeStatus } from "@/shared/lib";
+import {
+  getStatusColor,
+  normalizeAuthVariant,
+  normalizeStatus,
+} from "@/shared/lib";
 
 import { EmployeeReceptionsFilter } from "./EmployeeReceptionsFilter";
+
+import { ClientDetail } from "../client-detail/ClientDetail";
 
 export const EmployeeReceptions = ({
   managerId,
@@ -28,6 +34,12 @@ export const EmployeeReceptions = ({
       handleClearUrlFilters();
     }
   }, [isModalOpen, handleClearUrlFilters]);
+
+  const [openModal, setOpenModal] = useState(false);
+  const [client, setClient] = useState<{
+    centerId: string;
+    clientId: string;
+  } | null>(null);
 
   const { inputValue, setInputValue, debouncedQuery } = useSearchQuery({
     searchKey: "receptionQuery",
@@ -66,6 +78,7 @@ export const EmployeeReceptions = ({
           </div>
         </div>
       </div>
+
       {data?.map((appointment) => (
         <div
           key={appointment.id}
@@ -75,20 +88,28 @@ export const EmployeeReceptions = ({
             <div className="flex-1">
               <div className="flex items-center space-x-3 mb-2">
                 <button
-                  // onClick={() => onClientClick(client)}
-                  className="text-lg font-semibold text-blue-600 hover:text-blue-800 transition-colors"
+                  onClick={() => {
+                    setOpenModal(true);
+                    setClient({
+                      centerId: appointment.center!.id,
+                      clientId: appointment.user.id,
+                    });
+                  }}
+                  className="text-lg font-semibold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
                 >
                   {appointment.user.profile.fullName}
                 </button>
                 <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full bg-gray-500  text-white`}
+                  className={`px-2 py-1 text-xs font-medium rounded-full bg-black  text-white`}
                 >
-                  {normalizeStatus(appointment.status)}
+                  {normalizeAuthVariant(appointment.user.authType)}
                 </span>
                 <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full bg-gray-500  text-white`}
+                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                    appointment.status
+                  )}`}
                 >
-                  {appointment.user.authType}
+                  {normalizeStatus(appointment.status)}
                 </span>
               </div>
             </div>
@@ -122,17 +143,20 @@ export const EmployeeReceptions = ({
               })}
             </div>
           </div>
-          {/* 
-          {appointment.notes && (
-            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-700">
-                <span className="font-medium">Заметки:</span>{" "}
-                {appointment.notes}
-              </p>
-            </div>
-          )} */}
         </div>
       ))}
+      {client && (
+        <ClientDetail
+          key={client.clientId}
+          open={openModal}
+          params={{
+            centerId: client.centerId,
+            clientId: client.clientId,
+          }}
+          onOpenChange={setOpenModal}
+          onClientUpdate={() => {}}
+        />
+      )}
     </div>
   );
 };
