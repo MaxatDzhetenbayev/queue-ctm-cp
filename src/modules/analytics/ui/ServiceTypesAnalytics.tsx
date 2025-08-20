@@ -141,6 +141,11 @@ export const ServiceTypesAnalytics = () => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
                       <text
+                        onClick={() =>
+                          router.push(
+                            `admin/employee?service=${data[activeIndex].id}`
+                          )
+                        }
                         x={viewBox.cx}
                         y={viewBox.cy}
                         textAnchor="middle"
