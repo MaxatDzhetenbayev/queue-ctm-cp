@@ -3,14 +3,10 @@
 import { Calendar, Target, Users } from "lucide-react";
 import React from "react";
 
+import { useGetKeyStats } from "@/modules/analytics/application/use-cases";
+
 export const KeyAnalytics = () => {
-  const stats = {
-    totalEmployees: 100,
-    activeEmployees: 80,
-    totalAppointments: 200,
-    completedAppointments: 150,
-    completionRate: 75,
-  };
+  const { data: stats } = useGetKeyStats();
 
   return (
     <div className="grid grid-cols-1  md:grid-cols-3 gap-6">
@@ -21,7 +17,7 @@ export const KeyAnalytics = () => {
               Всего сотрудников
             </p>
             <p className="text-3xl font-bold text-gray-900">
-              {stats.totalEmployees}
+              {stats?.totalManagers.value || 0}
             </p>
           </div>
           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -30,9 +26,9 @@ export const KeyAnalytics = () => {
         </div>
         <div className="mt-4 flex items-center text-sm">
           <span className="text-green-600 font-medium">
-            {stats.activeEmployees} активных
+            {stats?.totalManagers.activeManagers || 0} активных
           </span>
-          <span className="text-gray-500 ml-2">в выбранном периоде</span>
+          <span className="text-gray-500 ml-2">сегодня</span>
         </div>
       </div>
 
@@ -41,7 +37,7 @@ export const KeyAnalytics = () => {
           <div>
             <p className="text-sm font-medium text-gray-600">Всего записей</p>
             <p className="text-3xl font-bold text-gray-900">
-              {stats.totalAppointments}
+              {stats?.totalReceptions.value || 0}
             </p>
           </div>
           <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -50,7 +46,7 @@ export const KeyAnalytics = () => {
         </div>
         <div className="mt-4 flex items-center text-sm">
           <span className="text-green-600 font-medium">
-            {stats.completedAppointments} завершено
+            {stats?.totalReceptions.doneReceptions || 0} завершено
           </span>
           <span className="text-gray-500 ml-2">за период</span>
         </div>
@@ -63,7 +59,7 @@ export const KeyAnalytics = () => {
               Процент завершения
             </p>
             <p className="text-3xl font-bold text-gray-900">
-              {stats.completionRate.toFixed(1)}%
+              {stats?.receptionsDonePercentage || 0}%
             </p>
           </div>
           <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
@@ -74,7 +70,7 @@ export const KeyAnalytics = () => {
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
               className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${stats.completionRate}%` }}
+              style={{ width: `${stats?.receptionsDonePercentage || 0}%` }}
             ></div>
           </div>
         </div>
