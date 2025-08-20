@@ -19,8 +19,9 @@ import {
   TabsTrigger,
 } from "@/shared/components/ui/tabs";
 
-import { EmployeeInfo } from "./EmployeeInfo";
 import { EmployeeReceptions } from "./EmployeeReceptions";
+
+import { EmployeeInfo } from "../components/EmployeeInfo";
 
 // import { ActivityCalendar } from "./ActivityCalendar";
 // import { AppointmentsList } from "./AppointmentsList";
@@ -110,7 +111,10 @@ export const EmployeeDetail = ({
               />
             </TabsContent>
             <TabsContent value="employee-receptions">
-              <EmployeeReceptions managerId={selectedEmployee!} isModalOpen={open} />
+              <EmployeeReceptions
+                managerId={selectedEmployee!}
+                isModalOpen={open}
+              />
             </TabsContent>
           </Tabs>
         </div>

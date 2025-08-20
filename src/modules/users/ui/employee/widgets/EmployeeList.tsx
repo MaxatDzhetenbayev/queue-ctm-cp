@@ -11,11 +11,12 @@ import {
 import { useSearchQuery, useUrlFilter } from "@/shared/hooks";
 import { CustomPagination } from "@/widgets";
 
-import { EmployeeCards } from "./employee-cards/EmployeeCards";
-import { EmployeeDetail } from "./employee-detail/EmployeeDetail";
+import { EmployeeDetail } from "./EmployeeDetail";
 import { EmployeeFilters } from "./EmployeeFilters";
-import { EmployeeHeaderTitle } from "./EmployeeHeaderTitle";
 import { EmployeeQuery } from "./EmployeeQuery";
+
+import { EmployeeCards } from "../components/cards/EmployeeCards";
+import { EmployeeHeaderTitle } from "../components/EmployeeHeaderTitle";
 
 export const EmployeeList = () => {
   const { selectedDepartment, selectedService, selectedPage, setPathParams } =

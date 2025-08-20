@@ -1,5 +1,6 @@
 import React from "react";
 
+import { DepartmentType, ServiceType } from "@/modules/users/domain/schemas";
 import {
   Select,
   SelectContent,
@@ -9,8 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-
-import { DepartmentType, ServiceType } from "../../domain/schemas";
 
 interface EmployeeFiltersProps {
   selectedDepartment: string | null;

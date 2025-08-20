@@ -13,7 +13,7 @@ import {
 
 import { EmployeeReceptionsFilter } from "./EmployeeReceptionsFilter";
 
-import { ClientDetail } from "../client-detail/ClientDetail";
+import { ClientDetail } from "../../client/widgets/ClientDetail";
 
 export const EmployeeReceptions = ({
   managerId,
