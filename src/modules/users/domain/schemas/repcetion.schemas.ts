@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { CenterSchema } from "./center.shemas";
+import { DepartmentSchema } from "./department.shemas";
 import { ServiceSchema } from "./service.shemas";
 import { UserProfileSchema } from "./user.shemas";
 
@@ -19,19 +21,27 @@ export const ReceptionSchema = z.object({
   time: z.date(),
   status: z.enum([
     "PENDING",
-		"WORKING",
+    "WORKING",
     "DONE",
     "CANCELLED",
     "NO_SHOW",
     "CALLED",
     "TRANSFERRED",
   ]),
+  comment: z.string().optional(),
   service: ServiceSchema,
+  department: DepartmentSchema,
+  center: CenterSchema,
   user: z.object({
     id: z.string(),
     authType: z.enum(["OFFLINE", "TELEGRAM"]),
     profile: UserProfileSchema,
   }),
+  employee: z
+    .object({
+      profile: UserProfileSchema,
+    })
+    .optional(),
 });
 
 export type StatusesType = z.infer<typeof ReceptionStatusSchema>;
