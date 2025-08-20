@@ -4,3 +4,4 @@ export { useGetServiceList } from "./get-service-list.usecases";
 export { useEmployeePagination } from "./employee-pagination.usecases";
 export { useGetEmployeeById } from "./employee-by-id.usecases";
 export { useGetReceptionsByEmployeeIdList } from "./employee-receptions-by-id.usecases";
+export { useGetClientInfo } from "./get-client.usercases";
