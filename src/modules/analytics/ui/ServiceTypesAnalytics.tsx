@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
@@ -27,8 +28,9 @@ import {
 } from "@/shared/components/ui/select";
 
 export const ServiceTypesAnalytics = () => {
-  const id = "pie-interactive";
+  const router = useRouter();
   const { data } = useGetServiceTypeCount();
+  const id = "pie-interactive";
 
   const [activeService, setActiveService] = useState<string>("");
 
@@ -107,6 +109,7 @@ export const ServiceTypesAnalytics = () => {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
+              className="cursor-pointer"
               data={data.map((item, index) => ({
                 ...item,
                 fill: `var(--chart-${index + 1})`,
@@ -116,6 +119,9 @@ export const ServiceTypesAnalytics = () => {
               innerRadius={60}
               strokeWidth={5}
               activeIndex={activeIndex}
+              onClick={() =>
+                router.push(`admin/employee?service=${data[activeIndex].id}`)
+              }
               activeShape={({
                 outerRadius = 0,
                 ...props

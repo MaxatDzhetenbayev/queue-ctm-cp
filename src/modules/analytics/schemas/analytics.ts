@@ -14,6 +14,7 @@ export const KeyStatsSchema = z.object({
 
 export const ServiceTypeCountsSchema = z.array(
   z.object({
+    id: z.string(),
     name: z.object({
       kz: z.string(),
       ru: z.string(),
@@ -23,4 +24,6 @@ export const ServiceTypeCountsSchema = z.array(
 );
 
 export type KeyStatsSchemaType = z.infer<typeof KeyStatsSchema>;
-export type ServiceTypeCountsSchemaType = z.infer<typeof ServiceTypeCountsSchema>;
+export type ServiceTypeCountsSchemaType = z.infer<
+  typeof ServiceTypeCountsSchema
+>;
