@@ -7,4 +7,7 @@ export const UserProfileSchema = z.object({
   phone: z.string().optional(),
 });
 
+export const AuthVariantSchema = z.enum(["CREDENTIALS", "TELEGRAM", "OFFLINE"]);
+
 export type UserProfileType = z.infer<typeof UserProfileSchema>;
+export type AuthVariantType = z.infer<typeof AuthVariantSchema>;
