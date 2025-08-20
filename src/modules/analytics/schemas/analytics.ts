@@ -12,4 +12,15 @@ export const KeyStatsSchema = z.object({
   receptionsDonePercentage: z.number(),
 });
 
+export const ServiceTypeCountsSchema = z.array(
+  z.object({
+    name: z.object({
+      kz: z.string(),
+      ru: z.string(),
+    }),
+    count: z.number(),
+  })
+);
+
 export type KeyStatsSchemaType = z.infer<typeof KeyStatsSchema>;
+export type ServiceTypeCountsSchemaType = z.infer<typeof ServiceTypeCountsSchema>;

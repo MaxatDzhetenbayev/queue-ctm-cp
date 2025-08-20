@@ -1,9 +1,10 @@
 "use client";
 
-import * as React from "react";
+import React, { useState } from "react";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
 
+import { useGetServiceTypeCount } from "@/modules/analytics/application/use-cases/get-analytics-service-type-counts";
 import {
   Card,
   CardContent,
@@ -25,94 +26,68 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
-export const description = "An interactive pie chart";
-
-const desktopData = [
-  { month: "january", desktop: 186, fill: "var(--color-january)" },
-  { month: "february", desktop: 305, fill: "var(--color-february)" },
-  { month: "march", desktop: 237, fill: "var(--color-march)" },
-  { month: "april", desktop: 173, fill: "var(--color-april)" },
-  { month: "may", desktop: 209, fill: "var(--color-may)" },
-];
-
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "Desktop",
-  },
-  mobile: {
-    label: "Mobile",
-  },
-  january: {
-    label: "January",
-    color: "var(--chart-1)",
-  },
-  february: {
-    label: "February",
-    color: "var(--chart-2)",
-  },
-  march: {
-    label: "March",
-    color: "var(--chart-3)",
-  },
-  april: {
-    label: "April",
-    color: "var(--chart-4)",
-  },
-  may: {
-    label: "May",
-    color: "var(--chart-5)",
-  },
-} satisfies ChartConfig;
-
 export const ServiceTypesAnalytics = () => {
   const id = "pie-interactive";
-  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month);
+  const { data } = useGetServiceTypeCount();
 
-  const activeIndex = React.useMemo(
-    () => desktopData.findIndex((item) => item.month === activeMonth),
-    [activeMonth]
-  );
-  const months = React.useMemo(() => desktopData.map((item) => item.month), []);
+  const [activeService, setActiveService] = useState<string>("");
+
+  if (!data || data.length === 0) {
+    return (
+      <Card className="flex flex-col items-center justify-center p-10">
+        <span className="text-muted-foreground">Нет данных</span>
+      </Card>
+    );
+  }
+
+  if (activeService === "" && data && data.length > 0) {
+    setActiveService(data[0].name.ru);
+  }
+
+  const activeIndex = data.findIndex((item) => item.name.ru === activeService);
+
+  // Генерация chartConfig на основе данных
+  const chartConfig: ChartConfig = data.reduce((acc, item, index) => {
+    acc[item.name.ru] = {
+      label: item.name.ru,
+      color: `var(--chart-${index + 1})`,
+    };
+    return acc;
+  }, {} as ChartConfig);
 
   return (
     <Card data-chart={id} className="flex flex-col">
       <ChartStyle id={id} config={chartConfig} />
-      <CardHeader className="flex-row align-items-startZ space-y-0 pb-0">
+      <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
           <CardTitle className="pl-4 text-2xl">Типы услуг</CardTitle>
         </div>
-        <Select value={activeMonth} onValueChange={setActiveMonth}>
+        <Select value={activeService} onValueChange={setActiveService}>
           <SelectTrigger
-            className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
-            aria-label="Select a value"
+            className="ml-auto h-7 w-[180px] rounded-lg pl-2.5"
+            aria-label="Select service"
           >
-            <SelectValue placeholder="Select month" />
+            <SelectValue placeholder="Выберите тип" />
           </SelectTrigger>
           <SelectContent align="end" className="rounded-xl">
-            {months.map((key) => {
-              const config = chartConfig[key as keyof typeof chartConfig];
-
-              if (!config) {
-                return null;
-              }
+            {data.map((item) => {
+              const config = chartConfig[item.name.ru];
+              if (!config) return null;
 
               return (
                 <SelectItem
-                  key={key}
-                  value={key}
+                  key={item.name.ru}
+                  value={item.name.ru}
                   className="rounded-lg [&_span]:flex"
                 >
                   <div className="flex items-center gap-2 text-xs">
                     <span
                       className="flex h-3 w-3 shrink-0 rounded-xs"
                       style={{
-                        backgroundColor: `var(--color-${key})`,
+                        backgroundColor: config.color,
                       }}
                     />
-                    {config?.label}
+                    {config.label}
                   </div>
                 </SelectItem>
               );
@@ -132,9 +107,12 @@ export const ServiceTypesAnalytics = () => {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={desktopData}
-              dataKey="desktop"
-              nameKey="month"
+              data={data.map((item, index) => ({
+                ...item,
+                fill: `var(--chart-${index + 1})`,
+              }))}
+              dataKey="count"
+              nameKey="name.ru"
               innerRadius={60}
               strokeWidth={5}
               activeIndex={activeIndex}
@@ -167,14 +145,14 @@ export const ServiceTypesAnalytics = () => {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {desktopData[activeIndex].desktop.toLocaleString()}
+                          {data[activeIndex].count.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Услуги
                         </tspan>
                       </text>
                     );
