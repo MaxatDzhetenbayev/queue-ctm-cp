@@ -1,5 +1,5 @@
+import { ServiceTypeCountsSchemaType } from "@/modules/analytics/domain/schemas/analytics";
 import { fetchGetServiceTypeCounts } from "@/modules/analytics/infrastructure/api/client.api";
-import { ServiceTypeCountsSchemaType } from "@/modules/analytics/schemas/analytics";
 
 import { useQuery } from "@tanstack/react-query";
 

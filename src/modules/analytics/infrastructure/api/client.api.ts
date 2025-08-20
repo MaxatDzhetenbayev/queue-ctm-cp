@@ -1,7 +1,7 @@
 import {
   KeyStatsSchemaType,
   ServiceTypeCountsSchemaType,
-} from "@/modules/analytics/schemas/analytics";
+} from "@/modules/analytics/domain/schemas/analytics";
 import { axiosApi } from "@/shared/lib/client";
 
 /**
