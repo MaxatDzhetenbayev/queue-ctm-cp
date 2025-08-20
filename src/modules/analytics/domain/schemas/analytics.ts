@@ -23,7 +23,17 @@ export const ServiceTypeCountsSchema = z.array(
   })
 );
 
+export const ActivityAnalyticsSchema = z.array(
+  z.object({
+    date: z.string(), // ISO date string
+    count: z.number(),
+  })
+);
+
 export type KeyStatsSchemaType = z.infer<typeof KeyStatsSchema>;
 export type ServiceTypeCountsSchemaType = z.infer<
   typeof ServiceTypeCountsSchema
+>;
+export type ActivityAnalyticsSchemaType = z.infer<
+  typeof ActivityAnalyticsSchema
 >;

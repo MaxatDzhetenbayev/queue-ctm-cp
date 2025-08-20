@@ -1,4 +1,5 @@
 import {
+  ActivityAnalyticsSchemaType,
   KeyStatsSchemaType,
   ServiceTypeCountsSchemaType,
 } from "@/modules/analytics/domain/schemas/analytics";
@@ -25,6 +26,18 @@ export async function fetchKeyStats(): Promise<KeyStatsSchemaType> {
 export async function fetchGetServiceTypeCounts(): Promise<ServiceTypeCountsSchemaType> {
   const response = await axiosApi.get<ServiceTypeCountsSchemaType>(
     `/analytics/service-types`
+  );
+  return response.data;
+}
+/**
+ * Получение статистики по активности центра.
+ *
+ * @returns {Promise<ActivityAnalyticsSchemaType>} - Статистика по активности центра.
+ *
+ */
+export async function fetchGetActivityAnalytics(): Promise<ActivityAnalyticsSchemaType> {
+  const response = await axiosApi.get<ActivityAnalyticsSchemaType>(
+    `/analytics/activity`
   );
   return response.data;
 }

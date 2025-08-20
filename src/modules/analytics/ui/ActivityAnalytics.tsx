@@ -16,6 +16,8 @@ import {
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
 
+import { useGetActivityAnalytics } from "../application/use-cases/get-analytics-activity";
+
 const chartData = [
   { date: "2024-06-01", activeEmployees: 12, records: 35 },
   { date: "2024-06-02", activeEmployees: 15, records: 52 },
@@ -36,72 +38,78 @@ const chartData = [
 const chartConfig = {
   records: {
     label: "Количество записей",
-    color: "var(--color-chart-6)",
+    color: "var(--color-chart-7)",
   },
 } satisfies ChartConfig;
 
 export const ActivityAnalytics = () => {
+  const { data, isLoading } = useGetActivityAnalytics();
+
   return (
     <Card className="">
       <CardHeader className="flex flex-col items-stretch border-b p-0 sm:flex-row">
         <CardTitle className="pl-4 text-2xl">График активности</CardTitle>
       </CardHeader>
       <CardContent className="px-2 sm:p-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
-        >
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[250px] w-full"
           >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("ru-RU", {
-                  month: "short",
-                  day: "numeric",
-                });
+            <BarChart
+              accessibilityLayer
+              data={data}
+              margin={{
+                left: 12,
+                right: 12,
               }}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  className="w-[180px]"
-                  formatter={(_, __, item) => (
-                    <>
-                      <div>
-                        📑 Записи за этот день: <b>{item.payload.records}</b>
-                      </div>
-                      <div>
-                        👥 Актив. сотрудники:{" "}
-                        <b>{item.payload.activeEmployees}</b>
-                      </div>
-                    </>
-                  )}
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("ru-RU", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    });
-                  }}
-                />
-              }
-            />
-            <Bar dataKey="records" fill={chartConfig.records.color} />
-          </BarChart>
-        </ChartContainer>
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("ru-RU", {
+                    month: "short",
+                    day: "numeric",
+                  });
+                }}
+              />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    className="w-[180px]"
+                    formatter={(_, __, item) => (
+                      <>
+                        <div>
+                          📑 Записи за этот день: <b>{item.payload.count}</b>
+                        </div>
+                        {/* <div>
+                          👥 Актив. сотрудники:{" "}
+                          <b>{item.payload.activeEmployees}</b>
+                        </div> */}
+                      </>
+                    )}
+                    labelFormatter={(value) => {
+                      return new Date(value).toLocaleDateString("ru-RU", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      });
+                    }}
+                  />
+                }
+              />
+              <Bar dataKey="count" fill={chartConfig.records.color} />
+            </BarChart>
+          </ChartContainer>
+        )}
       </CardContent>
     </Card>
   );
