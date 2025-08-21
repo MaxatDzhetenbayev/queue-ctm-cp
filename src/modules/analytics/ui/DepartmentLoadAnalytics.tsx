@@ -9,6 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
+import { useGetDepartmentLoads } from "@/modules/analytics/application/use-cases";
 import {
   Card,
   CardContent,
@@ -22,24 +23,10 @@ import {
   ChartTooltipContent,
 } from "@/shared/components/ui/chart";
 
-export const description = "A bar chart with a custom label";
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
-
+// Конфигурация графика
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-2)",
-  },
-  mobile: {
-    label: "Mobile",
+  count: {
+    label: "Количество",
     color: "var(--chart-2)",
   },
   label: {
@@ -48,6 +35,36 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export const DepartmentLoadAnalytics = () => {
+  const { data, isLoading, isError } = useGetDepartmentLoads();
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="pl-4 text-2xl">Нагрузка на отделы</CardTitle>
+        </CardHeader>
+        <CardContent>Загрузка...</CardContent>
+      </Card>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="pl-4 text-2xl">Нагрузка на отделы</CardTitle>
+        </CardHeader>
+        <CardContent>Ошибка при загрузке данных</CardContent>
+      </Card>
+    );
+  }
+
+  // Маппим данные: добавляем displayName для графика
+  const chartData = data.map((item) => ({
+    ...item,
+    displayName: item.name.ru,
+  }));
+
   return (
     <Card>
       <CardHeader>
@@ -65,39 +82,46 @@ export const DepartmentLoadAnalytics = () => {
           >
             <CartesianGrid horizontal={false} />
             <YAxis
-              dataKey="month"
+              dataKey="displayName"
               type="category"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-              hide
             />
-            <XAxis dataKey="desktop" type="number" hide />
+            <XAxis dataKey="count" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar
-              dataKey="desktop"
+              dataKey="count"
               layout="vertical"
-              fill="var(--color-desktop)"
+              fill="var(--color-count)"
               radius={4}
               barSize={40}
             >
+              {/* Название отдела слева */}
               <LabelList
-                dataKey="month"
+                dataKey="displayName"
                 position="insideLeft"
                 offset={8}
                 className="fill-(--color-label)"
-                fontSize={18}
+                fontSize={16}
               />
+              {/* Количество справа */}
               <LabelList
-                dataKey="desktop"
+                dataKey="count"
                 position="right"
                 offset={8}
                 className="fill-foreground"
-                fontSize={18}
+                fontSize={16}
+              />
+              <LabelList
+                dataKey="count"
+                position="right"
+                offset={8}
+                className="fill-foreground"
+                fontSize={16}
               />
             </Bar>
           </BarChart>

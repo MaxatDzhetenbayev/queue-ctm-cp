@@ -1,5 +1,6 @@
 import {
   ActivityAnalyticsSchemaType,
+  DepartmentLoadAnalyticsSchemaType,
   KeyStatsSchemaType,
   ServiceTypeCountsSchemaType,
 } from "@/modules/analytics/domain/schemas/analytics";
@@ -38,6 +39,18 @@ export async function fetchGetServiceTypeCounts(): Promise<ServiceTypeCountsSche
 export async function fetchGetActivityAnalytics(): Promise<ActivityAnalyticsSchemaType> {
   const response = await axiosApi.get<ActivityAnalyticsSchemaType>(
     `/analytics/activity`
+  );
+  return response.data;
+}
+/**
+ * Получение статистики по загруженности департаментов.
+ *
+ * @returns {Promise<DepartmentLoadAnalyticsSchemaType>} - Статистика по загруженности департаментов.
+ *
+ */
+export async function fetchGetDepartmentLoad(): Promise<DepartmentLoadAnalyticsSchemaType> {
+  const response = await axiosApi.get<DepartmentLoadAnalyticsSchemaType>(
+    `/analytics/department-load`
   );
   return response.data;
 }

@@ -25,8 +25,20 @@ export const ServiceTypeCountsSchema = z.array(
 
 export const ActivityAnalyticsSchema = z.array(
   z.object({
-    date: z.string(), // ISO date string
+    date: z.string(),
     count: z.number(),
+  })
+);
+
+export const DepartmentLoadAnalyticsSchema = z.array(
+  z.object({
+    id: z.string(),
+    name: z.object({
+      kz: z.string(),
+      ru: z.string(),
+    }),
+    count: z.number(),
+    percentage: z.number(),
   })
 );
 
@@ -36,4 +48,7 @@ export type ServiceTypeCountsSchemaType = z.infer<
 >;
 export type ActivityAnalyticsSchemaType = z.infer<
   typeof ActivityAnalyticsSchema
+>;
+export type DepartmentLoadAnalyticsSchemaType = z.infer<
+  typeof DepartmentLoadAnalyticsSchema
 >;

@@ -13,9 +13,7 @@ export const AnalyticsWrapper = () => {
       </div>
       <ActivityAnalytics />
       <ServiceTypesAnalytics />
-      <div className="col-span-1 md:col-span-2">
         <DepartmentLoadAnalytics />
-      </div>
     </div>
   );
 };
