@@ -1,4 +1,4 @@
-import { BarChart3, Home, Users } from "lucide-react";
+import { BarChart3, Calendar,Home, Users } from "lucide-react";
 import React from "react";
 
 import { Link } from "@/shared/configs/i18";
@@ -6,6 +6,7 @@ import { Link } from "@/shared/configs/i18";
 const navigation = [
   { name: "Главная", href: "/admin", icon: Home },
   { name: "Персонал", href: "/admin/employee", icon: Users },
+  { name: "Отсутствия", href: "/admin/absences", icon: Calendar },
 ];
 
 export const Header = () => {
