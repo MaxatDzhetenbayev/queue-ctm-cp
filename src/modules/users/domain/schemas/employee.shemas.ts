@@ -10,6 +10,8 @@ export const LanguageSchema = z.object({
   ru: z.string(),
 });
 
+export type LanguageType = z.infer<typeof LanguageSchema>;
+
 const EmployeeInfoSchema = z.object({
   id: z.string(),
   table: z.number(),
