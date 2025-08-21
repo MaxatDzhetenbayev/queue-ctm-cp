@@ -1,2 +1,2 @@
-export type LocaleType = ["ru", "kz", "en"];
+export type LocaleType = ["ru", "kz"];
 export type LocaleRecordType<T> = Record<LocaleType[number], T>;
