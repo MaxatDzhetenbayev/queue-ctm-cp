@@ -2,6 +2,7 @@ import {
   ActivityAnalyticsSchemaType,
   DepartmentLoadAnalyticsSchemaType,
   KeyStatsSchemaType,
+  ReceptionsAuthTypeData,
   ServiceTypeCountsSchemaType,
 } from "@/modules/analytics/domain/schemas/analytics";
 import { axiosApi } from "@/shared/lib/client";
@@ -54,3 +55,18 @@ export async function fetchGetDepartmentLoad(): Promise<DepartmentLoadAnalyticsS
   );
   return response.data;
 }
+
+/**
+ * Получение статистики по типам авторизации.
+ *
+ * @returns {Promise<ReceptionsAuthTypeData[]>} - Статистика по типам авторизации.
+ *
+ */
+export const getReceptionsAuthType = async (): Promise<
+  ReceptionsAuthTypeData[]
+> => {
+  const response = await axiosApi.get(
+    "/analytics/receptions-user-registration-type"
+  );
+  return response.data;
+};

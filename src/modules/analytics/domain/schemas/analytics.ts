@@ -42,6 +42,12 @@ export const DepartmentLoadAnalyticsSchema = z.array(
   })
 );
 
+export const ReceptionsAuthTypeSchema = z.array(
+  z.record(z.string(), z.number())
+);
+
+export type ReceptionsAuthTypeData = z.infer<typeof ReceptionsAuthTypeSchema>;
+
 export type KeyStatsSchemaType = z.infer<typeof KeyStatsSchema>;
 export type ServiceTypeCountsSchemaType = z.infer<
   typeof ServiceTypeCountsSchema

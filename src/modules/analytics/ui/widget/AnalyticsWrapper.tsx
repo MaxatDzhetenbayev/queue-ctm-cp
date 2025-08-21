@@ -3,6 +3,7 @@ import React from "react";
 import { ActivityAnalytics } from "../activity-analytics";
 import { DepartmentLoadAnalytics } from "../department-load-analytics";
 import { KeyAnalytics } from "../key-analytics/KeyAnalytics";
+import { ReceptionsAuthTypeAnalytics } from "../receptions-auth-type-analytics";
 import { ServiceTypesAnalytics } from "../service-types-analytics";
 
 export const AnalyticsWrapper = () => {
@@ -13,6 +14,7 @@ export const AnalyticsWrapper = () => {
       </div>
       <ActivityAnalytics />
       <ServiceTypesAnalytics />
+      <ReceptionsAuthTypeAnalytics />
       <DepartmentLoadAnalytics />
     </div>
   );

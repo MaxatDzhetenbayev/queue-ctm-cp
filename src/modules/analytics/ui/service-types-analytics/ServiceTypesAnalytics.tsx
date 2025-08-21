@@ -6,15 +6,11 @@ import { useGetServiceTypeCount } from "@/modules/analytics/application/use-case
 import { ChartConfig } from "@/shared/components/ui/chart";
 
 import { ServiceTypeChart } from "./ServiceTypeChart";
+import { ServiceTypesSkeleton } from "./ServiceTypesAnalyticsSkeleton";
 import { ServiceTypeSelect } from "./ServiceTypeSelect";
 
 import { serviceTypesConfig } from "../../domain/configs";
-import {
-  EmptyState,
-  ErrorState,
-  LoadingState,
-  StateWrapper,
-} from "../components/LoadStates";
+import { EmptyState, ErrorState, StateWrapper } from "../components/LoadStates";
 
 export const ServiceTypesAnalytics = () => {
   const { data, isLoading, isError } = useGetServiceTypeCount();
@@ -22,7 +18,11 @@ export const ServiceTypesAnalytics = () => {
   const chartId = "pie-interactive";
 
   if (isLoading) {
-    return <LoadingState />;
+    return (
+      <StateWrapper title={serviceTypesConfig.MAIN_CONFIG.title}>
+        <ServiceTypesSkeleton />
+      </StateWrapper>
+    );
   }
 
   if (isError) {
@@ -58,12 +58,10 @@ export const ServiceTypesAnalytics = () => {
       data-chart={chartId}
       className="flex flex-col rounded-xl shadow-sm border border-gray-200 p-5"
     >
-      <div className="flex-row items-start space-y-0 pb-0 mb-4">
-        <div className="grid gap-1">
-          <h2 className="pl-4 text-2xl font-bold text-gray-900">
-            {serviceTypesConfig.MAIN_CONFIG.title}
-          </h2>
-        </div>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900">
+          {serviceTypesConfig.MAIN_CONFIG.title}
+        </h2>
         <ServiceTypeSelect
           data={data}
           activeService={activeService}
