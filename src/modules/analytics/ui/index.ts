@@ -1,1 +1,1 @@
-export { AnalyticsWrapper } from "./AnalyticsWrapper";
+export { AnalyticsWrapper } from "./widget/AnalyticsWrapper";

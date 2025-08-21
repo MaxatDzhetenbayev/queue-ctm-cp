@@ -2,8 +2,8 @@ import { AlertCircle, BarChart3, PieChart } from "lucide-react";
 
 import { MAIN_CONFIG as departmentLoadConfig } from "../../domain/configs/department-load.config";
 import { MAIN_CONFIG as serviceTypesConfig } from "../../domain/configs/service-types.config";
-import { DepartmentLoadSkeleton } from "../DepartmentLoadAnalyticsSekelon";
-import { ServiceTypesSkeleton } from "../ServiceTypesAnalyticsSkeleton";
+import { DepartmentLoadSkeleton } from "../department-load-analytics";
+import { ServiceTypesSkeleton } from "../service-types-analytics";
 
 interface StateComponentProps {
   title: string;

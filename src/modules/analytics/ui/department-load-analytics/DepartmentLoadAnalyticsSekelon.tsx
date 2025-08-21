@@ -1,6 +1,6 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
-import { MAIN_CONFIG } from "../domain/configs/department-load.config";
+import { MAIN_CONFIG } from "../../domain/configs/department-load.config";
 
 export const DepartmentLoadSkeleton = () => {
   const { itemsCount, itemHeight, labelWidth, valueWidth } =

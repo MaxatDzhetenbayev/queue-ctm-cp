@@ -1,9 +1,9 @@
 import React from "react";
 
-import { ActivityAnalytics } from "./ActivityAnalytics";
-import { DepartmentLoadAnalytics } from "./DepartmentLoadAnalytics";
-import { KeyAnalytics } from "./KeyAnalytics";
-import { ServiceTypesAnalytics } from "./ServiceTypesAnalytics";
+import { ActivityAnalytics } from "../activity-analytics";
+import { DepartmentLoadAnalytics } from "../department-load-analytics";
+import { KeyAnalytics } from "../key-analytics/KeyAnalytics";
+import { ServiceTypesAnalytics } from "../service-types-analytics";
 
 export const AnalyticsWrapper = () => {
   return (
@@ -13,7 +13,7 @@ export const AnalyticsWrapper = () => {
       </div>
       <ActivityAnalytics />
       <ServiceTypesAnalytics />
-        <DepartmentLoadAnalytics />
+      <DepartmentLoadAnalytics />
     </div>
   );
 };

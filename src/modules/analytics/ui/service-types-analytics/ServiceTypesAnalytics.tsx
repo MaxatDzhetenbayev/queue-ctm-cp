@@ -5,16 +5,16 @@ import React, { useState } from "react";
 import { useGetServiceTypeCount } from "@/modules/analytics/application/use-cases/get-analytics-service-type-counts";
 import { ChartConfig } from "@/shared/components/ui/chart";
 
-import {
-  ServiceTypesEmptyState,
-  ServiceTypesErrorState,
-  ServiceTypesLoadingState,
-  StateWrapper,
-} from "./components/LoadStates";
-import { ServiceTypeChart } from "./components/ServiceTypeChart";
-import { ServiceTypeSelect } from "./components/ServiceTypeSelect";
+import { ServiceTypeChart } from "./ServiceTypeChart";
+import { ServiceTypeSelect } from "./ServiceTypeSelect";
 
-import { serviceTypesConfig } from "../domain/configs";
+import { serviceTypesConfig } from "../../domain/configs";
+import {
+  EmptyState,
+  ErrorState,
+  LoadingState,
+  StateWrapper,
+} from "../components/LoadStates";
 
 export const ServiceTypesAnalytics = () => {
   const { data, isLoading, isError } = useGetServiceTypeCount();
@@ -22,13 +22,13 @@ export const ServiceTypesAnalytics = () => {
   const chartId = "pie-interactive";
 
   if (isLoading) {
-    return <ServiceTypesLoadingState />;
+    return <LoadingState />;
   }
 
   if (isError) {
     return (
       <StateWrapper title={serviceTypesConfig.MAIN_CONFIG.title}>
-        <ServiceTypesErrorState />
+        <ErrorState />
       </StateWrapper>
     );
   }
@@ -36,7 +36,7 @@ export const ServiceTypesAnalytics = () => {
   if (!data || data.length === 0) {
     return (
       <StateWrapper title={serviceTypesConfig.MAIN_CONFIG.title}>
-        <ServiceTypesEmptyState />
+        <EmptyState />
       </StateWrapper>
     );
   }

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Bar,
   BarChart,
@@ -15,24 +17,12 @@ import {
 } from "@/shared/components/ui/chart";
 
 import { departmentLoadConfig } from "../../domain/configs";
-
-// Типы для графика
-interface DepartmentLoadData {
-  id: string;
-  name: { ru: string; kz: string };
-  count: number;
-  percentage: number;
-}
-
-interface ChartDataItem extends DepartmentLoadData {
-  displayName: string;
-}
+import { departmentLoadTypes } from "../../domain/types";
 
 interface DepartmentLoadChartProps {
-  data: ChartDataItem[];
+  data: departmentLoadTypes.ChartDataItem[];
 }
 
-// Компонент графика
 export const DepartmentLoadChart = ({ data }: DepartmentLoadChartProps) => {
   const { height, barSize, radius, margin, fontSize, offset } =
     departmentLoadConfig.MAIN_CONFIG.chart;

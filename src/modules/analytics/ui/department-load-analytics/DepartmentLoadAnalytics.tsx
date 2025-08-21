@@ -2,16 +2,16 @@
 
 import { useGetDepartmentLoads } from "@/modules/analytics/application/use-cases";
 
-import { DepartmentLoadChart } from "./components/DepartmentLoadChart";
+import { DepartmentLoadChart } from "./DepartmentLoadChart";
+
+import { departmentLoadConfig } from "../../domain/configs";
+import { departmentLoadTypes } from "../../domain/types";
 import {
   EmptyState,
   ErrorState,
   LoadingState,
   StateWrapper,
-} from "./components/LoadStates";
-
-import { departmentLoadConfig } from "../domain/configs";
-import { departmentLoadTypes } from "../domain/types";
+} from "../components/LoadStates";
 
 export const DepartmentLoadAnalytics = () => {
   const { data, isLoading, isError } = useGetDepartmentLoads();
