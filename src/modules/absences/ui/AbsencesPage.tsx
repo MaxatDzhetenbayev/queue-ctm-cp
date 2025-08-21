@@ -35,40 +35,19 @@ const mockStatistics = [
   { type: "personal", label: "Личное", count: 10, percentage: 31 },
 ];
 
-const mockUpcomingAbsences = [
-  {
-    id: "1",
-    employeeName: "Иванов Иван Иванович",
-    type: "vacation",
-    typeLabel: "Отпуск",
-    startDate: "2024-08-25",
-    endDate: "2024-09-05",
-  },
-  {
-    id: "2",
-    employeeName: "Петрова Анна Сергеевна",
-    type: "sick_leave",
-    typeLabel: "Больничный",
-    startDate: "2024-08-22",
-    endDate: "2024-08-28",
-  },
-  {
-    id: "3",
-    employeeName: "Сидоров Алексей Петрович",
-    type: "personal",
-    typeLabel: "Личное",
-    startDate: "2024-08-30",
-    endDate: "2024-08-30",
-  },
-];
-
 export const AbsencesPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("all");
 
-  // Получаем реальные данные
-  const { data: absencesResponse, isLoading, isError } = useGetAbsences();
+  // Получаем реальные данные с сортировкой по убыванию (новые к старым)
+  const {
+    data: absencesResponse,
+    isLoading,
+    isError,
+  } = useGetAbsences({
+    sort: "desc",
+  });
 
   // Преобразуем данные в нужный формат
   const absences = absencesResponse?.data.map(transformAbsenceData) || [];
@@ -179,7 +158,7 @@ export const AbsencesPage = () => {
         {/* Статистика */}
         <div className="space-y-6">
           <AbsencesStatistics statistics={mockStatistics} />
-          <UpcomingAbsences absences={mockUpcomingAbsences} />
+          <UpcomingAbsences />
         </div>
       </div>
 

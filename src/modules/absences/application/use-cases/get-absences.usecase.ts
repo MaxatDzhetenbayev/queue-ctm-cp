@@ -1,10 +1,15 @@
+import { getAbsences } from "../../infrastructure/api/absences.api";
 import { useQuery } from "@tanstack/react-query";
 
-import { getAbsences } from "../../infrastructure/api/absences.api";
+interface UseGetAbsencesParams {
+  limit?: number;
+  upcoming?: boolean;
+  sort?: "asc" | "desc";
+}
 
-export const useGetAbsences = () => {
+export const useGetAbsences = (params?: UseGetAbsencesParams) => {
   return useQuery({
-    queryKey: ["absences"],
-    queryFn: getAbsences,
+    queryKey: ["absences", params],
+    queryFn: () => getAbsences(params),
   });
 };
