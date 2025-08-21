@@ -1,6 +1,9 @@
 import { axiosApi } from "@/shared/lib/client";
 
-import { AbsencesResponseSchema } from "../../domain/schemas/absences.schemas";
+import {
+  AbsencesResponseSchema,
+  AbsenceStatisticsSchema,
+} from "../../domain/schemas/absences.schemas";
 
 interface GetAbsencesParams {
   limit?: number;
@@ -28,4 +31,9 @@ export const getAbsences = async (params?: GetAbsencesParams) => {
   }`;
   const response = await axiosApi.get(url);
   return AbsencesResponseSchema.parse(response.data);
+};
+
+export const getAbsenceStatistics = async () => {
+  const response = await axiosApi.get("/leaves/center/analytics/types");
+  return AbsenceStatisticsSchema.parse(response.data);
 };

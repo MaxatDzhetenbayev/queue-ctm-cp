@@ -15,5 +15,12 @@ export const AbsencesResponseSchema = z.object({
   data: z.array(AbsenceSchema),
 });
 
+export const AbsenceStatisticsSchema = z.object({
+  HOLIDAY: z.number(),
+  SICK_LEAVE: z.number(),
+  PERSONAL: z.number(),
+});
+
 export type Absence = z.infer<typeof AbsenceSchema>;
 export type AbsencesResponse = z.infer<typeof AbsencesResponseSchema>;
+export type AbsenceStatistics = z.infer<typeof AbsenceStatisticsSchema>;

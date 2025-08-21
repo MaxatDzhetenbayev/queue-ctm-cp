@@ -29,12 +29,6 @@ const mockAbsenceTypes = [
   { id: "personal", label: "Личное", color: "bg-yellow-500" },
 ];
 
-const mockStatistics = [
-  { type: "vacation", label: "Отпуск", count: 15, percentage: 45 },
-  { type: "sick_leave", label: "Больничный", count: 8, percentage: 24 },
-  { type: "personal", label: "Личное", count: 10, percentage: 31 },
-];
-
 export const AbsencesPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -157,7 +151,7 @@ export const AbsencesPage = () => {
 
         {/* Статистика */}
         <div className="space-y-6">
-          <AbsencesStatistics statistics={mockStatistics} />
+          <AbsencesStatistics />
           <UpcomingAbsences />
         </div>
       </div>
