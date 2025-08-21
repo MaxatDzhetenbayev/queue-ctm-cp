@@ -11,57 +11,8 @@ import { AbsencesList } from "./widgets/AbsencesList";
 import { AbsencesStatistics } from "./widgets/AbsencesStatistics";
 import { UpcomingAbsences } from "./widgets/UpcomingAbsences";
 
-// Моковые данные
-const mockAbsences = [
-  {
-    id: "1",
-    employeeName: "Иванов Иван Иванович",
-    employeeId: "emp1",
-    type: "vacation",
-    typeLabel: "Отпуск",
-    startDate: "2024-08-25",
-    endDate: "2024-09-05",
-    status: "active",
-    comment: "Летний отпуск",
-    createdAt: "2024-08-20",
-  },
-  {
-    id: "2",
-    employeeName: "Петрова Анна Сергеевна",
-    employeeId: "emp2",
-    type: "sick_leave",
-    typeLabel: "Больничный",
-    startDate: "2024-08-22",
-    endDate: "2024-08-28",
-    status: "active",
-    comment: "ОРВИ",
-    createdAt: "2024-08-21",
-  },
-  {
-    id: "3",
-    employeeName: "Сидоров Алексей Петрович",
-    employeeId: "emp3",
-    type: "personal",
-    typeLabel: "Личное",
-    startDate: "2024-08-30",
-    endDate: "2024-08-30",
-    status: "active",
-    comment: "Семейные дела",
-    createdAt: "2024-08-22",
-  },
-  {
-    id: "4",
-    employeeName: "Козлова Мария Дмитриевна",
-    employeeId: "emp4",
-    type: "vacation",
-    typeLabel: "Отпуск",
-    startDate: "2024-09-10",
-    endDate: "2024-09-20",
-    status: "active",
-    comment: "Осенний отпуск",
-    createdAt: "2024-08-23",
-  },
-];
+import { useGetAbsences } from "../application/use-cases";
+import { transformAbsenceData } from "../domain/utils/absence.utils";
 
 const mockEmployees = [
   { id: "emp1", name: "Иванов Иван Иванович" },
@@ -115,12 +66,25 @@ export const AbsencesPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [absences, setAbsences] = useState(mockAbsences);
+
+  // Получаем реальные данные
+  const { data: absencesResponse, isLoading, isError } = useGetAbsences();
+
+  // Преобразуем данные в нужный формат
+  const absences = absencesResponse?.data.map(transformAbsenceData) || [];
+  const [localAbsences, setLocalAbsences] = useState<typeof absences>([]);
+
+  // Обновляем локальное состояние при получении данных
+  React.useEffect(() => {
+    if (absencesResponse?.data) {
+      setLocalAbsences(absencesResponse.data.map(transformAbsenceData));
+    }
+  }, [absencesResponse]);
 
   const filteredAbsences =
     selectedType === "all"
-      ? absences
-      : absences.filter((absence) => absence.type === selectedType);
+      ? localAbsences
+      : localAbsences.filter((absence) => absence.type === selectedType);
 
   const handleCreateAbsence = (absenceData: any) => {
     const newAbsence = {
@@ -129,13 +93,15 @@ export const AbsencesPage = () => {
       status: "active",
       createdAt: new Date().toISOString().split("T")[0],
     };
-    setAbsences([newAbsence, ...absences]);
+    setLocalAbsences([newAbsence, ...localAbsences]);
     setIsCreateModalOpen(false);
   };
 
   const handleCancelAbsence = (absenceId: string) => {
     if (confirm("Вы уверены, что хотите отменить это отсутствие?")) {
-      setAbsences(absences.filter((absence) => absence.id !== absenceId));
+      setLocalAbsences(
+        localAbsences.filter((absence) => absence.id !== absenceId)
+      );
     }
   };
 
@@ -187,11 +153,27 @@ export const AbsencesPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Список отсутствий */}
         <div className="lg:col-span-2">
-          <AbsencesList
-            absences={filteredAbsences}
-            onCancel={handleCancelAbsence}
-            onEdit={handleEditAbsence}
-          />
+          {isLoading ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Загрузка данных...</p>
+              </div>
+            </div>
+          ) : isError ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-center">
+                <p className="text-red-600 mb-2">Ошибка загрузки данных</p>
+                <p className="text-gray-600">Попробуйте обновить страницу</p>
+              </div>
+            </div>
+          ) : (
+            <AbsencesList
+              absences={filteredAbsences}
+              onCancel={handleCancelAbsence}
+              onEdit={handleEditAbsence}
+            />
+          )}
         </div>
 
         {/* Статистика */}
