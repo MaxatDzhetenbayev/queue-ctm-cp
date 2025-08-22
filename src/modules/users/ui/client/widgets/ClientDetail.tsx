@@ -1,9 +1,24 @@
 "use client";
 
-import { Calendar, ChevronLeft, ChevronRight, User } from "lucide-react";
-import React, { useState } from "react";
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Edit2,
+  User,
+  X,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
-import { useGetClientInfo } from "@/modules/users/application/use-cases";
+import {
+  useGetClientInfo,
+  useUpdateClient,
+} from "@/modules/users/application/use-cases";
+import {
+  UpdateClientSchema,
+  UpdateClientType,
+} from "@/modules/users/domain/schemas/client.shemas";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +27,8 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { getStatusColor, normalizeStatus } from "@/shared/lib";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface ClientModalProps {
   open: boolean;
@@ -32,6 +49,47 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
   const [currentAppointmentIndex, setCurrentAppointmentIndex] = useState(0);
 
   const { data: client, isLoading, isError } = useGetClientInfo(params);
+  const updateClientMutation = useUpdateClient(params.clientId);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isDirty },
+    reset,
+    watch,
+  } = useForm<UpdateClientType>({
+    resolver: zodResolver(UpdateClientSchema),
+    defaultValues: {
+      name: client?.profile.fullName || "",
+      phone: client?.profile.phone || "",
+      iin: client?.profile.iin || "",
+    },
+  });
+
+  // Отслеживаем текущие значения формы
+  const watchedValues = watch();
+
+  // Сброс формы при изменении client
+  useEffect(() => {
+    if (client) {
+      reset({
+        name: client.profile.fullName || "",
+        phone: client.profile.phone || "",
+        iin: client.profile.iin || "",
+      });
+    }
+  }, [client, reset]);
+
+  const onSubmit = async (data: UpdateClientType) => {
+    if (!client) return;
+
+    try {
+      await updateClientMutation.mutateAsync(data);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Ошибка при обновлении:", error);
+    }
+  };
 
   if (isLoading || isError || !client) return;
   const currentAppointment = client.receptions[currentAppointmentIndex];
@@ -46,8 +104,6 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
   const prevAppointment = () => {
     setCurrentAppointmentIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
-
-  console.log(currentAppointment);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -65,40 +121,18 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                 <DialogTitle>{client?.profile.fullName}</DialogTitle>
               </div>
             </div>
-            {/* <div className="flex items-center space-x-2">
-              <button
-                onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                {isEditing ? (
-                  <>
-                    <Save className="h-4 w-4" />
-                    <span>Сохранить</span>
-                  </>
-                ) : (
-                  <>
-                    <Edit2 className="h-4 w-4" />
-                    <span>Редактировать</span>
-                  </>
-                )}
-              </button>
-              {isEditing && (
+            <div className="flex items-center space-x-2">
+              {!isEditing && (
                 <button
-                  onClick={handleCancel}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
-                  Отмена
+                  <Edit2 className="h-4 w-4" />
+                  <span>Редактировать</span>
                 </button>
               )}
-              <button
-                onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div> */}
+            </div>
           </div>
-
           <div className="p-6 max-h-[70vh] overflow-y-auto">
             <div className="space-y-8">
               {/* Client Details */}
@@ -109,21 +143,20 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                       Имя
                     </label>
                     {isEditing ? (
-                      <div></div>
+                      <input
+                        type="text"
+                        {...register("name")}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        placeholder="Введите имя"
+                      />
                     ) : (
-                      // <input
-                      //   type="text"
-                      //   value={editedClient.firstName}
-                      //   onChange={(e) =>
-                      //     setEditedClient({
-                      //       ...editedClient,
-                      //       firstName: e.target.value,
-                      //     })
-                      //   }
-                      //   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      // />
                       <p className="text-gray-900">
                         {client?.profile.fullName}
+                      </p>
+                    )}
+                    {isEditing && errors.name && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {errors.name.message}
                       </p>
                     )}
                   </div>
@@ -134,20 +167,19 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                         ИИН
                       </label>
                       {isEditing ? (
-                        <div></div>
+                        <input
+                          type="text"
+                          {...register("iin")}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          placeholder="Введите ИИН (12 цифр)"
+                        />
                       ) : (
-                        // <input
-                        //   type="text"
-                        //   value={editedClient.iin}
-                        //   onChange={(e) =>
-                        //     setEditedClient({
-                        //       ...editedClient,
-                        //       iin: e.target.value,
-                        //     })
-                        //   }
-                        //   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        // />
                         <p className="text-gray-900">{client?.profile.iin}</p>
+                      )}
+                      {isEditing && errors.iin && (
+                        <p className="text-sm text-red-500 mt-1">
+                          {errors.iin.message}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -160,20 +192,19 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                         Телефон
                       </label>
                       {isEditing ? (
-                        <div></div>
+                        <input
+                          type="text"
+                          {...register("phone")}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          placeholder="+7 (999) 999-99-99"
+                        />
                       ) : (
-                        // <input
-                        //   type="text"
-                        //   value={editedClient.phone}
-                        //   onChange={(e) =>
-                        //     setEditedClient({
-                        //       ...editedClient,
-                        //       phone: e.target.value,
-                        //     })
-                        //   }
-                        //   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        // />
                         <p className="text-gray-900">{client?.profile.phone}</p>
+                      )}
+                      {isEditing && errors.phone && (
+                        <p className="text-sm text-red-500 mt-1">
+                          {errors.phone.message}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -295,6 +326,36 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
               )}
             </div>
           </div>
+
+          {/* Кнопки управления для редактирования */}
+          {isEditing && (
+            <div className="p-6 border-t border-gray-200">
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    reset(); // Сбрасываем форму к исходным значениям
+                  }}
+                  disabled={isSubmitting || updateClientMutation.isPending}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                >
+                  Отмена
+                </button>
+                <button
+                  onClick={handleSubmit(onSubmit)}
+                  disabled={
+                    isSubmitting || updateClientMutation.isPending || !isDirty
+                  }
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                >
+                  {isSubmitting || updateClientMutation.isPending
+                    ? "Сохранение..."
+                    : "Сохранить"}
+                </button>
+              </div>
+            </div>
+          )}
         </DialogHeader>
       </DialogContent>
     </Dialog>
