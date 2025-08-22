@@ -58,9 +58,20 @@ export const EmployeeDetail = ({
               <div
                 className={clsx("rounded-full p-2 mr-3", {
                   "bg-green-500": employee?.employeeInfo.isOnline,
-                  "bg-red-500": employee?.employeeInfo.isOnline,
+                  "bg-red-500": !employee?.employeeInfo.isOnline,
                 })}
               ></div>
+            </div>
+            <div className="flex items-center space-x-2">
+              {!isEditing && (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Edit2 className="h-4 w-4" />
+                  <span>Редактировать</span>
+                </button>
+              )}
             </div>
             {/* <div className="flex items-center space-x-2">
               {activeTab === "info" && (
@@ -107,7 +118,12 @@ export const EmployeeDetail = ({
                 employee={employee}
                 isEditing={isEditing}
                 editedEmployee={editedEmployee}
-                setEditedEmployee={setEditedEmployee}
+                setEditedEmployee={(value) => {
+                  setEditedEmployee(value);
+                  if (value === null) {
+                    setIsEditing(false);
+                  }
+                }}
               />
             </TabsContent>
             <TabsContent value="employee-receptions">
