@@ -39,6 +39,7 @@ export const EmployeeDetail = ({
   const [editedEmployee, setEditedEmployee] = useState<any | null>(null);
 
   const { data: employee } = useGetEmployeeById({ id: selectedEmployee! });
+  const [activeTab, setActiveTab] = useState("info");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -63,7 +64,7 @@ export const EmployeeDetail = ({
               ></div>
             </div>
             <div className="flex items-center space-x-2">
-              {!isEditing && (
+              {!isEditing && activeTab === "info" && (
                 <button
                   onClick={() => setIsEditing(true)}
                   className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -73,38 +74,15 @@ export const EmployeeDetail = ({
                 </button>
               )}
             </div>
-            {/* <div className="flex items-center space-x-2">
-              {activeTab === "info" && (
-                <button
-                  // onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  {isEditing ? (
-                    <>
-                      <Save className="h-4 w-4" />
-                      <span>Сохранить</span>
-                    </>
-                  ) : (
-                    <>
-                      <Edit2 className="h-4 w-4" />
-                      <span>Редактировать</span>
-                    </>
-                  )}
-                </button>
-              )}
-              {isEditing && (
-                <button
-                  // onClick={handleCancel}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Отмена
-                </button>
-              )}
-            </div> */}
           </div>
         </DialogHeader>
         <div className="max-h-[60vh] overflow-y-auto">
-          <Tabs defaultValue="info">
+          <Tabs
+            defaultValue="info"
+            onValueChange={(value) => {
+              setActiveTab(value);
+            }}
+          >
             <TabsList className="bg-transparent mb-3 px-4">
               <TabsTrigger value="info" className="rounded-none">
                 Информация
