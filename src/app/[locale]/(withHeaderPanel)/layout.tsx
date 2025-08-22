@@ -1,57 +1,14 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { notFound } from "next/navigation";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { ToastContainer } from "react-toastify";
-
-import { QueryProvider } from "@/shared/providers";
 import { Header } from "@/widgets";
 
-import "@/shared/configs";
-import "@/styles/globals.css";
-import { routing } from "@i18/";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Панель управления очередью",
-};
-
-export default async function LocaleLayout({
+export default function WithHeaderPanelLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
-
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NextIntlClientProvider>
-          <QueryProvider>
-            <Header />
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-              {children}
-            </main>
-          </QueryProvider>
-        </NextIntlClientProvider>
-        <ToastContainer />
-      </body>
-    </html>
+    <>
+      <Header />
+      {children}
+    </>
   );
 }

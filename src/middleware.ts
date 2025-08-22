@@ -7,8 +7,8 @@ import { routing } from "@i18/";
 const intlMiddleware = createMiddleware(routing);
 
 const protectedRoutes: Record<string, string> = {
-  admin: "ADMIN", // только админ
-  manager: "MANAGER", // юзер или админ
+  admin: "ADMIN",
+  manager: "MANAGER",
 };
 
 /**
@@ -54,8 +54,17 @@ export default async function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
   const accessToken = req.cookies.get("accessToken")?.value;
+  const refreshToken = req.cookies.get("refreshToken")?.value;
 
   const locale = pathname.split("/")[1];
+
+  if (
+    !accessToken &&
+    !refreshToken &&
+    !pathname.startsWith(`/${locale}/login`)
+  ) {
+    return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
+  }
 
   const user = accessToken
     ? await verifyToken(accessToken).catch(() => null)
@@ -71,10 +80,6 @@ export default async function middleware(req: NextRequest) {
 
     return NextResponse.next();
   }
-
-  // if (!user) {
-  //   return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
-  // }
 
   for (const [route, allowedRole] of Object.entries(protectedRoutes)) {
     if (pathname.startsWith(`/${locale}/${route}`)) {

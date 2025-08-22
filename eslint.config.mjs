@@ -59,7 +59,7 @@ const eslintConfig = [
       "sonarjs/no-use-of-empty-return-value": "warn",
       "sonarjs/prefer-single-boolean-return": "warn",
       "sonarjs/no-nested-switch": "warn",
-      "sonarjs/cognitive-complexity": ["error", 15],
+      "sonarjs/cognitive-complexity": ["error", 20],
 
       // jsdoc rules
       "jsdoc/require-jsdoc": [

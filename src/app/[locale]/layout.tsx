@@ -5,7 +5,6 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { ToastContainer } from "react-toastify";
 
 import { QueryProvider } from "@/shared/providers";
-import { Header } from "@/widgets";
 
 import "@/shared/configs";
 import "@/styles/globals.css";
