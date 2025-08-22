@@ -54,20 +54,20 @@ axiosApi.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // дергаем refresh
         await axiosApi.post("/auth/refresh");
 
         processQueue(null, null);
 
-        return axiosApi(originalRequest); // повторяем изначальный запрос
+        return axiosApi(originalRequest);
       } catch (err) {
         processQueue(err, null);
-
-        // тут можно вызвать logout, например, очистку стейта
-        return Promise.reject(err);
       } finally {
         isRefreshing = false;
       }
+    }
+    if (error.response?.status === 400 && !originalRequest._retry) {
+      const locale = window.location.pathname.split("/")[1];
+      window.location.href = `/${locale}/login`;
     }
 
     return Promise.reject(error);
