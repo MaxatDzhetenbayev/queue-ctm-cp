@@ -49,7 +49,7 @@ export function useCustomMutation<
     onSuccess: (data, variables, context) => {
       if (customConfig?.invalidateQueries) {
         customConfig.invalidateQueries.forEach((queryKey) => {
-          queryClient.invalidateQueries({ queryKey: [queryKey] });
+          queryClient.invalidateQueries({ queryKey });
         });
       }
 
