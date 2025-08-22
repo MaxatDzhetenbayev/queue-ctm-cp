@@ -5,3 +5,4 @@ export { useEmployeePagination } from "./employee-pagination.usecases";
 export { useGetEmployeeById } from "./employee-by-id.usecases";
 export { useGetReceptionsByEmployeeIdList } from "./employee-receptions-by-id.usecases";
 export { useGetClientInfo } from "./get-client.usercases";
+export { useUpdateEmployee } from "./update-employee.usecase";

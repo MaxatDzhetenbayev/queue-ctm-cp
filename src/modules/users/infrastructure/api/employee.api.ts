@@ -1,6 +1,10 @@
 import { axiosApi } from "@/shared/lib/client";
 
-import { EmployeeOneType, EmployeeType } from "../../domain/schemas";
+import {
+  EmployeeOneType,
+  EmployeeType,
+  UpdateEmployeeType,
+} from "../../domain/schemas";
 
 /**
  * API для работы с пользователями.
@@ -66,6 +70,26 @@ export async function fetchEmployeeReceptions(
 ): Promise<EmployeeOneType> {
   const response = await axiosApi.get<EmployeeOneType>(
     `/receptions/managers/${id}`
+  );
+  return response.data;
+}
+
+/**
+ * Обновление информации сотрудника.
+ *
+ * @param id - ID сотрудника
+ * @param data - Данные для обновления
+ *
+ * @returns {Promise<{ id: string }>} Результат обновления.
+ *
+ */
+export async function updateEmployee(
+  id: string,
+  data: UpdateEmployeeType
+): Promise<{ id: string }> {
+  const response = await axiosApi.put<{ id: string }>(
+    `/users/managers/${id}`,
+    data
   );
   return response.data;
 }
