@@ -16,6 +16,7 @@ const EmployeeInfoSchema = z.object({
 
 const EmployeeOneSchema = z.object({
   id: z.string(),
+  login: z.string(),
   profile: UserProfileSchema,
   employeeInfo: EmployeeInfoSchema,
   employeeServices: z.array(
