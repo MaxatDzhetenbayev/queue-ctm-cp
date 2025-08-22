@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { LanguageSchema } from "./employee.shemas";
+import { LanguageSchema } from "./common.shemas";
 
 export const ServiceSchema = z.object({
   id: z.string(),
