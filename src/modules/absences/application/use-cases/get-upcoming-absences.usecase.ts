@@ -6,7 +6,7 @@ export const useGetUpcomingAbsences = () => {
     queryKey: ["upcoming-absences"],
     queryFn: () =>
       getAbsences({
-        limit: 5,
+        limit: 3,
         upcoming: true,
         sort: "desc",
       }),

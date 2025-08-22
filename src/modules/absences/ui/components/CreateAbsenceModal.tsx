@@ -1,12 +1,18 @@
 "use client";
 
+import { Calendar, CheckCircle, FileText, User, X } from "lucide-react";
 import React, { useState } from "react";
-import { X, Calendar, User, FileText, CheckCircle } from "lucide-react";
 
+import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { Textarea } from "@/shared/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -14,36 +20,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
-import { Badge } from "@/shared/components/ui/badge";
+import { Textarea } from "@/shared/components/ui/textarea";
+
+import { useCreateAbsence } from "../../application/use-cases";
+import { CreateAbsenceType } from "../../domain/schemas/absences.schemas";
 
 interface Employee {
   id: string;
   name: string;
 }
 
-interface AbsenceType {
-  id: string;
-  label: string;
-  color: string;
-}
-
 interface CreateAbsenceModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => void;
   employees: Employee[];
-  absenceTypes: AbsenceType[];
 }
 
 interface AbsenceFormData {
   employeeId: string;
-  type: string;
+  type: "HOLIDAY" | "SICK_LEAVE" | "PERSONAL";
   comment: string;
   startDate: string;
   endDate: string;
@@ -52,38 +47,44 @@ interface AbsenceFormData {
 export const CreateAbsenceModal = ({
   isOpen,
   onClose,
-  onSubmit,
   employees,
-  absenceTypes,
 }: CreateAbsenceModalProps) => {
   const [step, setStep] = useState<"form" | "confirmation">("form");
   const [formData, setFormData] = useState<AbsenceFormData>({
     employeeId: "",
-    type: "",
+    type: "HOLIDAY",
     comment: "",
     startDate: "",
     endDate: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const createAbsenceMutation = useCreateAbsence(formData.employeeId);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (step === "form") {
       setStep("confirmation");
     } else {
-      const selectedEmployee = employees.find(emp => emp.id === formData.employeeId);
-      const selectedType = absenceTypes.find(type => type.id === formData.type);
-      
-      const absenceData = {
-        employeeId: formData.employeeId,
-        employeeName: selectedEmployee?.name || "",
+      if (!formData.employeeId) {
+        alert("Выберите сотрудника");
+        return;
+      }
+
+      const startDateISO = new Date(
+        formData.startDate + "T00:00:00.000Z"
+      ).toISOString();
+      const endDateISO = formData.endDate
+        ? new Date(formData.endDate + "T23:59:59.999Z").toISOString()
+        : undefined;
+
+      const absenceData: CreateAbsenceType = {
+        startDate: startDateISO,
+        endDate: endDateISO,
         type: formData.type,
-        typeLabel: selectedType?.label || "",
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        comment: formData.comment,
+        comment: formData.comment || undefined,
       };
-      
-      onSubmit(absenceData);
+
+      await createAbsenceMutation.mutateAsync(absenceData);
       handleClose();
     }
   };
@@ -92,7 +93,7 @@ export const CreateAbsenceModal = ({
     setStep("form");
     setFormData({
       employeeId: "",
-      type: "",
+      type: "HOLIDAY",
       comment: "",
       startDate: "",
       endDate: "",
@@ -100,8 +101,17 @@ export const CreateAbsenceModal = ({
     onClose();
   };
 
-  const selectedEmployee = employees.find(emp => emp.id === formData.employeeId);
-  const selectedType = absenceTypes.find(type => type.id === formData.type);
+  const selectedEmployee = employees.find(
+    (emp) => emp.id === formData.employeeId
+  );
+
+  const absenceTypes = [
+    { id: "HOLIDAY", label: "Отпуск", color: "bg-blue-500" },
+    { id: "SICK_LEAVE", label: "Больничный", color: "bg-red-500" },
+    { id: "PERSONAL", label: "Отгул", color: "bg-yellow-500" },
+  ];
+
+  const selectedType = absenceTypes.find((type) => type.id === formData.type);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
@@ -149,13 +159,18 @@ export const CreateAbsenceModal = ({
             <>
               {/* Выбор сотрудника */}
               <div className="space-y-2">
-                <Label htmlFor="employee" className="flex items-center space-x-2">
+                <Label
+                  htmlFor="employee"
+                  className="flex items-center space-x-2"
+                >
                   <User className="h-4 w-4" />
                   <span>Сотрудник *</span>
                 </Label>
                 <Select
                   value={formData.employeeId}
-                  onValueChange={(value) => setFormData({ ...formData, employeeId: value })}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, employeeId: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите сотрудника" />
@@ -178,20 +193,35 @@ export const CreateAbsenceModal = ({
                 </Label>
                 <Select
                   value={formData.type}
-                  onValueChange={(value) => setFormData({ ...formData, type: value })}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      type: value as "HOLIDAY" | "SICK_LEAVE" | "PERSONAL",
+                    })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите тип отсутствия" />
                   </SelectTrigger>
                   <SelectContent>
-                    {absenceTypes.map((type) => (
-                      <SelectItem key={type.id} value={type.id}>
-                        <div className="flex items-center space-x-2">
-                          <div className={`w-3 h-3 rounded-full ${type.color}`} />
-                          <span>{type.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="HOLIDAY">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-blue-500" />
+                        <span>Отпуск</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="SICK_LEAVE">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500" />
+                        <span>Больничный</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="PERSONAL">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                        <span>Отгул</span>
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -204,8 +234,10 @@ export const CreateAbsenceModal = ({
                     id="startDate"
                     type="date"
                     value={formData.startDate}
-                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    min={new Date().toISOString().split('T')[0]}
+                    onChange={(e) =>
+                      setFormData({ ...formData, startDate: e.target.value })
+                    }
+                    min={new Date().toISOString().split("T")[0]}
                     required
                   />
                 </div>
@@ -215,8 +247,13 @@ export const CreateAbsenceModal = ({
                     id="endDate"
                     type="date"
                     value={formData.endDate}
-                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    min={formData.startDate || new Date().toISOString().split('T')[0]}
+                    onChange={(e) =>
+                      setFormData({ ...formData, endDate: e.target.value })
+                    }
+                    min={
+                      formData.startDate ||
+                      new Date().toISOString().split("T")[0]
+                    }
                     required
                   />
                 </div>
@@ -229,7 +266,9 @@ export const CreateAbsenceModal = ({
                   id="comment"
                   placeholder="Введите комментарий к отсутствию..."
                   value={formData.comment}
-                  onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, comment: e.target.value })
+                  }
                   rows={3}
                 />
               </div>
@@ -238,8 +277,10 @@ export const CreateAbsenceModal = ({
             /* Экран подтверждения */
             <div className="space-y-4">
               <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-3">Проверьте данные:</h4>
-                
+                <h4 className="font-medium text-gray-900 mb-3">
+                  Проверьте данные:
+                </h4>
+
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <User className="h-4 w-4 text-gray-500" />
@@ -252,7 +293,9 @@ export const CreateAbsenceModal = ({
                   <div className="flex items-center space-x-3">
                     <FileText className="h-4 w-4 text-gray-500" />
                     <div>
-                      <span className="text-sm text-gray-600">Тип отсутствия:</span>
+                      <span className="text-sm text-gray-600">
+                        Тип отсутствия:
+                      </span>
                       <div className="flex items-center space-x-2">
                         <Badge className={getTypeColor(formData.type)}>
                           {selectedType?.label}
@@ -266,7 +309,8 @@ export const CreateAbsenceModal = ({
                     <div>
                       <span className="text-sm text-gray-600">Период:</span>
                       <p className="font-medium">
-                        {formatDate(formData.startDate)} - {formatDate(formData.endDate)}
+                        {formatDate(formData.startDate)} -{" "}
+                        {formatDate(formData.endDate)}
                       </p>
                     </div>
                   </div>
@@ -275,7 +319,9 @@ export const CreateAbsenceModal = ({
                     <div className="flex items-start space-x-3">
                       <FileText className="h-4 w-4 text-gray-500 mt-0.5" />
                       <div>
-                        <span className="text-sm text-gray-600">Комментарий:</span>
+                        <span className="text-sm text-gray-600">
+                          Комментарий:
+                        </span>
                         <p className="text-sm">{formData.comment}</p>
                       </div>
                     </div>
@@ -294,8 +340,12 @@ export const CreateAbsenceModal = ({
             >
               {step === "form" ? "Отмена" : "Назад"}
             </Button>
-            <Button type="submit">
-              {step === "form" ? "Продолжить" : "Создать отсутствие"}
+            <Button type="submit" disabled={createAbsenceMutation.isPending}>
+              {step === "form"
+                ? "Продолжить"
+                : createAbsenceMutation.isPending
+                ? "Создание..."
+                : "Создать отсутствие"}
             </Button>
           </div>
         </form>

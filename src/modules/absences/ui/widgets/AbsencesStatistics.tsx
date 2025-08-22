@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart3, Calendar, UserCheck, UserX, Users } from "lucide-react";
+import { BarChart3, Calendar, UserCheck, Users, UserX } from "lucide-react";
 import React from "react";
 
 import { Badge } from "@/shared/components/ui/badge";

@@ -1,8 +1,9 @@
 import { axiosApi } from "@/shared/lib/client";
 
 import {
-  AbsencesResponseSchema,
-  AbsenceStatisticsSchema,
+  AbsencesResponse,
+  AbsenceStatistics,
+  CreateAbsenceType,
 } from "../../domain/schemas/absences.schemas";
 
 interface GetAbsencesParams {
@@ -29,11 +30,27 @@ export const getAbsences = async (params?: GetAbsencesParams) => {
   const url = `/leaves/center${
     queryParams.toString() ? `?${queryParams.toString()}` : ""
   }`;
-  const response = await axiosApi.get(url);
-  return AbsencesResponseSchema.parse(response.data);
+  const response = await axiosApi.get<AbsencesResponse>(url);
+  return response.data;
 };
 
 export const getAbsenceStatistics = async () => {
-  const response = await axiosApi.get("/leaves/center/analytics/types");
-  return AbsenceStatisticsSchema.parse(response.data);
+  const response = await axiosApi.get<AbsenceStatistics>(
+    "/leaves/center/analytics/types"
+  );
+  return response.data;
+};
+
+/**
+ * Создание отсутствия для сотрудника
+ * @param employeeId - ID сотрудника
+ * @param data - Данные для создания отсутствия
+ * @returns Promise с результатом создания
+ */
+export const createAbsence = async (
+  employeeId: string,
+  data: CreateAbsenceType
+) => {
+  const response = await axiosApi.post(`/leaves/employee/${employeeId}`, data);
+  return response.data;
 };

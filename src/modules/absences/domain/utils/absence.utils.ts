@@ -2,7 +2,7 @@ import { Absence } from "../schemas/absences.schemas";
 
 export const mapAbsenceType = (type: string): string => {
   switch (type) {
-    case "VACATION":
+    case "HOLIDAY":
       return "Отпуск";
     case "SICK_LEAVE":
       return "Больничный";
@@ -15,8 +15,8 @@ export const mapAbsenceType = (type: string): string => {
 
 export const mapAbsenceTypeToId = (type: string): string => {
   switch (type) {
-    case "VACATION":
-      return "vacation";
+    case "HOLIDAY":
+      return "holiday";
     case "SICK_LEAVE":
       return "sick_leave";
     case "PERSONAL":

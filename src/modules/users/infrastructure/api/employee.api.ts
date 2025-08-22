@@ -13,27 +13,27 @@ import {
  * @param departmentId - ID отдела
  * @param serviceId - ID услуги
  * @param query - Строка запроса для поиска сотрудников по ФИО
+ * @param limit - Количество сотрудников на странице
  *
  * @returns {Promise<EmployeeType>} Данные пользователей.
  *
  */
 export async function fetchEmployeeList(
-  page: number,
+  page?: number,
   departmentId?: string | null,
   serviceId?: string | null,
-  query?: string | null
+  query?: string,
+  limit?: number
 ): Promise<EmployeeType> {
   const params: {
     departmentId?: string | null;
     serviceId?: string | null;
     search?: string | null;
-    page: number;
-    limit: number;
-  } = {
-    page,
-    limit: 9,
-  };
-
+    page?: number;
+    limit?: number;
+  } = {};
+  if (limit) params.limit = limit;
+  if (page) params.page = page;
   if (departmentId) params.departmentId = departmentId;
   if (serviceId) params.serviceId = serviceId;
   if (query) params.search = query;

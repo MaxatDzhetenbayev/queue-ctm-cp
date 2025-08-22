@@ -36,6 +36,7 @@ export const EmployeeList = () => {
     departmentId: selectedDepartment,
     serviceId: selectedService,
     query: debouncedQuery,
+    limit: 9,
     page: Number(selectedPage) || 1,
   });
 

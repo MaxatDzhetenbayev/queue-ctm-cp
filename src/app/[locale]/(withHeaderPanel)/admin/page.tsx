@@ -15,8 +15,7 @@ const AdminPage = () => {
             Обзор деятельности центров карьеры
           </p>
         </div>
-        <div className=" flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-          {/* Date Range Filter */}
+        {/* <div className=" flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <div className="flex items-center space-x-3 bg-white px-4 py-2 rounded-lg border border-gray-200">
             <Calendar className="h-5 w-5 text-gray-400" />
             <input
@@ -29,12 +28,11 @@ const AdminPage = () => {
             <input type="date" className="border-none focus:ring-0 text-sm" />
           </div>
 
-          {/* Download Report Button */}
           <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
             <Download className="h-4 w-4" />
             <span>Скачать отчет</span>
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="mt-4">
         <AnalyticsWrapper />

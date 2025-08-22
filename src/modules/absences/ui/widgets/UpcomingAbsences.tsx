@@ -62,14 +62,12 @@ const getDaysUntil = (dateString: string) => {
 export const UpcomingAbsences = ({
   absences: propAbsences,
 }: UpcomingAbsencesProps) => {
-  // Получаем реальные данные о ближайших отсутствиях
   const {
     data: upcomingResponse,
     isLoading,
     isError,
   } = useGetUpcomingAbsences();
 
-  // Используем переданные данные или реальные данные
   const absences =
     propAbsences || upcomingResponse?.data.map(transformAbsenceData) || [];
 
