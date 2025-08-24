@@ -29,7 +29,7 @@ interface AbsencesListProps {
   absences: Absence[];
   onCancel: (id: string) => void;
   onEdit: (id: string) => void;
-  onViewDetails: (employeeId: string) => void;
+  onViewDetails: (leaveId: string) => void;
 }
 
 const getTypeColor = (type: string) => {
@@ -92,7 +92,7 @@ export const AbsencesList = ({
             <div
               key={absence.id}
               className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-              onClick={() => onViewDetails(absence.employeeId)}
+              onClick={() => onViewDetails(absence.id)}
             >
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">

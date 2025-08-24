@@ -22,9 +22,7 @@ export const AbsencesContent = ({
   selectedType,
   onCreateAbsence,
 }: AbsencesContentProps) => {
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
-    null
-  );
+  const [selectedLeaveId, setSelectedLeaveId] = useState<string | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const {
@@ -68,14 +66,14 @@ export const AbsencesContent = ({
     console.log("Редактирование отсутствия:", absenceId);
   };
 
-  const handleViewDetails = (employeeId: string) => {
-    setSelectedEmployeeId(employeeId);
+  const handleViewDetails = (leaveId: string) => {
+    setSelectedLeaveId(leaveId);
     setIsDetailsModalOpen(true);
   };
 
   const handleCloseDetailsModal = () => {
     setIsDetailsModalOpen(false);
-    setSelectedEmployeeId(null);
+    setSelectedLeaveId(null);
   };
 
   return (
@@ -135,11 +133,11 @@ export const AbsencesContent = ({
       </div>
 
       {/* Модальное окно с деталями отсутствия */}
-      {selectedEmployeeId && (
+      {selectedLeaveId && (
         <AbsenceDetailsModal
           isOpen={isDetailsModalOpen}
           onClose={handleCloseDetailsModal}
-          employeeId={selectedEmployeeId}
+          leaveId={selectedLeaveId}
         />
       )}
     </>

@@ -25,7 +25,7 @@ interface UpcomingAbsence {
 
 interface UpcomingAbsencesProps {
   absences?: UpcomingAbsence[];
-  onViewDetails?: (employeeId: string) => void;
+  onViewDetails?: (leaveId: string) => void;
 }
 
 const getTypeColor = (type: string) => {

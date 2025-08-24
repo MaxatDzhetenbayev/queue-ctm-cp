@@ -1,6 +1,8 @@
 import { axiosApi } from "@/shared/lib/client";
 
 import {
+  AbsenceDetails,
+  AbsenceDetailsSchema,
   AbsencesResponse,
   AbsenceStatistics,
   CreateAbsenceType,
@@ -30,6 +32,7 @@ export const getAbsences = async (params?: GetAbsencesParams) => {
   const url = `/leaves/center${
     queryParams.toString() ? `?${queryParams.toString()}` : ""
   }`;
+
   const response = await axiosApi.get<AbsencesResponse>(url);
   return response.data;
 };
@@ -42,36 +45,30 @@ export const getAbsenceStatistics = async () => {
 };
 
 /**
- * Получение детальных данных отсутствия сотрудника
- * @param employeeId - ID сотрудника
+ * Получение детальных данных отсутствия
+ * @param leaveId - ID отсутствия
  * @returns Promise с детальными данными отсутствия
  */
-export const getAbsenceDetails = async (employeeId: string) => {
-  // TODO: Заменить на реальный API запрос
-  // const response = await axiosApi.get(`/leaves/employee/${employeeId}`);
-  // return response.data;
+export const getAbsenceDetails = async (
+  leaveId: string
+): Promise<AbsenceDetails> => {
+  const response = await axiosApi.get(`/leaves/${leaveId}`);
+  const data = response.data;
 
-  // Моковые данные для демонстрации
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        id: employeeId,
-        employeeName: "Иванов Иван Иванович",
-        employeeId: employeeId,
-        type: "HOLIDAY",
-        typeLabel: "Отпуск",
-        startDate: "2024-01-15",
-        endDate: "2024-01-30",
-        status: "WORKING",
-        comment: "Ежегодный оплачиваемый отпуск",
-        createdAt: "2024-01-10",
-        department: "IT отдел",
-        position: "Старший разработчик",
-        totalDays: 16,
-        remainingDays: 8,
-      });
-    }, 500); // Имитация задержки сети
-  });
+  // Валидация данных с помощью схемы
+  const validationResult = AbsenceDetailsSchema.safeParse(data);
+
+  if (!validationResult.success) {
+    console.warn(
+      "Валидация данных отсутствия не прошла:",
+      validationResult.error
+    );
+    // Возвращаем данные даже если валидация не прошла
+    return data as AbsenceDetails;
+  } else {
+    console.log("Данные отсутствия успешно валидированы");
+    return validationResult.data;
+  }
 };
 
 /**

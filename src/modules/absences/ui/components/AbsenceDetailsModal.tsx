@@ -1,10 +1,9 @@
 "use client";
 
-import { Calendar, Clock, FileText, MapPin, User, X } from "lucide-react";
+import { Calendar, Clock, FileText, MapPin, User } from "lucide-react";
 import React from "react";
 
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,11 +12,12 @@ import {
 } from "@/shared/components/ui/dialog";
 
 import { useGetAbsenceDetails } from "../../application/use-cases";
+import { mapAbsenceType } from "../../domain/utils/absence.utils";
 
 interface AbsenceDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  employeeId: string;
+  leaveId: string;
 }
 
 const getTypeColor = (type: string) => {
@@ -67,16 +67,30 @@ const formatDate = (dateString: string) => {
   });
 };
 
+// Проверяем, прошла ли дата
+const isDatePassed = (dateString: string) => {
+  const today = new Date();
+  const targetDate = new Date(dateString);
+  return targetDate < today;
+};
+
+// Проверяем, является ли отсутствие завершенным
+const isAbsenceCompleted = (absenceDetails: any) => {
+  return (
+    absenceDetails.remainingDays === 0 && isDatePassed(absenceDetails.endDate)
+  );
+};
+
 export const AbsenceDetailsModal = ({
   isOpen,
   onClose,
-  employeeId,
+  leaveId,
 }: AbsenceDetailsModalProps) => {
   const {
     data: absenceDetails,
     isLoading,
     isError,
-  } = useGetAbsenceDetails(employeeId);
+  } = useGetAbsenceDetails(leaveId);
 
   if (isLoading) {
     return (
@@ -137,14 +151,6 @@ export const AbsenceDetailsModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>Детали отсутствия</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-6 w-6 p-0"
-            >
-              <X className="h-4 w-4" />
-            </Button>
           </DialogTitle>
         </DialogHeader>
 
@@ -155,26 +161,19 @@ export const AbsenceDetailsModal = ({
               <User className="h-5 w-5 text-gray-500" />
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {absenceDetails.employeeName}
+                  {absenceDetails.employee.fullName}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  {absenceDetails.position}
+                  ID сотрудника: {absenceDetails.employee.id}
                 </p>
               </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <MapPin className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-600">
-                {absenceDetails.department}
-              </span>
             </div>
           </div>
 
           {/* Тип и статус отсутствия */}
           <div className="flex items-center space-x-3">
             <Badge className={getTypeColor(absenceDetails.type)}>
-              {absenceDetails.typeLabel}
+              {mapAbsenceType(absenceDetails.type)}
             </Badge>
             <Badge className={getStatusColor(absenceDetails.status)}>
               {getStatusLabel(absenceDetails.status)}
@@ -208,17 +207,21 @@ export const AbsenceDetailsModal = ({
             </div>
           </div>
 
-          {/* Длительность */}
+          {/* Длительность или статус завершения */}
           <div className="bg-gray-50 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-gray-500" />
                 <span className="text-sm font-medium text-gray-700">
-                  Длительность отсутствия
+                  {isAbsenceCompleted(absenceDetails)
+                    ? "Статус"
+                    : "Длительность отсутствия"}
                 </span>
               </div>
               <span className="text-lg font-semibold text-gray-900">
-                {absenceDetails.totalDays} дней
+                {isAbsenceCompleted(absenceDetails)
+                  ? "Прошло"
+                  : `${absenceDetails.totalDays} дней`}
               </span>
             </div>
           </div>
@@ -247,19 +250,23 @@ export const AbsenceDetailsModal = ({
             <h4 className="text-sm font-medium text-blue-900 mb-2">
               Дополнительная информация
             </h4>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-blue-700">Создано:</span>
-                <span className="ml-2 text-blue-900">
-                  {formatDate(absenceDetails.createdAt)}
-                </span>
-              </div>
-              <div>
-                <span className="text-blue-700">Осталось дней:</span>
-                <span className="ml-2 text-blue-900">
-                  {absenceDetails.remainingDays}
-                </span>
-              </div>
+            <div className="grid grid-cols-1 gap-4 text-sm">
+              {!isAbsenceCompleted(absenceDetails) && (
+                <div>
+                  <span className="text-blue-700">Осталось дней:</span>
+                  <span className="ml-2 text-blue-900">
+                    {absenceDetails.remainingDays}
+                  </span>
+                </div>
+              )}
+              {isAbsenceCompleted(absenceDetails) && (
+                <div>
+                  <span className="text-blue-700">Завершено:</span>
+                  <span className="ml-2 text-blue-900">
+                    {formatDate(absenceDetails.endDate)}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>
