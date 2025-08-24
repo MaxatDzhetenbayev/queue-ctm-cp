@@ -69,7 +69,7 @@ export const UpcomingAbsences = ({
   } = useGetUpcomingAbsences();
 
   const absences =
-    propAbsences || upcomingResponse?.data.map(transformAbsenceData) || [];
+    propAbsences || upcomingResponse?.data?.map(transformAbsenceData) || [];
 
   if (isLoading) {
     return (

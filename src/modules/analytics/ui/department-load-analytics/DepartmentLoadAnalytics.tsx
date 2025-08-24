@@ -36,7 +36,7 @@ export const DepartmentLoadAnalytics = () => {
     );
   }
 
-  const chartData: departmentLoadTypes.ChartDataItem[] = data.map(
+  const chartData: departmentLoadTypes.ChartDataItem[] = (data || []).map(
     (item: departmentLoadTypes.DepartmentLoadData) => ({
       ...item,
       displayName: item.name.kz,

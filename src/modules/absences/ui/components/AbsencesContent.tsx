@@ -29,7 +29,7 @@ export const AbsencesContent = ({
   });
 
   // Преобразуем данные в нужный формат
-  const absences = absencesResponse?.data.map(transformAbsenceData) || [];
+  const absences = absencesResponse?.data?.map(transformAbsenceData) || [];
 
   // Проверяем, есть ли данные (даже если массив пустой)
   const hasData = absencesResponse !== undefined;

@@ -91,22 +91,24 @@ export const AbsencesStatistics = () => {
     statistics.HOLIDAY + statistics.SICK_LEAVE + statistics.PERSONAL;
 
   // Преобразуем данные в формат для отображения
-  const statisticsData = Object.entries(statistics).map(([type, count]) => {
-    const typeInfo = getTypeInfo(type);
-    const percentage =
-      totalAbsences > 0 ? Math.round((count / totalAbsences) * 100) : 0;
+  const statisticsData = Object.entries(statistics || {}).map(
+    ([type, count]) => {
+      const typeInfo = getTypeInfo(type);
+      const percentage =
+        totalAbsences > 0 ? Math.round((count / totalAbsences) * 100) : 0;
 
-    return {
-      type,
-      label: typeInfo.label,
-      count,
-      percentage,
-      color: typeInfo.color,
-      bgColor: typeInfo.bgColor,
-      textColor: typeInfo.textColor,
-      icon: typeInfo.icon,
-    };
-  });
+      return {
+        type,
+        label: typeInfo.label,
+        count,
+        percentage,
+        color: typeInfo.color,
+        bgColor: typeInfo.bgColor,
+        textColor: typeInfo.textColor,
+        icon: typeInfo.icon,
+      };
+    }
+  );
 
   return (
     <Card>
