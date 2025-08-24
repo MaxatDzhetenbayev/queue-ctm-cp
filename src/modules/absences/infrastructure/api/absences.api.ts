@@ -15,31 +15,21 @@ interface GetAbsencesParams {
 }
 
 export const getAbsences = async (params?: GetAbsencesParams) => {
-  const queryParams = new URLSearchParams();
+  const paramsData: Record<string, string | number | boolean> = {};
 
-  if (params?.limit) {
-    queryParams.append("limit", params.limit.toString());
-  }
+  if (params?.limit) paramsData.limit = params.limit;
+  if (params?.upcoming) paramsData.upcoming = params.upcoming;
+  if (params?.sort) paramsData.sort = params.sort;
 
-  if (params?.upcoming !== undefined) {
-    queryParams.append("upcoming", params.upcoming.toString());
-  }
-
-  if (params?.sort) {
-    queryParams.append("sort", params.sort);
-  }
-
-  const url = `/leaves/center${
-    queryParams.toString() ? `?${queryParams.toString()}` : ""
-  }`;
-
-  const response = await axiosApi.get<AbsencesResponse>(url);
+  const response = await axiosApi.get<AbsencesResponse>("/leaves", {
+    params: paramsData,
+  });
   return response.data;
 };
 
 export const getAbsenceStatistics = async () => {
   const response = await axiosApi.get<AbsenceStatistics>(
-    "/leaves/center/analytics/types"
+    "/leaves/stats/center"
   );
   return response.data;
 };

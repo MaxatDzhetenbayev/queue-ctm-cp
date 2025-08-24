@@ -34,7 +34,7 @@ interface AbsencesListProps {
 
 const getTypeColor = (type: string) => {
   switch (type) {
-    case "vacation":
+    case "holiday":
       return "bg-blue-100 text-blue-800 border-blue-200";
     case "sick_leave":
       return "bg-red-100 text-red-800 border-red-200";

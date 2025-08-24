@@ -29,8 +29,8 @@ export const mapAbsenceTypeToId = (type: string): string => {
 export const transformAbsenceData = (absence: Absence) => {
   return {
     id: absence.id,
-    employeeName: absence.employeeName,
-    employeeId: absence.id, // Используем id как employeeId для совместимости
+    employeeName: absence.employee.fullName,
+    employeeId: absence.employee.id,
     type: mapAbsenceTypeToId(absence.type),
     typeLabel: mapAbsenceType(absence.type),
     startDate: absence.startDate.split("T")[0],

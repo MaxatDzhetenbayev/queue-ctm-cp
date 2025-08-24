@@ -4,10 +4,13 @@ export const AbsenceSchema = z.object({
   id: z.string(),
   startDate: z.string(),
   endDate: z.string(),
-  status: z.enum(["WORKING", "CANCELLED", "COMPLETED"]),
-  type: z.enum(["VACATION", "SICK_LEAVE", "PERSONAL"]),
+  status: z.enum(["WORKING", "CANCELLED", "COMPLETED", "PLANNED"]),
+  type: z.enum(["HOLIDAY", "SICK_LEAVE", "PERSONAL"]),
   comment: z.string().nullable(),
-  employeeName: z.string(),
+  employee: z.object({
+    id: z.string(),
+    fullName: z.string(),
+  }),
 });
 
 export const AbsencesResponseSchema = z.object({
@@ -36,7 +39,7 @@ export const AbsenceDetailsSchema = z.object({
   startDate: z.string(),
   endDate: z.string(),
   type: z.enum(["HOLIDAY", "SICK_LEAVE", "PERSONAL"]),
-  status: z.enum(["WORKING", "CANCELLED", "COMPLETED"]),
+  status: z.enum(["WORKING", "CANCELLED", "COMPLETED", "PLANNED"]),
   totalDays: z.number(),
   remainingDays: z.number(),
   employee: z.object({
