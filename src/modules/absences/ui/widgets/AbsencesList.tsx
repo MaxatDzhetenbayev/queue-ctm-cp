@@ -29,6 +29,7 @@ interface AbsencesListProps {
   absences: Absence[];
   onCancel: (id: string) => void;
   onEdit: (id: string) => void;
+  onViewDetails: (employeeId: string) => void;
 }
 
 const getTypeColor = (type: string) => {
@@ -56,6 +57,7 @@ export const AbsencesList = ({
   absences,
   onCancel,
   onEdit,
+  onViewDetails,
 }: AbsencesListProps) => {
   if (absences.length === 0) {
     return (
@@ -89,7 +91,8 @@ export const AbsencesList = ({
           {absences.map((absence) => (
             <div
               key={absence.id}
-              className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              onClick={() => onViewDetails(absence.employeeId)}
             >
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
@@ -119,7 +122,10 @@ export const AbsencesList = ({
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div
+                className="flex items-center space-x-2"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Button
                   variant="outline"
                   size="sm"

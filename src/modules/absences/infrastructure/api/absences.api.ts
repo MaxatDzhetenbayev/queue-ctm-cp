@@ -42,6 +42,39 @@ export const getAbsenceStatistics = async () => {
 };
 
 /**
+ * Получение детальных данных отсутствия сотрудника
+ * @param employeeId - ID сотрудника
+ * @returns Promise с детальными данными отсутствия
+ */
+export const getAbsenceDetails = async (employeeId: string) => {
+  // TODO: Заменить на реальный API запрос
+  // const response = await axiosApi.get(`/leaves/employee/${employeeId}`);
+  // return response.data;
+
+  // Моковые данные для демонстрации
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        id: employeeId,
+        employeeName: "Иванов Иван Иванович",
+        employeeId: employeeId,
+        type: "HOLIDAY",
+        typeLabel: "Отпуск",
+        startDate: "2024-01-15",
+        endDate: "2024-01-30",
+        status: "WORKING",
+        comment: "Ежегодный оплачиваемый отпуск",
+        createdAt: "2024-01-10",
+        department: "IT отдел",
+        position: "Старший разработчик",
+        totalDays: 16,
+        remainingDays: 8,
+      });
+    }, 500); // Имитация задержки сети
+  });
+};
+
+/**
  * Создание отсутствия для сотрудника
  * @param employeeId - ID сотрудника
  * @param data - Данные для создания отсутствия

@@ -25,6 +25,7 @@ interface UpcomingAbsence {
 
 interface UpcomingAbsencesProps {
   absences?: UpcomingAbsence[];
+  onViewDetails?: (employeeId: string) => void;
 }
 
 const getTypeColor = (type: string) => {
@@ -61,6 +62,7 @@ const getDaysUntil = (dateString: string) => {
 
 export const UpcomingAbsences = ({
   absences: propAbsences,
+  onViewDetails,
 }: UpcomingAbsencesProps) => {
   const {
     data: upcomingResponse,
@@ -125,7 +127,8 @@ export const UpcomingAbsences = ({
           {absences.map((absence) => (
             <div
               key={absence.id}
-              className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              onClick={() => onViewDetails?.(absence.id)}
             >
               <div className="flex-shrink-0">
                 <User className="h-4 w-4 text-gray-500 mt-0.5" />

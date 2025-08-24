@@ -1,12 +1,13 @@
 "use client";
 
 import { FileText, Plus } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/shared/components/ui/button";
 
 import { useGetAbsences } from "../../application/use-cases";
 import { transformAbsenceData } from "../../domain/utils/absence.utils";
+import { AbsenceDetailsModal } from "./AbsenceDetailsModal";
 import { AbsencesList } from "../widgets/AbsencesList";
 import { AbsencesStatistics } from "../widgets/AbsencesStatistics";
 import { UpcomingAbsences } from "../widgets/UpcomingAbsences";
@@ -20,6 +21,11 @@ export const AbsencesContent = ({
   selectedType,
   onCreateAbsence,
 }: AbsencesContentProps) => {
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
+    null
+  );
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
   const {
     data: absencesResponse,
     isLoading,
@@ -60,58 +66,80 @@ export const AbsencesContent = ({
     console.log("Редактирование отсутствия:", absenceId);
   };
 
+  const handleViewDetails = (employeeId: string) => {
+    setSelectedEmployeeId(employeeId);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedEmployeeId(null);
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Список отсутствий */}
-      <div className="lg:col-span-2">
-        {isLoading ? (
-          <div className="flex items-center justify-center p-8">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Загрузка данных...</p>
-            </div>
-          </div>
-        ) : isError ? (
-          <div className="flex items-center justify-center p-8">
-            <div className="text-center">
-              <p className="text-red-600 mb-2">Ошибка загрузки данных</p>
-              <p className="text-gray-600">Попробуйте обновить страницу</p>
-            </div>
-          </div>
-        ) : isEmpty ? (
-          <div className="flex items-center justify-center p-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="h-8 w-8 text-gray-400" />
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Список отсутствий */}
+        <div className="lg:col-span-2">
+          {isLoading ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Загрузка данных...</p>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Нет отсутствий
-              </h3>
-              <p className="text-gray-600 mb-4">
-                В данный момент нет активных отсутствий сотрудников
-              </p>
-              <Button
-                onClick={onCreateAbsence}
-                className="flex items-center space-x-2 mx-auto"
-              >
-                <Plus className="h-4 w-4" />
-                <span>Добавить первое отсутствие</span>
-              </Button>
             </div>
-          </div>
-        ) : (
-          <AbsencesList
-            absences={filteredAbsences}
-            onCancel={handleCancelAbsence}
-            onEdit={handleEditAbsence}
-          />
-        )}
+          ) : isError ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-center">
+                <p className="text-red-600 mb-2">Ошибка загрузки данных</p>
+                <p className="text-gray-600">Попробуйте обновить страницу</p>
+              </div>
+            </div>
+          ) : isEmpty ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="h-8 w-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Нет отсутствий
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  В данный момент нет активных отсутствий сотрудников
+                </p>
+                <Button
+                  onClick={onCreateAbsence}
+                  className="flex items-center space-x-2 mx-auto"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Добавить первое отсутствие</span>
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <AbsencesList
+              absences={filteredAbsences}
+              onCancel={handleCancelAbsence}
+              onEdit={handleEditAbsence}
+              onViewDetails={handleViewDetails}
+            />
+          )}
+        </div>
+
+        <div className="space-y-6">
+          <AbsencesStatistics />
+          <UpcomingAbsences onViewDetails={handleViewDetails} />
+        </div>
       </div>
 
-      <div className="space-y-6">
-        <AbsencesStatistics />
-        <UpcomingAbsences />
-      </div>
-    </div>
+      {/* Модальное окно с деталями отсутствия */}
+      {selectedEmployeeId && (
+        <AbsenceDetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={handleCloseDetailsModal}
+          employeeId={selectedEmployeeId}
+        />
+      )}
+    </>
   );
 };
