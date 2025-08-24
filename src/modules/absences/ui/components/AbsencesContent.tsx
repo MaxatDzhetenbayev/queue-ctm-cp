@@ -5,9 +5,10 @@ import React, { useState } from "react";
 
 import { Button } from "@/shared/components/ui/button";
 
+import { AbsenceDetailsModal } from "./AbsenceDetailsModal";
+
 import { useGetAbsences } from "../../application/use-cases";
 import { transformAbsenceData } from "../../domain/utils/absence.utils";
-import { AbsenceDetailsModal } from "./AbsenceDetailsModal";
 import { AbsencesList } from "../widgets/AbsencesList";
 import { AbsencesStatistics } from "../widgets/AbsencesStatistics";
 import { UpcomingAbsences } from "../widgets/UpcomingAbsences";
@@ -47,11 +48,12 @@ export const AbsencesContent = ({
       : absences.filter((absence) => {
           // Маппинг типов для фильтрации
           const typeMapping: Record<string, string> = {
-            HOLIDAY: "vacation",
+            HOLIDAY: "holiday",
             SICK_LEAVE: "sick_leave",
             PERSONAL: "personal",
           };
-          return typeMapping[absence.type] === selectedType;
+          const mappedType = typeMapping[selectedType];
+          return mappedType === absence.type;
         });
 
   const handleCancelAbsence = (absenceId: string) => {
