@@ -1,3 +1,4 @@
+export * from "./activity.schemas";
 export * from "./common.shemas";
 export * from "./employee.shemas";
 export * from "./center.shemas";

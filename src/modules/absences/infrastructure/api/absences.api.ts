@@ -21,7 +21,7 @@ export const getAbsences = async (params?: GetAbsencesParams) => {
   if (params?.upcoming) paramsData.upcoming = params.upcoming;
   if (params?.sort) paramsData.sort = params.sort;
 
-  const response = await axiosApi.get<AbsencesResponse>("/leaves", {
+  const response = await axiosApi.get<AbsencesResponse>("/activity/leave", {
     params: paramsData,
   });
   return response.data;
@@ -29,7 +29,7 @@ export const getAbsences = async (params?: GetAbsencesParams) => {
 
 export const getAbsenceStatistics = async () => {
   const response = await axiosApi.get<AbsenceStatistics>(
-    "/leaves/stats/center"
+    "/activity/leave/stats/center"
   );
   return response.data;
 };
@@ -42,7 +42,7 @@ export const getAbsenceStatistics = async () => {
 export const getAbsenceDetails = async (
   leaveId: string
 ): Promise<AbsenceDetails> => {
-  const response = await axiosApi.get(`/leaves/${leaveId}`);
+  const response = await axiosApi.get(`/activity/leave/${leaveId}`);
   const data = response.data;
 
   // Валидация данных с помощью схемы
@@ -71,6 +71,9 @@ export const createAbsence = async (
   employeeId: string,
   data: CreateAbsenceType
 ) => {
-  const response = await axiosApi.post(`/leaves/employee/${employeeId}`, data);
+  const response = await axiosApi.post(`/activity/leave`, {
+    employeeId,
+    ...data,
+  });
   return response.data;
 };

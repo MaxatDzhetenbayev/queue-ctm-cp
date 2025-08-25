@@ -7,3 +7,4 @@ export { useGetReceptionsByEmployeeIdList } from "./employee-receptions-by-id.us
 export { useGetClientInfo } from "./get-client.usercases";
 export { useUpdateEmployee } from "./update-employee.usecase";
 export { useUpdateClient } from "./update-client.usecase";
+export { useGetEmployeeActivity } from "./get-employee-activity.usecase";

@@ -19,6 +19,9 @@ import {
   UpdateEmployeeType,
 } from "@/modules/users/domain/schemas";
 
+import { ActivityHeatmap } from "./ActivityHeatmap";
+
+import { useGetEmployeeActivity } from "../../../application/use-cases/get-employee-activity.usecase";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EmployeeInfoProps {
@@ -36,6 +39,8 @@ export const EmployeeInfo = ({
 }: EmployeeInfoProps) => {
   const updateEmployeeMutation = useUpdateEmployee(employee?.id || "");
   const { data: services } = useGetServiceList();
+  const { data: activities, isLoading: activitiesLoading } =
+    useGetEmployeeActivity(employee?.id || "");
 
   const [selectedServices, setSelectedServices] = useState<string[]>(
     employee?.employeeServices.map((es) => es.service.id) || []
@@ -269,6 +274,14 @@ export const EmployeeInfo = ({
           </div>
         </div>
       </div>
+
+      {/* Активность сотрудника */}
+      {activities && (
+        <ActivityHeatmap
+          activities={activities}
+          employeeName={employee?.profile.fullName || ""}
+        />
+      )}
 
       <div className="mt-8 col-span-2 border-t border-gray-100">
         <h4 className="text-lg font-medium text-gray-900 pt-2">
