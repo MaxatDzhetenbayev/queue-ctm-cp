@@ -1,6 +1,7 @@
 import { Calendar, Home, Users } from "lucide-react";
 import React from "react";
 
+import { LogoutButton } from "@/modules/auth/ui";
 import { Link } from "@/shared/configs/i18";
 
 const navigation = [
@@ -31,6 +32,11 @@ export const Header = () => {
                 );
               })}
             </div>
+          </div>
+
+          {/* Кнопка выхода справа */}
+          <div className="flex items-center">
+            <LogoutButton />
           </div>
         </div>
       </div>
