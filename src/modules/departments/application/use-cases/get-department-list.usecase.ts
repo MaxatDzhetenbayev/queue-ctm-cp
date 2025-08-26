@@ -1,7 +1,6 @@
+import { DepartmentType } from "../../domain/schemas";
+import { fetchDepartmentList } from "../../infrastructure/api/department.api";
 import { useQuery } from "@tanstack/react-query";
-
-import { fetchDepartmentList } from "@/modules/departments/infrastructure/api/department.api";
-import { DepartmentType } from "@/modules/departments/domain/schemas";
 
 export const useGetDepartmentList = () => {
   return useQuery<DepartmentType[]>({

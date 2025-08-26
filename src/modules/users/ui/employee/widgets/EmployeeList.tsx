@@ -4,10 +4,10 @@ import React, { useState } from "react";
 
 import {
   useEmployeePagination,
-  useGetDepartmentList,
   useGetEmployeeList,
   useGetServiceList,
 } from "@/modules/users/application/use-cases";
+import { useGetDepartmentList } from "@/modules/departments/application/use-cases";
 import { useSearchQuery, useUrlFilter } from "@/shared/hooks";
 import { CustomPagination } from "@/widgets";
 

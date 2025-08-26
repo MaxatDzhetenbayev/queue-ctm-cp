@@ -1,4 +1,4 @@
-import { Calendar, Home, Users } from "lucide-react";
+import { Building2, Calendar, Home, Users } from "lucide-react";
 import React from "react";
 
 import { LogoutButton } from "@/modules/auth/ui";
@@ -7,6 +7,7 @@ import { Link } from "@/shared/configs/i18";
 const navigation = [
   { name: "Главная", href: "/admin", icon: Home },
   { name: "Персонал", href: "/admin/employee", icon: Users },
+  { name: "Отделы", href: "/admin/departments", icon: Building2 },
   { name: "Отсутствия", href: "/admin/absences", icon: Calendar },
 ];
 

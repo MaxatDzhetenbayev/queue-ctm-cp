@@ -1,6 +1,7 @@
 import React from "react";
 
-import { DepartmentType, ServiceType } from "@/modules/users/domain/schemas";
+import { DepartmentType } from "@/modules/departments/domain/schemas";
+import { ServiceType } from "@/modules/users/domain/schemas";
 import {
   Select,
   SelectContent,

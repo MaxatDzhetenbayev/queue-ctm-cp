@@ -9,8 +9,8 @@ import {
 import React, { Dispatch, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { useGetDepartmentList } from "@/modules/departments/application/use-cases";
 import {
-  useGetDepartmentList,
   useGetServiceList,
   useUpdateEmployee,
 } from "@/modules/users/application/use-cases";
