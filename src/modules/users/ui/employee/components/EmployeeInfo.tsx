@@ -126,7 +126,7 @@ export const EmployeeInfo = ({
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
             <User className="h-5 w-5 text-gray-400" />
-            <div>
+            <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 ФИО
               </label>
