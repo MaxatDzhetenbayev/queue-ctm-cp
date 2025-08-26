@@ -8,4 +8,16 @@ export const DepartmentSchema = z.object({
   employeeCount: z.number(),
 });
 
+export const CreateDepartmentSchema = z.object({
+  name: LanguageSchema,
+  departmentFeatures: z
+    .object({
+      TIME: z.string().optional(),
+      SHOW: z.string().optional(),
+      LETTER: z.string().optional(),
+    })
+    .optional(),
+});
+
 export type DepartmentType = z.infer<typeof DepartmentSchema>;
+export type CreateDepartmentType = z.infer<typeof CreateDepartmentSchema>;

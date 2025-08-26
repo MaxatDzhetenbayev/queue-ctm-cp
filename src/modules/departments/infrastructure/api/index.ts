@@ -1,1 +1,1 @@
-export { fetchDepartmentList } from "./department.api";
+export { fetchDepartmentList, createDepartment } from "./department.api";
