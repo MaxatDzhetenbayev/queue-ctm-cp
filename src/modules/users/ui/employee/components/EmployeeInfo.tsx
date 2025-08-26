@@ -10,6 +10,7 @@ import React, { Dispatch, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
+  useGetDepartmentList,
   useGetServiceList,
   useUpdateEmployee,
 } from "@/modules/users/application/use-cases";
@@ -18,6 +19,14 @@ import {
   UpdateEmployeeSchema,
   UpdateEmployeeType,
 } from "@/modules/users/domain/schemas";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 
 import { ActivityHeatmap } from "./ActivityHeatmap";
 
@@ -27,18 +36,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 interface EmployeeInfoProps {
   employee: EmployeeOneType | undefined;
   isEditing: boolean;
-  editedEmployee: any | null;
   setEditedEmployee: Dispatch<any>;
 }
 
 export const EmployeeInfo = ({
   employee,
   isEditing,
-  editedEmployee,
   setEditedEmployee,
 }: EmployeeInfoProps) => {
   const updateEmployeeMutation = useUpdateEmployee(employee?.id || "");
   const { data: services } = useGetServiceList();
+  const { data: departments } = useGetDepartmentList();
   const { data: activities, isLoading: activitiesLoading } =
     useGetEmployeeActivity(employee?.id || "");
 
@@ -51,6 +59,8 @@ export const EmployeeInfo = ({
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    setValue,
+    watch,
   } = useForm<UpdateEmployeeType>({
     resolver: zodResolver(UpdateEmployeeSchema),
     defaultValues: {
@@ -58,12 +68,15 @@ export const EmployeeInfo = ({
         fullName: employee?.profile.fullName || "",
         phone: employee?.profile.phone || "",
       },
+      department_id: employee?.employeeInfo.department.id || "",
       table: employee?.employeeInfo.table || 0,
       cabinet: employee?.employeeInfo.cabinet || 0,
       login: "",
       password: "",
     },
   });
+
+  const selectedDepartmentId = watch("department_id");
 
   // Сброс формы при изменении employee
   useEffect(() => {
@@ -73,6 +86,7 @@ export const EmployeeInfo = ({
           fullName: employee.profile.fullName || "",
           phone: employee.profile.phone || "",
         },
+        department_id: employee.employeeInfo.department.id || "",
         table: employee.employeeInfo.table || 0,
         cabinet: employee.employeeInfo.cabinet || 0,
         login: "",
@@ -107,174 +121,199 @@ export const EmployeeInfo = ({
   };
 
   return (
-    <div className="grid grid-cols-2">
-      <div className="space-y-4">
-        <div className="flex items-center space-x-3">
-          <User className="h-5 w-5 text-gray-400" />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              ФИО
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                {...register("profile.fullName")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            ) : (
-              <p className="text-gray-900">{employee?.profile.fullName}</p>
-            )}
-            {isEditing && errors.profile?.fullName && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.profile.fullName.message}
-              </p>
-            )}
+    <div className="overflow-x-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3">
+            <User className="h-5 w-5 text-gray-400" />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                ФИО
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  {...register("profile.fullName")}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{employee?.profile.fullName}</p>
+              )}
+              {isEditing && errors.profile?.fullName && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.profile.fullName.message}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Phone className="h-5 w-5 text-gray-400" />
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Телефон
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                {...register("profile.phone")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            ) : (
-              <p className="text-gray-900">{employee?.profile.phone}</p>
-            )}
-            {isEditing && errors.profile?.phone && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.profile.phone.message}
-              </p>
-            )}
+          <div className="flex items-center space-x-3">
+            <Phone className="h-5 w-5 text-gray-400" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Телефон
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  {...register("profile.phone")}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">{employee?.profile.phone}</p>
+              )}
+              {isEditing && errors.profile?.phone && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.profile.phone.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <User className="h-5 w-5 text-gray-400" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Логин
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  {...register("login")}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Введите логин"
+                />
+              ) : (
+                <p className="text-gray-900">
+                  {employee?.login || "Не указан"}
+                </p>
+              )}
+              {isEditing && errors.login && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.login.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <User className="h-5 w-5 text-gray-400" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Пароль
+              </label>
+              {isEditing ? (
+                <input
+                  type="password"
+                  {...register("password")}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Оставьте пустым, если не хотите менять"
+                />
+              ) : (
+                <p className="text-gray-900">••••••••</p>
+              )}
+              {isEditing && errors.password && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <User className="h-5 w-5 text-gray-400" />
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Логин
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                {...register("login")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Введите логин"
-              />
-            ) : (
-              <p className="text-gray-900">{employee?.login || "Не указан"}</p>
-            )}
-            {isEditing && errors.login && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.login.message}
+        <div className="space-y-4">
+          <div className="flex  items-start space-x-3">
+            <MapPin className="h-5 w-5 text-gray-400 mt-1" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Центр
+              </label>
+              <p className="text-gray-900">
+                {employee?.employeeInfo.center.name.ru}
               </p>
-            )}
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center space-x-3">
-          <User className="h-5 w-5 text-gray-400" />
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Пароль
-            </label>
-            {isEditing ? (
-              <input
-                type="password"
-                {...register("password")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Оставьте пустым, если не хотите менять"
-              />
-            ) : (
-              <p className="text-gray-900">••••••••</p>
-            )}
-            {isEditing && errors.password && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.password.message}
-              </p>
-            )}
+          <div className="flex items-center space-x-3">
+            <Briefcase className="h-5 min-w-5  text-gray-400 mt-1" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Отдел
+              </label>
+              {isEditing ? (
+                <Select
+                  onValueChange={(value) => setValue("department_id", value)}
+                  value={selectedDepartmentId}
+                >
+                  <SelectTrigger className="w-full ">
+                    <SelectValue placeholder="Выберите отдел" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {departments?.map((department) => (
+                        <SelectItem key={department.id} value={department.id}>
+                          {department.name.ru}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              ) : (
+                <p className="text-gray-900">
+                  {employee?.employeeInfo.department.name.ru}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-3">
+            <Armchair className="h-5 w-5 text-gray-400 mt-1" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Стол
+              </label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  {...register("table", { valueAsNumber: true })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">№{employee?.employeeInfo.table}</p>
+              )}
+              {isEditing && errors.table && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.table.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-3">
+            <DoorOpen className="h-5 w-5 text-gray-400 mt-1" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Кабинет
+              </label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  {...register("cabinet", { valueAsNumber: true })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-900">
+                  №{employee?.employeeInfo.cabinet}
+                </p>
+              )}
+              {isEditing && errors.cabinet && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.cabinet.message}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="space-y-4">
-        <div className="flex  items-start space-x-3">
-          <MapPin className="h-5 w-5 text-gray-400 mt-1" />
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Центр
-            </label>
-            <p className="text-gray-900">
-              {employee?.employeeInfo.center.name.ru}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-start space-x-3">
-          <Briefcase className="h-5 w-5 text-gray-400 mt-1" />
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Отдел
-            </label>
-            <p className="text-gray-900">
-              {employee?.employeeInfo.department.name.ru}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-start space-x-3">
-          <Armchair className="h-5 w-5 text-gray-400 mt-1" />
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Стол
-            </label>
-            {isEditing ? (
-              <input
-                type="number"
-                {...register("table", { valueAsNumber: true })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            ) : (
-              <p className="text-gray-900">№{employee?.employeeInfo.table}</p>
-            )}
-            {isEditing && errors.table && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.table.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-start space-x-3">
-          <DoorOpen className="h-5 w-5 text-gray-400 mt-1" />
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Кабинет
-            </label>
-            {isEditing ? (
-              <input
-                type="number"
-                {...register("cabinet", { valueAsNumber: true })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            ) : (
-              <p className="text-gray-900">№{employee?.employeeInfo.cabinet}</p>
-            )}
-            {isEditing && errors.cabinet && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.cabinet.message}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Активность сотрудника */}
       {activities && (
         <ActivityHeatmap

@@ -44,6 +44,7 @@ export const UpdateEmployeeSchema = z.object({
   profile: UpdateEmployeeProfileSchema.optional(),
   service_ids: z.array(z.string()).optional(),
   table: z.number().optional(),
+  department_id: z.string().optional(),
   cabinet: z.number().optional(),
   password: z.string().optional(),
   login: z.string().optional(),

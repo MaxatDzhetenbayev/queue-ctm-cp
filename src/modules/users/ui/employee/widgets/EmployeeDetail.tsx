@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { Edit2, Save, User } from "lucide-react";
+import { Edit2, User } from "lucide-react";
 import React, { useState } from "react";
 
 import { useGetEmployeeById } from "@/modules/users/application/use-cases";
@@ -23,8 +23,6 @@ import { EmployeeReceptions } from "./EmployeeReceptions";
 
 import { EmployeeInfo } from "../components/EmployeeInfo";
 
-// import { ActivityCalendar } from "./ActivityCalendar";
-// import { AppointmentsList } from "./AppointmentsList";
 
 export const EmployeeDetail = ({
   open,
@@ -95,7 +93,6 @@ export const EmployeeDetail = ({
               <EmployeeInfo
                 employee={employee}
                 isEditing={isEditing}
-                editedEmployee={editedEmployee}
                 setEditedEmployee={(value) => {
                   setEditedEmployee(value);
                   if (value === null) {
