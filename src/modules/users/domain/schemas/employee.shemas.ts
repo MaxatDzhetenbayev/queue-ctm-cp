@@ -24,6 +24,15 @@ const EmployeeOneSchema = z.object({
       service: ServiceSchema,
     })
   ),
+  employeeFeatures: z
+    .array(
+      z.object({
+        id: z.string(),
+        type: z.string(),
+        value: z.string(),
+      })
+    )
+    .optional(),
 });
 
 export const EmployeeSchema = z.object({
@@ -48,6 +57,14 @@ export const UpdateEmployeeSchema = z.object({
   cabinet: z.number().optional(),
   password: z.string().optional(),
   login: z.string().optional(),
+  employeeFeatures: z
+    .array(
+      z.object({
+        type: z.string(),
+        value: z.string(),
+      })
+    )
+    .optional(),
 });
 
 export type EmployeeType = z.infer<typeof EmployeeSchema>;
@@ -107,7 +124,14 @@ export const CreateEmployeeSchema = z.object({
   department_id: z.string().min(1, "ID департамента обязателен"),
   service_ids: z.array(z.string()).min(1, "Выберите хотя бы один сервис"),
 
-  employee_features: z.record(z.string(), z.string()).optional(),
+  employeeFeatures: z
+    .array(
+      z.object({
+        type: z.string(),
+        value: z.string(),
+      })
+    )
+    .optional(),
 });
 
 export type CreateEmployeeType = z.infer<typeof CreateEmployeeSchema>;

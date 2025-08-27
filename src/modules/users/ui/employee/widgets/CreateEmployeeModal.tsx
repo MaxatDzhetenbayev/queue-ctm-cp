@@ -64,7 +64,7 @@ export const CreateEmployeeModal: React.FC = () => {
       table: 0,
       department_id: "",
       service_ids: [],
-      employee_features: {},
+      employeeFeatures: [],
     },
   });
 
@@ -78,7 +78,7 @@ export const CreateEmployeeModal: React.FC = () => {
     (value: string) => {
       setSelectedDepartmentId(value);
       setValue("department_id", value);
-      setValue("employee_features", {});
+      setValue("employeeFeatures", []);
       trigger("department_id");
     },
     [setValue, trigger]
@@ -86,8 +86,13 @@ export const CreateEmployeeModal: React.FC = () => {
 
   const handleLettersChange = React.useCallback(
     (letters: string[]) => {
-      setValue("employee_features", { LETTER: letters.join(",") });
-      trigger("employee_features");
+      setValue("employeeFeatures", [
+        {
+          type: "LETTER",
+          value: letters.join(","),
+        },
+      ]);
+      trigger("employeeFeatures");
     },
     [setValue, trigger]
   );
@@ -128,8 +133,8 @@ export const CreateEmployeeModal: React.FC = () => {
 
         if (
           hasLetterFeature &&
-          (!data.employee_features?.LETTER ||
-            data.employee_features.LETTER.length === 0)
+          (!data.employeeFeatures?.some((f) => f.type === "LETTER") ||
+            !data.employeeFeatures.find((f) => f.type === "LETTER")?.value)
         ) {
           return;
         }
@@ -170,8 +175,8 @@ export const CreateEmployeeModal: React.FC = () => {
 
     const conditionalFieldsValid =
       !hasLetterFeature ||
-      (formValues.employee_features?.LETTER &&
-        formValues.employee_features.LETTER.length > 0);
+      (formValues.employeeFeatures?.some((f) => f.type === "LETTER") &&
+        formValues.employeeFeatures.find((f) => f.type === "LETTER")?.value);
 
     return requiredFieldsValid && conditionalFieldsValid && isValid;
   }, [watch, hasLetterFeature, isValid]);
@@ -360,13 +365,14 @@ export const CreateEmployeeModal: React.FC = () => {
               <LetterSelector
                 onLettersChange={handleLettersChange}
                 selectedLetters={
-                  watch("employee_features")
-                    ?.LETTER?.split(",")
+                  watch("employeeFeatures")
+                    ?.find((f) => f.type === "LETTER")
+                    ?.value?.split(",")
                     .filter(Boolean) || []
                 }
                 disabled={isSubmitting}
               />
-              {errors.employee_features && (
+              {errors.employeeFeatures && (
                 <p className="text-sm text-red-500">
                   Выберите хотя бы одну букву
                 </p>

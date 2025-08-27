@@ -13,6 +13,7 @@ import { useGetDepartmentList } from "@/modules/departments/application/use-case
 import {
   useGetServiceList,
   useUpdateEmployee,
+  useGetDepartmentFeatures,
 } from "@/modules/users/application/use-cases";
 import {
   EmployeeOneType,
@@ -27,6 +28,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { Button } from "@/shared/components/ui/button";
+import { Label } from "@/shared/components/ui/label";
+import { KAZAKH_ALPHABET } from "@/shared/consts";
 
 import { ActivityHeatmap } from "./ActivityHeatmap";
 
@@ -73,10 +77,20 @@ export const EmployeeInfo = ({
       cabinet: employee?.employeeInfo.cabinet || 0,
       login: "",
       password: "",
+      employeeFeatures: employee?.employeeFeatures || [],
     },
   });
 
   const selectedDepartmentId = watch("department_id");
+  const { data: departmentFeatures } = useGetDepartmentFeatures(
+    selectedDepartmentId || ""
+  );
+
+  const hasLetterFeature = React.useMemo(() => {
+    return departmentFeatures?.some(
+      (feature) => feature.type === "LETTER" && feature.value === "true"
+    );
+  }, [departmentFeatures]);
 
   // Сброс формы при изменении employee
   useEffect(() => {
@@ -91,6 +105,7 @@ export const EmployeeInfo = ({
         cabinet: employee.employeeInfo.cabinet || 0,
         login: "",
         password: "",
+        employeeFeatures: employee.employeeFeatures || [],
       });
 
       // Обновляем выбранные услуги
@@ -118,6 +133,15 @@ export const EmployeeInfo = ({
         ? prev.filter((id) => id !== serviceId)
         : [...prev, serviceId]
     );
+  };
+
+  const handleLettersChange = (letters: string[]) => {
+    setValue("employeeFeatures", [
+      {
+        type: "LETTER",
+        value: letters.join(","),
+      },
+    ]);
   };
 
   return (
@@ -356,6 +380,40 @@ export const EmployeeInfo = ({
         )}
       </div>
 
+      {/* Employee Features */}
+      {hasLetterFeature && (
+        <div className="mt-8 col-span-2 border-t border-gray-100">
+          <h4 className="text-lg font-medium text-gray-900 pt-2">Буквы</h4>
+          {isEditing ? (
+            <LetterSelector
+              onLettersChange={handleLettersChange}
+              selectedLetters={
+                watch("employeeFeatures")
+                  ?.find((f) => f.type === "LETTER")
+                  ?.value?.split(",")
+                  .filter(Boolean) || []
+              }
+              disabled={isSubmitting}
+            />
+          ) : (
+            <div className="flex flex-wrap mt-2 gap-2">
+              {employee?.employeeFeatures
+                ?.find((f) => f.type === "LETTER")
+                ?.value?.split(",")
+                .filter(Boolean)
+                .map((letter: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 text-xs bg-green-50 text-green-700 rounded-full"
+                  >
+                    {letter}
+                  </span>
+                ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Кнопки управления */}
       {isEditing && (
         <div className="mt-6 col-span-2 flex justify-end space-x-4 pt-4 border-t">
@@ -377,6 +435,53 @@ export const EmployeeInfo = ({
               : "Сохранить"}
           </button>
         </div>
+      )}
+    </div>
+  );
+};
+
+// Компонент выбора букв
+const LetterSelector: React.FC<{
+  onLettersChange: (letters: string[]) => void;
+  selectedLetters: string[];
+  disabled?: boolean;
+}> = ({ onLettersChange, selectedLetters, disabled = false }) => {
+  const handleLetterToggle = React.useCallback(
+    (letter: string, event: React.MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (disabled) return;
+
+      const newSelection = selectedLetters.includes(letter)
+        ? selectedLetters.filter((l: string) => l !== letter)
+        : [...selectedLetters, letter];
+
+      onLettersChange(newSelection);
+    },
+    [selectedLetters, onLettersChange, disabled]
+  );
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-1">
+        {KAZAKH_ALPHABET.map((letter) => (
+          <Button
+            key={letter}
+            size="sm"
+            type="button"
+            variant={selectedLetters.includes(letter) ? "default" : "outline"}
+            onClick={(event) => handleLetterToggle(letter, event)}
+            disabled={disabled}
+            className="w-8 h-8 p-0"
+          >
+            {letter}
+          </Button>
+        ))}
+      </div>
+      {selectedLetters.length > 0 && (
+        <p className="text-sm text-muted-foreground">
+          Выбрано: {selectedLetters.sort().join(", ")}
+        </p>
       )}
     </div>
   );
