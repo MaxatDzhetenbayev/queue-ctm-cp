@@ -6,3 +6,4 @@ export * from "./department.shemas";
 export * from "./service.shemas";
 export * from "./user.shemas";
 export * from "./repcetion.schemas";
+export * from "./client.shemas";
