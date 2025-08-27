@@ -1,5 +1,6 @@
 import {
   CreateOfflineReceptionType,
+  ManagerServicesType,
   ReceptionsListType,
   ReceptionType,
   UpdateReceptionStatusType,
@@ -36,5 +37,11 @@ export async function createOfflineReception(
 // Получение деталей приема
 export async function fetchReceptionById(id: string): Promise<ReceptionType> {
   const response = await axiosApi.get(`/receptions/${id}`);
+  return response.data;
+}
+
+// Получение сервисов менеджера
+export async function fetchManagerServices(): Promise<ManagerServicesType> {
+  const response = await axiosApi.get("/services/manager");
   return response.data;
 }

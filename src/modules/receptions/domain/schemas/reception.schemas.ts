@@ -26,6 +26,9 @@ const ServiceSchema = z.object({
   name: NameSchema,
 });
 
+// Схема для списка сервисов менеджера
+export const ManagerServicesSchema = z.array(ServiceSchema);
+
 // Схема для центра
 const CenterSchema = z.object({
   id: z.string(),
@@ -74,11 +77,10 @@ export const UpdateReceptionStatusSchema = z.object({
 
 // Схема для создания офлайн приема
 export const CreateOfflineReceptionSchema = z.object({
-  profile: z.object({
-    fullName: z.string().min(2, "ФИО должно содержать минимум 2 символа"),
-    phone: z.string().min(10, "Телефон должен содержать минимум 10 цифр"),
-  }),
-  time: z.string(),
+  full_name: z.string().min(2, "ФИО должно содержать минимум 2 символа"),
+  iin: z.string().length(12, "ИИН должен содержать 12 символов"),
+  phone: z.string().min(10, "Телефон должен содержать минимум 10 цифр"),
+  serviceId: z.string().min(1, "Выберите сервис"),
 });
 
 // Типы
@@ -93,5 +95,6 @@ export type CreateOfflineReceptionType = z.infer<
 >;
 export type UserProfileType = z.infer<typeof UserProfileSchema>;
 export type ServiceType = z.infer<typeof ServiceSchema>;
+export type ManagerServicesType = z.infer<typeof ManagerServicesSchema>;
 export type CenterType = z.infer<typeof CenterSchema>;
 export type DepartmentType = z.infer<typeof DepartmentSchema>;

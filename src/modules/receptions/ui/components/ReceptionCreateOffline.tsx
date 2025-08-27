@@ -20,27 +20,40 @@ import {
 } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 
-import { useCreateOfflineReception } from "../../application/use-cases";
+import {
+  useCreateOfflineReception,
+  useGetManagerServices,
+} from "../../application/use-cases";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const ReceptionCreateOffline: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const createOfflineMutation = useCreateOfflineReception();
+  const { data: services, isLoading: servicesLoading } =
+    useGetManagerServices();
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<CreateOfflineReceptionType>({
     resolver: zodResolver(CreateOfflineReceptionSchema),
     defaultValues: {
-      profile: {
-        fullName: "",
-        phone: "",
-      },
-      time: new Date().toISOString().slice(0, 16), // Текущее время в формате datetime-local
+      full_name: "",
+      iin: "",
+      phone: "",
+      serviceId: "",
     },
   });
 
@@ -80,17 +93,29 @@ export const ReceptionCreateOffline: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fullName">ФИО клиента *</Label>
+            <Label htmlFor="full_name">ФИО клиента *</Label>
             <Input
-              id="fullName"
+              id="full_name"
               placeholder="Введите ФИО клиента"
               disabled={isSubmitting}
-              {...register("profile.fullName")}
+              {...register("full_name")}
             />
-            {errors.profile?.fullName && (
-              <p className="text-sm text-red-500">
-                {errors.profile.fullName.message}
-              </p>
+            {errors.full_name && (
+              <p className="text-sm text-red-500">{errors.full_name.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="iin">ИИН *</Label>
+            <Input
+              id="iin"
+              placeholder="Введите ИИН (12 цифр)"
+              disabled={isSubmitting}
+              maxLength={12}
+              {...register("iin")}
+            />
+            {errors.iin && (
+              <p className="text-sm text-red-500">{errors.iin.message}</p>
             )}
           </div>
 
@@ -101,25 +126,32 @@ export const ReceptionCreateOffline: React.FC = () => {
               type="tel"
               placeholder="Введите номер телефона"
               disabled={isSubmitting}
-              {...register("profile.phone")}
+              {...register("phone")}
             />
-            {errors.profile?.phone && (
-              <p className="text-sm text-red-500">
-                {errors.profile.phone.message}
-              </p>
+            {errors.phone && (
+              <p className="text-sm text-red-500">{errors.phone.message}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="time">Время приема *</Label>
-            <Input
-              id="time"
-              type="datetime-local"
-              disabled={isSubmitting}
-              {...register("time")}
-            />
-            {errors.time && (
-              <p className="text-sm text-red-500">{errors.time.message}</p>
+            <Label htmlFor="serviceId">Сервис *</Label>
+            <Select
+              disabled={isSubmitting || servicesLoading}
+              onValueChange={(value) => setValue("serviceId", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите сервис" />
+              </SelectTrigger>
+              <SelectContent className="w-full">
+                {services?.map((service) => (
+                  <SelectItem key={service.id} value={service.id}>
+                    {service.name.ru}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.serviceId && (
+              <p className="text-sm text-red-500">{errors.serviceId.message}</p>
             )}
           </div>
 
