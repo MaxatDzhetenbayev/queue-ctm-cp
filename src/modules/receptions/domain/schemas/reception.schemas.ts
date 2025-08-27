@@ -75,6 +75,14 @@ export const UpdateReceptionStatusSchema = z.object({
   comment: z.string().optional(),
 });
 
+// Схема для поиска пользователя по ИИН
+export const UserByIinSchema = z.object({
+  id: z.string(),
+  fullName: z.string(),
+  userIin: z.string(),
+  phone: z.string(),
+});
+
 // Схема для создания офлайн приема
 export const CreateOfflineReceptionSchema = z.object({
   full_name: z.string().min(2, "ФИО должно содержать минимум 2 символа"),
@@ -96,5 +104,6 @@ export type CreateOfflineReceptionType = z.infer<
 export type UserProfileType = z.infer<typeof UserProfileSchema>;
 export type ServiceType = z.infer<typeof ServiceSchema>;
 export type ManagerServicesType = z.infer<typeof ManagerServicesSchema>;
+export type UserByIinType = z.infer<typeof UserByIinSchema>;
 export type CenterType = z.infer<typeof CenterSchema>;
 export type DepartmentType = z.infer<typeof DepartmentSchema>;

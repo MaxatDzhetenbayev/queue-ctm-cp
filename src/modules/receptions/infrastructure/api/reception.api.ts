@@ -4,6 +4,7 @@ import {
   ReceptionsListType,
   ReceptionType,
   UpdateReceptionStatusType,
+  UserByIinType,
 } from "@/modules/receptions/domain/schemas/reception.schemas";
 import { axiosApi } from "@/shared/lib/client";
 
@@ -43,5 +44,11 @@ export async function fetchReceptionById(id: string): Promise<ReceptionType> {
 // Получение сервисов менеджера
 export async function fetchManagerServices(): Promise<ManagerServicesType> {
   const response = await axiosApi.get("/services/manager");
+  return response.data;
+}
+
+// Поиск пользователя по ИИН
+export async function fetchUserByIin(iin: string): Promise<UserByIinType> {
+  const response = await axiosApi.get(`/users/iin/${iin}`);
   return response.data;
 }

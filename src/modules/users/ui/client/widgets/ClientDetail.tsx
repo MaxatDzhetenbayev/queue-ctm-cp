@@ -48,7 +48,13 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [currentAppointmentIndex, setCurrentAppointmentIndex] = useState(0);
 
-  const { data: client, isLoading, isError } = useGetClientInfo(params);
+  const {
+    data: client,
+    isLoading,
+    isError,
+  } = useGetClientInfo({
+    clientId: params.clientId,
+  });
   const updateClientMutation = useUpdateClient(params.clientId);
 
   const {

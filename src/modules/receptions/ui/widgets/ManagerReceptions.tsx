@@ -41,7 +41,6 @@ export const ManagerReceptions: React.FC = () => {
   const { data, isLoading, isError } = useGetManagerReceptions();
   const [openModal, setOpenModal] = useState(false);
   const [client, setClient] = useState<{
-    centerId: string;
     clientId: string;
   } | null>(null);
   const [completeModalOpen, setCompleteModalOpen] = useState(false);
@@ -118,7 +117,6 @@ export const ManagerReceptions: React.FC = () => {
                         onClick={() => {
                           setOpenModal(true);
                           setClient({
-                            centerId: reception.center.id,
                             clientId: reception.user.id,
                           });
                         }}
@@ -206,7 +204,6 @@ export const ManagerReceptions: React.FC = () => {
                         onClick={() => {
                           setOpenModal(true);
                           setClient({
-                            centerId: reception.center.id,
                             clientId: reception.user.id,
                           });
                         }}
@@ -227,7 +224,6 @@ export const ManagerReceptions: React.FC = () => {
                           onClick={() => {
                             setOpenModal(true);
                             setClient({
-                              centerId: reception.center.id,
                               clientId: reception.user.id,
                             });
                           }}
@@ -242,7 +238,6 @@ export const ManagerReceptions: React.FC = () => {
                         onClick={() => {
                           setOpenModal(true);
                           setClient({
-                            centerId: reception.center.id,
                             clientId: reception.user.id,
                           });
                         }}
@@ -280,7 +275,6 @@ export const ManagerReceptions: React.FC = () => {
                           onClick={() => {
                             setOpenModal(true);
                             setClient({
-                              centerId: reception.center.id,
                               clientId: reception.user.id,
                             });
                           }}
@@ -305,7 +299,6 @@ export const ManagerReceptions: React.FC = () => {
                           onClick={() => {
                             setOpenModal(true);
                             setClient({
-                              centerId: reception.center.id,
                               clientId: reception.user.id,
                             });
                           }}
@@ -328,7 +321,6 @@ export const ManagerReceptions: React.FC = () => {
           key={client.clientId}
           open={openModal}
           params={{
-            centerId: client.centerId,
             clientId: client.clientId,
           }}
           onOpenChange={setOpenModal}
