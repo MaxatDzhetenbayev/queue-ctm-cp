@@ -6,6 +6,6 @@ export const useGetManagerReceptions = () => {
   return useQuery({
     queryKey: ["manager-receptions"],
     queryFn: fetchManagerReceptions,
-    refetchInterval: 5000, // Обновляем каждые 5 секунд для реального времени
+    refetchInterval: 1 * 60 * 1000, // Обновляем каждые 1 минуту для реального времени
   });
 };
