@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Clock, FileText, Phone, User } from "lucide-react";
+import { Calendar, FileText, Phone, User } from "lucide-react";
 import React, { useState } from "react";
 
 import { ReceptionStatusType } from "@/modules/receptions/domain/schemas/reception.schemas";
@@ -12,8 +12,8 @@ import {
   STATUS_LABELS,
 } from "../../domain/constants/status.constants";
 import { ChangeReceptionStatusButton } from "../components/ChangeReceptionStatusButton";
-import { ReceptionCreateOffline } from "../components/ReceptionCreateOffline";
 import { CompleteReceptionModal } from "../components/CompleteReceptionModal";
+import { ReceptionCreateOffline } from "../components/ReceptionCreateOffline";
 
 // Функция для нормализации статуса
 const normalizeStatus = (status: ReceptionStatusType): string => {
@@ -53,24 +53,32 @@ export const ManagerReceptions: React.FC = () => {
     return (
       <div className="h-[85vh] space-y-4">
         <div className="h-8 bg-gray-200 rounded animate-pulse w-32"></div>
-        <div className="space-y-4 max-w-lg">
+        <div className="space-y-4 w-full">
           {[...Array(9)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 animate-pulse"
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-pulse"
             >
-              <div className="h-4 bg-gray-200 rounded mb-3"></div>
-              <div className="flex justify-between mb-3">
-                <div className="space-y-1.5 flex-1">
-                  <div className="h-3 bg-gray-200 rounded w-24"></div>
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
+              <div className="h-6 bg-gray-200 rounded mb-4"></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-4">
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-8"></div>
+                  <div className="h-4 bg-gray-200 rounded w-24"></div>
                 </div>
-                <div className="space-y-1.5 ml-4 text-right">
-                  <div className="h-3 bg-gray-200 rounded w-20"></div>
-                  <div className="h-3 bg-gray-200 rounded w-28"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-12"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  <div className="h-4 bg-gray-200 rounded w-28"></div>
                 </div>
               </div>
-              <div className="h-6 bg-gray-200 rounded w-20"></div>
+              <div className="h-8 bg-gray-200 rounded w-24"></div>
             </div>
           ))}
         </div>
@@ -103,59 +111,82 @@ export const ManagerReceptions: React.FC = () => {
                 key={reception.id}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
               >
-                <div className="p-4 max-w-lg">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <button
-                      onClick={() => {
-                        setOpenModal(true);
-                        setClient({
-                          centerId: reception.center.id,
-                          clientId: reception.user.id,
-                        });
-                      }}
-                      className="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer truncate"
-                    >
-                      {reception.user.profile.fullName}
-                    </button>
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full bg-black text-white flex-shrink-0`}
-                    >
-                      {normalizeAuthVariant(reception.user.authType)}
-                    </span>
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                        reception.status
-                      )} flex-shrink-0`}
-                    >
-                      {normalizeStatus(reception.status)}
-                    </span>
+                <div className="p-6 w-full">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <div className="flex items-center space-x-3 flex-1 min-w-0">
+                      <button
+                        onClick={() => {
+                          setOpenModal(true);
+                          setClient({
+                            centerId: reception.center.id,
+                            clientId: reception.user.id,
+                          });
+                        }}
+                        className="text-lg font-semibold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer truncate"
+                      >
+                        {reception.user.profile.fullName}
+                      </button>
+                    </div>
+                    <div className="flex items-center space-x-2 flex-shrink-0">
+                      <span
+                        className={`px-3 py-1 text-sm font-medium rounded-full bg-black text-white`}
+                      >
+                        {normalizeAuthVariant(reception.user.authType)}
+                      </span>
+                      <span
+                        className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(
+                          reception.status
+                        )}`}
+                      >
+                        {normalizeStatus(reception.status)}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="flex justify-between mb-3">
-                    <div className="space-y-1.5 flex-1">
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <User className="h-3 w-3 flex-shrink-0" />
-                        <span className="text-xs">
-                          ИИН: {reception.user.profile.iin || "Не указан"}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <FileText className="h-3 w-3 flex-shrink-0" />
-                        <span className="text-xs truncate">
-                          {reception.service.name.ru}
-                        </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-4">
+                    <div className="flex items-center space-x-3 text-gray-600">
+                      <User className="h-5 w-5 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-medium text-gray-900">
+                          ИИН
+                        </div>
+                        <div className="text-sm truncate">
+                          {reception.user.profile.iin || "Не указан"}
+                        </div>
                       </div>
                     </div>
 
-                    <div className="space-y-1.5 ml-4 text-right">
-                      <div className="flex items-center justify-end space-x-2 text-gray-600">
-                        <span className="text-xs">
+                    <div className="flex items-center space-x-3 text-gray-600">
+                      <Phone className="h-5 w-5 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-medium text-gray-900">
+                          Телефон
+                        </div>
+                        <div className="text-sm truncate">
                           {reception.user.profile.phone}
-                        </span>
-                        <Phone className="h-3 w-3 flex-shrink-0" />
+                        </div>
                       </div>
-                      <div className="flex items-center justify-end space-x-2 text-gray-600">
-                        <span className="text-xs">
+                    </div>
+
+                    <div className="flex items-center space-x-3 text-gray-600">
+                      <FileText className="h-5 w-5 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-medium text-gray-900">
+                          Услуга
+                        </div>
+                        <div className="text-sm truncate">
+                          {reception.service.name.ru}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-3 text-gray-600">
+                      <Calendar className="h-5 w-5 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-medium text-gray-900">
+                          Дата и время
+                        </div>
+                        <div className="text-sm truncate">
                           {new Date(reception.date).toLocaleDateString("ru-RU")}{" "}
                           {new Date(reception.time).toLocaleTimeString(
                             "ru-RU",
@@ -164,13 +195,12 @@ export const ManagerReceptions: React.FC = () => {
                               minute: "2-digit",
                             }
                           )}
-                        </span>
-                        <Calendar className="h-3 w-3 flex-shrink-0" />
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-2 flex-wrap">
+                  <div className="flex gap-2 sm:gap-3 flex-wrap justify-end">
                     {reception.status === "DONE" && (
                       <button
                         onClick={() => {
@@ -180,7 +210,7 @@ export const ManagerReceptions: React.FC = () => {
                             clientId: reception.user.id,
                           });
                         }}
-                        className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                        className="px-3 sm:px-4 py-2 text-xs sm:text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                       >
                         Детали
                       </button>
@@ -201,7 +231,7 @@ export const ManagerReceptions: React.FC = () => {
                               clientId: reception.user.id,
                             });
                           }}
-                          className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                          className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
                           Детали
                         </button>
@@ -216,7 +246,7 @@ export const ManagerReceptions: React.FC = () => {
                             clientId: reception.user.id,
                           });
                         }}
-                        className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                        className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                       >
                         Детали
                       </button>
@@ -254,7 +284,7 @@ export const ManagerReceptions: React.FC = () => {
                               clientId: reception.user.id,
                             });
                           }}
-                          className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                          className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
                           Детали
                         </button>
@@ -267,7 +297,7 @@ export const ManagerReceptions: React.FC = () => {
                             setSelectedReceptionId(reception.id);
                             setCompleteModalOpen(true);
                           }}
-                          className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors"
+                          className="px-4 py-2 text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-medium"
                         >
                           Завершить
                         </button>
@@ -279,7 +309,7 @@ export const ManagerReceptions: React.FC = () => {
                               clientId: reception.user.id,
                             });
                           }}
-                          className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                          className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
                           Детали
                         </button>

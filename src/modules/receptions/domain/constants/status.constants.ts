@@ -6,7 +6,7 @@ export const RECEPTION_STATUSES = {
   CALLED: "CALLED",
   WORKING: "WORKING",
   DONE: "DONE",
-  NO_SHOW: "NO_SHOW",
+  NOSHOW: "NOSHOW",
   CANCELED: "CANCELED",
 } as const;
 
