@@ -53,7 +53,7 @@ export const EmployeeFilters = ({
         onValueChange={(value) => setPathParams("service", value)}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Выберите отдел" />
+          <SelectValue placeholder="Выберите сервис" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
