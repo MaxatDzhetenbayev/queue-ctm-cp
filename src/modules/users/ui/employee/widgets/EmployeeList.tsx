@@ -11,6 +11,7 @@ import {
 import { useSearchQuery, useUrlFilter } from "@/shared/hooks";
 import { CustomPagination } from "@/widgets";
 
+import { CreateEmployeeModal } from "./CreateEmployeeModal";
 import { EmployeeDetail } from "./EmployeeDetail";
 import { EmployeeFilters } from "./EmployeeFilters";
 import { EmployeeQuery } from "./EmployeeQuery";
@@ -67,6 +68,9 @@ export const EmployeeList = () => {
               departments={departments}
               services={services}
             />
+
+            {/* Кнопка создания работника */}
+            <CreateEmployeeModal />
           </div>
         </div>
       </div>

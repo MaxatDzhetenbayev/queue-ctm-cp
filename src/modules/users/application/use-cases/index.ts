@@ -8,3 +8,5 @@ export { useGetClientInfo } from "./get-client.usercases";
 export { useUpdateEmployee } from "./update-employee.usecase";
 export { useUpdateClient } from "./update-client.usecase";
 export { useGetEmployeeActivity } from "./get-employee-activity.usecase";
+export { useCreateEmployee } from "./create-employee.usecase";
+export { useGetDepartmentFeatures } from "./get-department-features.usecase";
