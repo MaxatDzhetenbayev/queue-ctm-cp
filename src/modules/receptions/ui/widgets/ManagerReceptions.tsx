@@ -50,8 +50,8 @@ export const ManagerReceptions: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="h-[85vh] space-y-4">
-        <div className="h-8 bg-gray-200 rounded animate-pulse w-32"></div>
+      <div className="h-[75vh] overflow-y-hidden space-y-4">
+        <div className="h-8  rounded animate-pulse w-32"></div>
         <div className="space-y-4 w-full">
           {[...Array(9)].map((_, i) => (
             <div
