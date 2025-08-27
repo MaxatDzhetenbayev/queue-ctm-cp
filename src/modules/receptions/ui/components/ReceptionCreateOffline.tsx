@@ -65,11 +65,14 @@ export const ReceptionCreateOffline: React.FC = () => {
   });
 
   const watchedIin = watch("iin");
+  // Очищаем ИИН от пробелов для проверки
+  const cleanIin = watchedIin?.replace(/\s/g, "") || "";
+
   const {
     data: userByIin,
     isLoading: userLoading,
     error: userError,
-  } = useGetUserByIin(watchedIin?.length === 12 ? watchedIin : null);
+  } = useGetUserByIin(cleanIin.length === 12 ? cleanIin : null);
 
   // Автозаполнение полей при нахождении пользователя
   React.useEffect(() => {
@@ -77,11 +80,24 @@ export const ReceptionCreateOffline: React.FC = () => {
       setValue("full_name", userByIin.fullName);
       setValue("phone", userByIin.phone);
       setShowAdditionalFields(true);
-    } else if (watchedIin?.length === 12 && !userLoading && !userError) {
-      // Пользователь не найден, показываем поля для заполнения
+    } else if (
+      cleanIin.length === 12 &&
+      !userLoading &&
+      (userError || !userByIin)
+    ) {
+      // Пользователь не найден (ошибка 404 или нет данных), показываем поля для заполнения с пустыми значениями
+      setValue("full_name", "");
+      setValue("phone", "");
+      setValue("serviceId", "");
       setShowAdditionalFields(true);
+    } else if (cleanIin.length !== 12) {
+      // ИИН не равен 12 символам, скрываем дополнительные поля и сбрасываем значения
+      setShowAdditionalFields(false);
+      setValue("full_name", "");
+      setValue("phone", "");
+      setValue("serviceId", "");
     }
-  }, [userByIin, watchedIin, userLoading, userError, setValue]);
+  }, [userByIin, cleanIin, userLoading, userError, setValue]);
 
   const onSubmit = async (data: CreateOfflineReceptionType) => {
     try {
@@ -139,7 +155,13 @@ export const ReceptionCreateOffline: React.FC = () => {
               placeholder="Введите ИИН (12 цифр)"
               disabled={isSubmitting}
               maxLength={12}
-              {...register("iin")}
+              {...register("iin", {
+                onChange: (e) => {
+                  // Убираем пробелы при вводе
+                  const value = e.target.value.replace(/\s/g, "");
+                  e.target.value = value;
+                },
+              })}
             />
             {errors.iin && (
               <p className="text-sm text-red-500">{errors.iin.message}</p>
@@ -182,6 +204,23 @@ export const ReceptionCreateOffline: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* Информация о том, что пользователь не найден */}
+            {cleanIin.length === 12 &&
+              !userLoading &&
+              (userError || !userByIin) && (
+                <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center space-x-2 text-blue-800">
+                    <User className="h-4 w-4" />
+                    <span className="font-medium">
+                      Пользователь не найден в базе данных
+                    </span>
+                  </div>
+                  <div className="mt-1 text-sm text-blue-700">
+                    Заполните данные для создания нового клиента
+                  </div>
+                </div>
+              )}
           </div>
 
           {/* Дополнительные поля показываются только после ввода ИИН */}
@@ -256,8 +295,9 @@ export const ReceptionCreateOffline: React.FC = () => {
               disabled={
                 isSubmitting ||
                 !showAdditionalFields ||
-                !watchedIin ||
-                watchedIin.length !== 12
+                !cleanIin ||
+                cleanIin.length !== 12 ||
+                userLoading
               }
             >
               {isSubmitting ? "Создание..." : "Создать"}

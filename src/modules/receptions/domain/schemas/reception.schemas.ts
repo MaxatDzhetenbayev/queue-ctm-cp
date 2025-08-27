@@ -86,7 +86,14 @@ export const UserByIinSchema = z.object({
 // Схема для создания офлайн приема
 export const CreateOfflineReceptionSchema = z.object({
   full_name: z.string().min(2, "ФИО должно содержать минимум 2 символа"),
-  iin: z.string().length(12, "ИИН должен содержать 12 символов"),
+  iin: z
+    .string()
+    .length(12, "ИИН должен содержать 12 символов")
+    .refine((value) => !value.includes(" "), "ИИН не должен содержать пробелы")
+    .refine(
+      (value) => /^\d+$/.test(value),
+      "ИИН должен содержать только цифры"
+    ),
   phone: z.string().min(10, "Телефон должен содержать минимум 10 цифр"),
   serviceId: z.string().min(1, "Выберите сервис"),
 });
