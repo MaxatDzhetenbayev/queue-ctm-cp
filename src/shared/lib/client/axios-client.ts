@@ -65,7 +65,11 @@ axiosApi.interceptors.response.use(
         isRefreshing = false;
       }
     }
-    if (error.response?.status === 400 && !originalRequest._retry) {
+
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry
+    ) {
       const locale = window.location.pathname.split("/")[1];
       window.location.href = `/${locale}/login`;
     }
