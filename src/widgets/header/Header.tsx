@@ -19,7 +19,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ showNavigation = true }) => {
-  const { data: userProfile, isLoading } = useGetUserProfile();
+  const { data: userProfile } = useGetUserProfile();
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">

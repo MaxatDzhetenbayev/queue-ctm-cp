@@ -14,7 +14,7 @@ export const statusOptions: Array<{ value: StatusesType; label: string }> = [
     label: "Завершено",
   },
   {
-    value: "CANCELLED",
+    value: "CANCELED",
     label: "Отменено",
   },
   {

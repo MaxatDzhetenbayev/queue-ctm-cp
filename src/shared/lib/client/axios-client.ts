@@ -37,7 +37,7 @@ axiosApi.interceptors.response.use(
         // ждем пока другой запрос обновит токен
         return new Promise((resolve, reject) => {
           failedQueue.push({
-            resolve: (token) => {
+            resolve: () => {
               // пробуем повторить запрос
               originalRequest.headers = {
                 ...originalRequest.headers,

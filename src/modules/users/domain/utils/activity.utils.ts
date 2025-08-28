@@ -85,15 +85,17 @@ export const processActivityData = (
   const daysToAdd = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
 
   // Добавляем пустые дни в начале года
-  for (let i = 0; i < daysToAdd; i++) {
-    const prevDate = new Date(firstDayOfYear);
-    prevDate.setDate(firstDayOfYear.getDate() - daysToAdd + i);
-    days.push({
-      date: prevDate.toISOString().split("T")[0],
-      status: null,
-      activities: [],
-      totalHours: 0,
-    });
+  if (daysToAdd > 0) {
+    for (let i = 0; i < daysToAdd; i++) {
+      const prevDate = new Date(firstDayOfYear);
+      prevDate.setDate(firstDayOfYear.getDate() - daysToAdd + i);
+      days.push({
+        date: prevDate.toISOString().split("T")[0],
+        status: null,
+        activities: [],
+        totalHours: 0,
+      });
+    }
   }
 
   // Создаем массив всех дней года
