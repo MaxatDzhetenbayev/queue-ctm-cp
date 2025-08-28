@@ -149,7 +149,7 @@ export const ReceptionCreateOffline: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="iin">ИИН *</Label>
+            <Label htmlFor="iin">ИИН/БИН *</Label>
             <Input
               id="iin"
               placeholder="Введите ИИН (12 цифр)"
@@ -178,7 +178,7 @@ export const ReceptionCreateOffline: React.FC = () => {
                 <div className="flex items-center space-x-2 text-green-800">
                   <User className="h-4 w-4" />
                   <span className="font-medium">
-                    Найден существующий пользователь:
+                    Найден существующий клиент:
                   </span>
                 </div>
                 <div className="mt-2 space-y-1 text-sm text-green-700">
@@ -227,10 +227,10 @@ export const ReceptionCreateOffline: React.FC = () => {
           {showAdditionalFields && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="full_name">ФИО клиента *</Label>
+                <Label htmlFor="full_name">ФИО клиента/Наименование *</Label>
                 <Input
                   id="full_name"
-                  placeholder="Введите ФИО клиента"
+                  placeholder="Введите ФИО клиента/Наименование"
                   disabled={isSubmitting || !!userByIin}
                   {...register("full_name")}
                 />
