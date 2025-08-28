@@ -92,9 +92,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
     try {
       await updateClientMutation.mutateAsync(data);
       setIsEditing(false);
-    } catch (error) {
-      console.error("Ошибка при обновлении:", error);
-    }
+    } catch (error) {}
   };
 
   if (isLoading || isError || !client) return;

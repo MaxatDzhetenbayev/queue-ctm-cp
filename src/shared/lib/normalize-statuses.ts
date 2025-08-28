@@ -13,7 +13,7 @@ export function normalizeStatus(status?: StatusesType) {
       return "В работе";
     case "DONE":
       return "Завершен";
-    case "CANCELLED":
+    case "CANCELED":
       return "Отменен";
     case "NO_SHOW":
       return "Не пришел";
