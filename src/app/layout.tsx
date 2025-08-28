@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { notFound } from "next/navigation";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 import { ToastContainer } from "react-toastify";
 
 import { QueryProvider } from "@/shared/providers";
 
 import "@/shared/configs";
 import "@/styles/globals.css";
-import { routing } from "@i18/index";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +30,6 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
 
   return (
     <html lang={locale}>
