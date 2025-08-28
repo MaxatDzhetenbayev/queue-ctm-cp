@@ -44,6 +44,7 @@ export const ReceptionCreateOffline: React.FC = () => {
     clientId: string;
   } | null>(null);
   const createOfflineMutation = useCreateOfflineReception();
+  const isSubmitting = createOfflineMutation.isPending;
   const { data: services, isLoading: servicesLoading } =
     useGetManagerServices();
 
@@ -53,7 +54,7 @@ export const ReceptionCreateOffline: React.FC = () => {
     reset,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreateOfflineReceptionType>({
     resolver: zodResolver(CreateOfflineReceptionSchema),
     defaultValues: {
@@ -99,14 +100,13 @@ export const ReceptionCreateOffline: React.FC = () => {
     }
   }, [userByIin, cleanIin, userLoading, userError, setValue]);
 
-  const onSubmit = async (data: CreateOfflineReceptionType) => {
-    try {
-      await createOfflineMutation.mutateAsync(data);
-      // Закрываем модалку, очистка произойдет в handleOpenChange
-      setOpen(false);
-    } catch (error) {
-      console.error("Ошибка при создании приема:", error);
-    }
+  const onSubmit = (data: CreateOfflineReceptionType) => {
+    createOfflineMutation.mutate(data, {
+      onSuccess: () => {
+        reset();
+        setOpen(false);
+      },
+    });
   };
 
   const handleClose = () => {
@@ -147,7 +147,13 @@ export const ReceptionCreateOffline: React.FC = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(onSubmit)(e);
+          }}
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Label htmlFor="iin">ИИН/БИН *</Label>
             <Input
