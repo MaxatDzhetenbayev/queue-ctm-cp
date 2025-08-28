@@ -15,9 +15,8 @@ const EmployeeInfoSchema = z.object({
 });
 
 const EmployeeOneSchema = z.object({
-  id: z.string(),
   login: z.string(),
-  profile: UserProfileSchema,
+  ...UserProfileSchema.shape,
   employeeInfo: EmployeeInfoSchema,
   employeeServices: z.array(
     z.object({
