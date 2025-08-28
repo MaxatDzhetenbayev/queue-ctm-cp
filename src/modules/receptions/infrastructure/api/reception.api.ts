@@ -8,7 +8,14 @@ import {
 } from "@/modules/receptions/domain/schemas/reception.schemas";
 import { axiosApi } from "@/shared/lib/client";
 
-// Получение списка приемов для менеджера
+/**
+ * Получение списка приемов для менеджера
+ * @param params - Параметры для фильтрации
+ * @param params.search - Поиск по ФИО, ИИН, БИН
+ * @param params.status - Статус приема
+ * @param params.date - Дата приема
+ * @returns Promise<ReceptionsListType> - Список приемов
+ */
 export async function fetchManagerReceptions(params?: {
   search?: string;
   status?: string;
@@ -34,7 +41,11 @@ export async function fetchManagerReceptions(params?: {
   return response.data;
 }
 
-// Обновление статуса приема
+/**
+ * Обновление статуса приема
+ * @param data - Данные для обновления статуса
+ * @returns Promise<ReceptionType> - Данные записи
+ */
 export async function updateReceptionStatus(
   data: UpdateReceptionStatusType
 ): Promise<ReceptionType> {
@@ -47,7 +58,11 @@ export async function updateReceptionStatus(
   return response.data;
 }
 
-// Создание офлайн приема
+/**
+ * Создание оффлайн записи
+ * @param data - Данные для создания оффлайн записи
+ * @returns Promise<ReceptionType> - Данные записи
+ */
 export async function createOfflineReception(
   data: CreateOfflineReceptionType
 ): Promise<ReceptionType> {
@@ -55,19 +70,30 @@ export async function createOfflineReception(
   return response.data;
 }
 
-// Получение деталей приема
+/**
+ * Получение деталей приема
+ * @param id - ID приема
+ * @returns Promise<ReceptionType> - Данные записи
+ */
 export async function fetchReceptionById(id: string): Promise<ReceptionType> {
   const response = await axiosApi.get(`/receptions/${id}`);
   return response.data;
 }
 
-// Получение сервисов менеджера
+/**
+ * Получение сервисов менеджера
+ * @returns Promise<ManagerServicesType> - Данные сервисов
+ */
 export async function fetchManagerServices(): Promise<ManagerServicesType> {
   const response = await axiosApi.get("/services/manager");
   return response.data;
 }
 
-// Поиск пользователя по ИИН
+/**
+ * Поиск пользователя по ИИН
+ * @param iin - ИИН пользователя
+ * @returns Promise<UserByIinType> - Данные пользователя
+ */
 export async function fetchUserByIin(iin: string): Promise<UserByIinType> {
   const response = await axiosApi.get(`/users/iin/${iin}`);
   return response.data;
