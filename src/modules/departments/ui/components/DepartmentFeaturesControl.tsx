@@ -1,14 +1,10 @@
 "use client";
 
 import { Clock, Eye, FileText } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Control, Controller, UseFormSetValue } from "react-hook-form";
+import React, { useEffect } from "react";
+import { Control } from "react-hook-form";
 
-import { CreateDepartmentType } from "../../domain/schemas";
-import { getHoursFromToHourEnd } from "../../domain/utils/time.utils";
-import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import {
   Select,
@@ -18,61 +14,65 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
+import { CreateDepartmentType } from "../../domain/schemas";
+import { useDepartmentFormStore } from "../../domain/stores";
+import { getHoursFromToHourEnd } from "../../domain/utils/time.utils";
+
 interface DepartmentFeaturesControlProps {
   control: Control<CreateDepartmentType>;
-  setFormValue: UseFormSetValue<CreateDepartmentType>;
   features?: { [key: string]: string } | null;
 }
 
 export const DepartmentFeaturesControl = ({
-  control,
-  setFormValue,
   features = null,
 }: DepartmentFeaturesControlProps) => {
   const timeSlots = getHoursFromToHourEnd("09:00", "18:30");
-  const [departmentFeatures, setDepartmentFeatures] = useState<{
-    [key: string]: string;
-  }>({});
 
-  useEffect(() => {
-    setFormValue("departmentFeatures", departmentFeatures);
-  }, [departmentFeatures, setFormValue]);
+  const {
+    startTime,
+    endTime,
+    isShowDepartment,
+    isLetterDepartment,
+    setDepartmentFeatures,
+    setStartTime,
+    setEndTime,
+    updateTimeFeature,
+    updateShowFeature,
+    updateLetterFeature,
+  } = useDepartmentFormStore();
 
-  const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("");
-  const [isShowDepartment, setIsShowDepartment] = useState(false);
-  const [isLetterDepartment, setIsLetterDepartment] = useState(false);
-
+  // Инициализация состояния из пропсов
   useEffect(() => {
     if (features) {
       setDepartmentFeatures(features);
       setStartTime(features.TIME?.split("-")[0] || "09:00");
       setEndTime(features.TIME?.split("-")[1] || "");
-      setIsShowDepartment(Boolean(features.SHOW === "true"));
-      setIsLetterDepartment(Boolean(features.LETTER === "true"));
+      updateShowFeature(Boolean(features.SHOW === "true"));
+      updateLetterFeature(Boolean(features.LETTER === "true"));
     }
-  }, [features]);
+  }, [
+    features,
+    setDepartmentFeatures,
+    setStartTime,
+    setEndTime,
+    updateShowFeature,
+    updateLetterFeature,
+  ]);
 
+  // Обновление времени при изменении startTime или endTime
   useEffect(() => {
     if (startTime && endTime) {
-      const time = `${startTime}-${endTime}`;
-      setDepartmentFeatures((prev) => ({ ...prev, TIME: time }));
+      updateTimeFeature(startTime, endTime);
     }
-  }, [startTime, endTime]);
+  }, [startTime, endTime, updateTimeFeature]);
 
-  useEffect(() => {
-    setDepartmentFeatures((prev) => ({
-      ...prev,
-      SHOW: String(isShowDepartment),
-    }));
-  }, [isShowDepartment]);
+  const handleShowDepartmentChange = (checked: boolean | "indeterminate") => {
+    updateShowFeature(checked === true);
+  };
 
-  useEffect(() => {
-    setDepartmentFeatures((prev) => ({
-      ...prev,
-      LETTER: String(isLetterDepartment),
-    }));
-  }, [isLetterDepartment]);
+  const handleLetterDepartmentChange = (checked: boolean | "indeterminate") => {
+    updateLetterFeature(checked === true);
+  };
 
   return (
     <div className="space-y-4">
@@ -123,7 +123,7 @@ export const DepartmentFeaturesControl = ({
           <Checkbox
             id="showDepartment"
             checked={isShowDepartment}
-            onCheckedChange={setIsShowDepartment}
+            onCheckedChange={handleShowDepartmentChange}
           />
           <Label
             htmlFor="showDepartment"
@@ -138,7 +138,7 @@ export const DepartmentFeaturesControl = ({
           <Checkbox
             id="letterDepartment"
             checked={isLetterDepartment}
-            onCheckedChange={setIsLetterDepartment}
+            onCheckedChange={handleLetterDepartmentChange}
           />
           <Label
             htmlFor="letterDepartment"

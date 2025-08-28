@@ -1,19 +1,29 @@
 "use client";
 
 import { Calendar, FileText, Phone, User } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 import { ReceptionStatusType } from "@/modules/receptions/domain/schemas/reception.schemas";
 import { ClientDetail } from "@/modules/users/ui/client/widgets/ClientDetail";
+import { useSearchQuery } from "@/shared/hooks";
 
 import { useGetManagerReceptions } from "../../application/use-cases";
 import {
   STATUS_COLORS,
   STATUS_LABELS,
 } from "../../domain/constants/status.constants";
-import { ChangeReceptionStatusButton } from "../components/ChangeReceptionStatusButton";
-import { CompleteReceptionModal } from "../components/CompleteReceptionModal";
-import { ReceptionCreateOffline } from "../components/ReceptionCreateOffline";
+import {
+  useReceptionFiltersStore,
+  useReceptionModalsStore,
+} from "../../domain/stores";
+import {
+  ChangeReceptionStatusButton,
+  CompleteReceptionModal,
+  ReceptionCreateOffline,
+  ReceptionDateFilter,
+  ReceptionSearch,
+  ReceptionStatusFilter,
+} from "../components";
 
 // Функция для нормализации статуса
 const normalizeStatus = (status: ReceptionStatusType): string => {
@@ -38,74 +48,89 @@ const normalizeAuthVariant = (authType: string): string => {
 };
 
 export const ManagerReceptions: React.FC = () => {
-  const { data, isLoading, isError } = useGetManagerReceptions();
-  const [openModal, setOpenModal] = useState(false);
-  const [client, setClient] = useState<{
-    clientId: string;
-  } | null>(null);
-  const [completeModalOpen, setCompleteModalOpen] = useState(false);
-  const [selectedReceptionId, setSelectedReceptionId] = useState<string | null>(
-    null
-  );
+  // Используем Zustand store для фильтров
+  const { searchValue, selectedDate, selectedStatus } =
+    useReceptionFiltersStore();
 
-  if (isLoading) {
-    return (
-      <div className="h-[75vh] overflow-y-hidden space-y-4">
-        <div className="h-8  rounded animate-pulse w-32"></div>
-        <div className="space-y-4 w-full">
-          {[...Array(9)].map((_, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-pulse"
-            >
-              <div className="h-6 bg-gray-200 rounded mb-4"></div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-4">
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-8"></div>
-                  <div className="h-4 bg-gray-200 rounded w-24"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
-                  <div className="h-4 bg-gray-200 rounded w-20"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-12"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-24"></div>
-                  <div className="h-4 bg-gray-200 rounded w-28"></div>
-                </div>
-              </div>
-              <div className="h-8 bg-gray-200 rounded w-24"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  // Используем хук для поиска с debounce
+  const { inputValue, setInputValue, debouncedQuery } = useSearchQuery({
+    searchKey: "search",
+  });
 
-  if (isError) {
-    return (
-      <div className="h-[85vh] flex items-center justify-center">
-        <div className="text-red-500">Ошибка при загрузке данных</div>
-      </div>
-    );
-  }
+  // Синхронизируем состояние поиска с Zustand store
+  React.useEffect(() => {
+    setInputValue(searchValue);
+  }, [searchValue, setInputValue]);
+
+  // Получаем данные с фильтрами
+  const { data, isLoading } = useGetManagerReceptions({
+    search: debouncedQuery,
+    status: selectedStatus || undefined,
+    date: selectedDate || new Date().toISOString().split("T")[0], // По умолчанию сегодня
+  });
+
+  // Используем Zustand store для модальных окон
+  const {
+    isClientDetailOpen,
+    isCompleteModalOpen,
+    selectedClientId,
+    selectedReceptionId,
+    openClientDetail,
+    closeClientDetail,
+    openCompleteModal,
+    closeCompleteModal,
+  } = useReceptionModalsStore();
 
   return (
     <div className="h-[85vh] flex flex-col">
-      <div className="flex items-center justify-between mb-6 flex-shrink-0">
-        <h2 className="text-2xl font-semibold">Приемы</h2>
-        <ReceptionCreateOffline />
+      <div className="mb-6 flex-shrink-0">
+        <h2 className="text-2xl font-semibold mb-4">Приемы</h2>
+        <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 flex-1">
+            <ReceptionSearch value={inputValue} />
+            <ReceptionDateFilter selectedDate={selectedDate} />
+            <ReceptionStatusFilter selectedStatus={selectedStatus} />
+          </div>
+          <ReceptionCreateOffline />
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {!data || data.length === 0 ? (
+        {isLoading ? (
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-pulse"
+              >
+                <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-4">
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-8"></div>
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-12"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    <div className="h-4 bg-gray-200 rounded w-28"></div>
+                  </div>
+                </div>
+                <div className="h-8 bg-gray-200 rounded w-24"></div>
+              </div>
+            ))}
+          </div>
+        ) : !data?.length ? (
           <div className="text-center text-gray-500 py-8">Нет записей</div>
         ) : (
           <div className="space-y-4">
-            {data.map((reception) => (
+            {data?.map((reception) => (
               <div
                 key={reception.id}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
@@ -115,10 +140,7 @@ export const ManagerReceptions: React.FC = () => {
                     <div className="flex items-center space-x-3 flex-1 min-w-0">
                       <button
                         onClick={() => {
-                          setOpenModal(true);
-                          setClient({
-                            clientId: reception.user.id,
-                          });
+                          openClientDetail(reception.user.id);
                         }}
                         className="text-lg font-semibold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer truncate"
                       >
@@ -202,10 +224,7 @@ export const ManagerReceptions: React.FC = () => {
                     {reception.status === "DONE" && (
                       <button
                         onClick={() => {
-                          setOpenModal(true);
-                          setClient({
-                            clientId: reception.user.id,
-                          });
+                          openClientDetail(reception.user.id);
                         }}
                         className="px-3 sm:px-4 py-2 text-xs sm:text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                       >
@@ -222,10 +241,7 @@ export const ManagerReceptions: React.FC = () => {
                         </ChangeReceptionStatusButton>
                         <button
                           onClick={() => {
-                            setOpenModal(true);
-                            setClient({
-                              clientId: reception.user.id,
-                            });
+                            openClientDetail(reception.user.id);
                           }}
                           className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
@@ -236,10 +252,7 @@ export const ManagerReceptions: React.FC = () => {
                     {reception.status === "CANCELED" && (
                       <button
                         onClick={() => {
-                          setOpenModal(true);
-                          setClient({
-                            clientId: reception.user.id,
-                          });
+                          openClientDetail(reception.user.id);
                         }}
                         className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                       >
@@ -273,10 +286,7 @@ export const ManagerReceptions: React.FC = () => {
                         </ChangeReceptionStatusButton>
                         <button
                           onClick={() => {
-                            setOpenModal(true);
-                            setClient({
-                              clientId: reception.user.id,
-                            });
+                            openClientDetail(reception.user.id);
                           }}
                           className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
@@ -288,8 +298,7 @@ export const ManagerReceptions: React.FC = () => {
                       <>
                         <button
                           onClick={() => {
-                            setSelectedReceptionId(reception.id);
-                            setCompleteModalOpen(true);
+                            openCompleteModal(reception.id);
                           }}
                           className="px-4 py-2 text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-medium"
                         >
@@ -297,10 +306,7 @@ export const ManagerReceptions: React.FC = () => {
                         </button>
                         <button
                           onClick={() => {
-                            setOpenModal(true);
-                            setClient({
-                              clientId: reception.user.id,
-                            });
+                            openClientDetail(reception.user.id);
                           }}
                           className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
@@ -316,25 +322,25 @@ export const ManagerReceptions: React.FC = () => {
         )}
       </div>
 
-      {client && (
+      {selectedClientId && (
         <ClientDetail
-          key={client.clientId}
-          open={openModal}
+          key={selectedClientId}
+          open={isClientDetailOpen}
           params={{
-            clientId: client.clientId,
+            clientId: selectedClientId,
           }}
-          onOpenChange={setOpenModal}
+          onOpenChange={closeClientDetail}
           onClientUpdate={() => {}}
         />
       )}
 
       {selectedReceptionId && (
         <CompleteReceptionModal
-          open={completeModalOpen}
-          onOpenChange={setCompleteModalOpen}
+          open={isCompleteModalOpen}
+          onOpenChange={closeCompleteModal}
           receptionId={selectedReceptionId}
           onSuccess={() => {
-            setSelectedReceptionId(null);
+            closeCompleteModal();
           }}
         />
       )}

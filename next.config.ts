@@ -1,10 +1,19 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@messages": path.join(__dirname, "messages"),
+    };
+    return config;
+  },
 };
 
-const withNextIntl = createNextIntlPlugin("./src/shared/configs/i18/request.ts");
+const withNextIntl = createNextIntlPlugin(
+  "./src/shared/configs/i18/request.ts"
+);
 
 export default withNextIntl(nextConfig);

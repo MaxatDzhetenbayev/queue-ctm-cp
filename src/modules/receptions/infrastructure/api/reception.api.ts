@@ -9,8 +9,28 @@ import {
 import { axiosApi } from "@/shared/lib/client";
 
 // Получение списка приемов для менеджера
-export async function fetchManagerReceptions(): Promise<ReceptionsListType> {
-  const response = await axiosApi.get("/receptions/managers/me");
+export async function fetchManagerReceptions(params?: {
+  search?: string;
+  status?: string;
+  date?: string;
+}): Promise<ReceptionsListType> {
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+  if (params?.status) {
+    queryParams.append("status", params.status);
+  }
+  if (params?.date) {
+    queryParams.append("date", params.date);
+  }
+
+  const url = queryParams.toString()
+    ? `/receptions/managers/me?${queryParams.toString()}`
+    : "/receptions/managers/me";
+
+  const response = await axiosApi.get(url);
   return response.data;
 }
 

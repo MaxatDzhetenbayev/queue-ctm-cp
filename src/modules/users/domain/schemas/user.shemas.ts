@@ -5,6 +5,8 @@ export const UserProfileSchema = z.object({
   profile: z.object({
     id: z.string(),
     fullName: z.string(),
+    phone: z.string(),
+    iin: z.string(),
   }),
 });
 

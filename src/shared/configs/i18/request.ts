@@ -1,7 +1,7 @@
 import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
 
-import { routing } from "@i18/";
+import { routing } from "@i18/index";
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;

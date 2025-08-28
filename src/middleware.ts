@@ -2,7 +2,7 @@ import { jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 
-import { routing } from "@i18/";
+import { routing } from "@i18/index";
 
 const intlMiddleware = createMiddleware(routing);
 

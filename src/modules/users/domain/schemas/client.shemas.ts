@@ -4,8 +4,7 @@ import { ReceptionSchema } from "./repcetion.schemas";
 import { UserProfileSchema } from "./user.shemas";
 
 export const ClientInfoSchema = z.object({
-  id: z.string(),
-  profile: UserProfileSchema,
+  ...UserProfileSchema.shape,
   receptions: z.array(ReceptionSchema),
 });
 

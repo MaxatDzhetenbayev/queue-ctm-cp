@@ -1,15 +1,16 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useCreateDepartment } from "../../application/use-cases";
+import { useCreateDepartment } from "@/modules/departments/application/use-cases";
 import {
   CreateDepartmentSchema,
   CreateDepartmentType,
-} from "../../domain/schemas";
+} from "@/modules/departments/domain/schemas";
+import { useDepartmentFormStore } from "@/modules/departments/domain/stores";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -28,6 +29,7 @@ import { DepartmentFeaturesControl } from "./DepartmentFeaturesControl";
 export const CreateDepartmentModal = () => {
   const [open, setOpen] = React.useState(false);
   const createDepartmentMutation = useCreateDepartment();
+  const { departmentFeatures, resetForm } = useDepartmentFormStore();
 
   const {
     control,
@@ -46,10 +48,16 @@ export const CreateDepartmentModal = () => {
     },
   });
 
+  // Синхронизируем состояние формы с Zustand store
+  React.useEffect(() => {
+    setValue("departmentFeatures", departmentFeatures);
+  }, [departmentFeatures, setValue]);
+
   const onSubmit = (data: CreateDepartmentType) => {
     createDepartmentMutation.mutate(data, {
       onSuccess: () => {
         reset();
+        resetForm();
         setOpen(false);
       },
     });
@@ -99,10 +107,7 @@ export const CreateDepartmentModal = () => {
 
           <div className="space-y-2">
             <Label>Особенности отдела</Label>
-            <DepartmentFeaturesControl
-              control={control}
-              setFormValue={setValue}
-            />
+            <DepartmentFeaturesControl control={control} />
           </div>
 
           <DialogFooter>

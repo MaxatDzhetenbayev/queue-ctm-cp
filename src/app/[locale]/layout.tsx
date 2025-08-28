@@ -8,7 +8,7 @@ import { QueryProvider } from "@/shared/providers";
 
 import "@/shared/configs";
 import "@/styles/globals.css";
-import { routing } from "@i18/";
+import { routing } from "@i18/index";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

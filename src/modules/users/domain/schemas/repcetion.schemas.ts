@@ -33,15 +33,10 @@ export const ReceptionSchema = z.object({
   department: DepartmentSchema,
   center: CenterSchema,
   user: z.object({
-    id: z.string(),
     authType: z.enum(["OFFLINE", "TELEGRAM"]),
-    profile: UserProfileSchema,
+    ...UserProfileSchema.shape,
   }),
-  employee: z
-    .object({
-      profile: UserProfileSchema,
-    })
-    .optional(),
+  employee: UserProfileSchema.optional(),
 });
 
 export type StatusesType = z.infer<typeof ReceptionStatusSchema>;

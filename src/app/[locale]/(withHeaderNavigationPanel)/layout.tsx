@@ -7,7 +7,7 @@ export default function WithHeaderPanelLayout({
 }) {
   return (
     <>
-      <Header />
+      <Header showNavigation={true} />
       {children}
     </>
   );
