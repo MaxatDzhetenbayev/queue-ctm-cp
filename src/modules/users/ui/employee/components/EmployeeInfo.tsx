@@ -11,15 +11,17 @@ import { useForm } from "react-hook-form";
 
 import { useGetDepartmentList } from "@/modules/departments/application/use-cases";
 import {
+  useGetDepartmentFeatures,
   useGetServiceList,
   useUpdateEmployee,
-  useGetDepartmentFeatures,
 } from "@/modules/users/application/use-cases";
 import {
   EmployeeOneType,
   UpdateEmployeeSchema,
   UpdateEmployeeType,
 } from "@/modules/users/domain/schemas";
+import { Button } from "@/shared/components/ui/button";
+import { Label } from "@/shared/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -28,8 +30,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { Button } from "@/shared/components/ui/button";
-import { Label } from "@/shared/components/ui/label";
 import { KAZAKH_ALPHABET } from "@/shared/consts";
 
 import { ActivityHeatmap } from "./ActivityHeatmap";
