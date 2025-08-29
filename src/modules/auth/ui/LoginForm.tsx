@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -20,8 +19,8 @@ import {
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 
-import { useUserLogin } from "../application/use-cases/use-login";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useUserLogin } from "../application/use-cases/use-login";
 
 export const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -47,9 +46,9 @@ export const LoginForm = () => {
             <FormItem>
               <FormLabel>Имя пользователя</FormLabel>
               <FormControl>
-                <Input placeholder="dzhetenbaev" {...field} />
+                <Input placeholder="Логин" {...field} />
               </FormControl>
-              <FormDescription>Это ваше публичный логин.</FormDescription>
+              <FormDescription>Это ваш публичный логин.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
