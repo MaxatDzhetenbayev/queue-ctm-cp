@@ -148,7 +148,6 @@ export default async function middleware(req: NextRequest) {
 }
 export const config = {
   matcher: [
-    "/", // Root path
     "/(ru|kz)/:path*", // Locales
   ],
 };
