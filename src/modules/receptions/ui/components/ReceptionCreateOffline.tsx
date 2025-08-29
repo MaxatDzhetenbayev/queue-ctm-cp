@@ -43,6 +43,12 @@ export const ReceptionCreateOffline: React.FC = () => {
   const [clientData, setClientData] = React.useState<{
     clientId: string;
   } | null>(null);
+
+  // Используем ref для отслеживания, были ли поля заполнены пользователем
+  const userFilledFields = React.useRef({
+    full_name: false,
+    phone: false,
+  });
   const createOfflineMutation = useCreateOfflineReception();
   const isSubmitting = createOfflineMutation.isPending;
   const { data: services, isLoading: servicesLoading } =
@@ -80,15 +86,26 @@ export const ReceptionCreateOffline: React.FC = () => {
     if (userByIin) {
       setValue("full_name", userByIin.fullName);
       setValue("phone", userByIin.phone);
+      // Сбрасываем флаги, так как поля заполнены автоматически
+      userFilledFields.current.full_name = false;
+      userFilledFields.current.phone = false;
       setShowAdditionalFields(true);
     } else if (
       cleanIin.length === 12 &&
       !userLoading &&
       (userError || !userByIin)
     ) {
-      // Пользователь не найден (ошибка 404 или нет данных), показываем поля для заполнения с пустыми значениями
-      setValue("full_name", "");
-      setValue("phone", "");
+      // Пользователь не найден (ошибка 404 или нет данных), показываем поля для заполнения
+      // НЕ очищаем поля, если они уже заполнены пользователем
+      const currentFullName = watch("full_name");
+      const currentPhone = watch("phone");
+
+      if (!currentFullName && !userFilledFields.current.full_name) {
+        setValue("full_name", "");
+      }
+      if (!currentPhone && !userFilledFields.current.phone) {
+        setValue("phone", "");
+      }
       setValue("serviceId", "");
       setShowAdditionalFields(true);
     } else if (cleanIin.length !== 12) {
@@ -97,8 +114,11 @@ export const ReceptionCreateOffline: React.FC = () => {
       setValue("full_name", "");
       setValue("phone", "");
       setValue("serviceId", "");
+      // Сбрасываем флаги
+      userFilledFields.current.full_name = false;
+      userFilledFields.current.phone = false;
     }
-  }, [userByIin, cleanIin, userLoading, userError, setValue]);
+  }, [userByIin, cleanIin, userLoading, userError, setValue, watch]);
 
   const onSubmit = (data: CreateOfflineReceptionType) => {
     createOfflineMutation.mutate(data, {
@@ -116,6 +136,9 @@ export const ReceptionCreateOffline: React.FC = () => {
       setShowAdditionalFields(false);
       setClientModalOpen(false);
       setClientData(null);
+      // Сбрасываем флаги заполнения полей
+      userFilledFields.current.full_name = false;
+      userFilledFields.current.phone = false;
     }
   };
 
@@ -126,6 +149,9 @@ export const ReceptionCreateOffline: React.FC = () => {
       setShowAdditionalFields(false);
       setClientModalOpen(false);
       setClientData(null);
+      // Сбрасываем флаги заполнения полей
+      userFilledFields.current.full_name = false;
+      userFilledFields.current.phone = false;
     }
     setOpen(newOpen);
   };
@@ -238,7 +264,14 @@ export const ReceptionCreateOffline: React.FC = () => {
                   id="full_name"
                   placeholder="Введите ФИО клиента/Наименование"
                   disabled={isSubmitting || !!userByIin}
-                  {...register("full_name")}
+                  {...register("full_name", {
+                    onChange: (e) => {
+                      // Отмечаем, что поле было заполнено пользователем
+                      if (e.target.value.trim()) {
+                        userFilledFields.current.full_name = true;
+                      }
+                    },
+                  })}
                 />
                 {errors.full_name && (
                   <p className="text-sm text-red-500">
@@ -254,7 +287,14 @@ export const ReceptionCreateOffline: React.FC = () => {
                   type="tel"
                   placeholder="Введите номер телефона"
                   disabled={isSubmitting || !!userByIin}
-                  {...register("phone")}
+                  {...register("phone", {
+                    onChange: (e) => {
+                      // Отмечаем, что поле было заполнено пользователем
+                      if (e.target.value.trim()) {
+                        userFilledFields.current.phone = true;
+                      }
+                    },
+                  })}
                 />
                 {errors.phone && (
                   <p className="text-sm text-red-500">{errors.phone.message}</p>
