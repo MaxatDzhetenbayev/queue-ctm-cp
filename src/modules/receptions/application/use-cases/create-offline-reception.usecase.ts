@@ -7,7 +7,10 @@ export const useCreateOfflineReception = () => {
     mutationFn: (data: CreateOfflineReceptionType) =>
       createOfflineReception(data),
     customConfig: {
-      invalidateQueries: [["manager-receptions"]],
+      invalidateQueries: [
+        ["manager-receptions"],
+        { queryKey: ["client-info"], refetchType: "refetch" },
+      ],
     },
     toastConfig: {
       successMessage: "Прием успешно создан",

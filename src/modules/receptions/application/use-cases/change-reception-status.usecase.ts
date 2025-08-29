@@ -11,7 +11,10 @@ export const useChangeReceptionStatus = () => {
       updateReceptionStatus(data),
     onSuccess: () => {
       // Инвалидируем кеш приемов для обновления списка
-      queryClient.invalidateQueries({ queryKey: ["manager-receptions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["manager-receptions"],
+      });
+      queryClient.refetchQueries({ queryKey: ["client-info"] });
     },
   });
 };
