@@ -3,7 +3,6 @@
 import { Phone, Plus, User } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   CreateOfflineReceptionSchema,
@@ -35,6 +34,7 @@ import {
   useGetManagerServices,
   useGetUserByIin,
 } from "../../application/use-cases";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const ReceptionCreateOffline: React.FC = () => {
   const [open, setOpen] = React.useState(false);
