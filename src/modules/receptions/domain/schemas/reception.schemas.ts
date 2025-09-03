@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+// Схема для типов авторизации
+export const AuthTypeSchema = z.enum(["TELEGRAM", "OFFLINE"]);
+
 // Схема для названий (многоязычные)
 const NameSchema = z.object({
   kz: z.string(),
@@ -16,7 +19,7 @@ const UserProfileSchema = z.object({
 // Схема для пользователя
 const UserSchema = z.object({
   id: z.string(),
-  authType: z.string(),
+  authType: AuthTypeSchema,
   profile: UserProfileSchema,
 });
 
@@ -68,6 +71,14 @@ export const ReceptionSchema = z.object({
 // Схема для списка приемов (массив приемов)
 export const ReceptionsListSchema = z.array(ReceptionSchema);
 
+// Схема для пагинированного ответа
+export const PaginatedReceptionsSchema = z.object({
+  receptions: ReceptionsListSchema,
+  total: z.number(),
+  page: z.number(),
+  totalPages: z.number(),
+});
+
 // Схема для обновления статуса приема
 export const UpdateReceptionStatusSchema = z.object({
   id: z.string(),
@@ -98,9 +109,20 @@ export const CreateOfflineReceptionSchema = z.object({
   serviceId: z.string().min(1, "Выберите сервис"),
 });
 
+// Схема для запроса всех записей (админ)
+export const GetAllReceptionsQuerySchema = z.object({
+  search: z.string().optional(),
+  status: ReceptionStatusSchema.optional(),
+  date: z.string().optional(),
+  type: AuthTypeSchema.optional(),
+  page: z.number().optional(),
+  limit: z.number().optional(),
+});
+
 // Типы
 export type ReceptionType = z.infer<typeof ReceptionSchema>;
 export type ReceptionsListType = z.infer<typeof ReceptionsListSchema>;
+export type PaginatedReceptionsType = z.infer<typeof PaginatedReceptionsSchema>;
 export type ReceptionStatusType = z.infer<typeof ReceptionStatusSchema>;
 export type UpdateReceptionStatusType = z.infer<
   typeof UpdateReceptionStatusSchema
@@ -114,3 +136,7 @@ export type ManagerServicesType = z.infer<typeof ManagerServicesSchema>;
 export type UserByIinType = z.infer<typeof UserByIinSchema>;
 export type CenterType = z.infer<typeof CenterSchema>;
 export type DepartmentType = z.infer<typeof DepartmentSchema>;
+export type AuthType = z.infer<typeof AuthTypeSchema>;
+export type GetAllReceptionsQueryType = z.infer<
+  typeof GetAllReceptionsQuerySchema
+>;

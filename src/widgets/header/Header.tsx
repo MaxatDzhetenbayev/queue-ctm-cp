@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, Calendar, Home, Users } from "lucide-react";
+import { Building2, Calendar, FileText,Home, Users } from "lucide-react";
 import React from "react";
 
 import { LogoutButton } from "@/modules/auth/ui";
@@ -12,6 +12,7 @@ const navigation = [
   { name: "Персонал", href: "/admin/employee", icon: Users },
   { name: "Отделы", href: "/admin/departments", icon: Building2 },
   { name: "Отсутствия", href: "/admin/absences", icon: Calendar },
+  { name: "Записи", href: "/admin/receptions", icon: FileText },
 ];
 
 interface HeaderProps {

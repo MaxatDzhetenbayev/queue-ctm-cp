@@ -1,6 +1,8 @@
 import {
   CreateOfflineReceptionType,
+  GetAllReceptionsQueryType,
   ManagerServicesType,
+  PaginatedReceptionsType,
   ReceptionsListType,
   ReceptionType,
   UpdateReceptionStatusType,
@@ -96,5 +98,46 @@ export async function fetchManagerServices(): Promise<ManagerServicesType> {
  */
 export async function fetchUserByIin(iin: string): Promise<UserByIinType> {
   const response = await axiosApi.get(`/users/iin/${iin}`);
+  return response.data;
+}
+
+/**
+ * Получение всех записей (для админа)
+ * @param params - Параметры для фильтрации
+ * @param params.search - Поиск по ФИО
+ * @param params.status - Статус приема
+ * @param params.date - Дата приема
+ * @param params.type - Тип авторизации
+ * @returns Promise<PaginatedReceptionsType> - Пагинированный список приемов
+ */
+export async function fetchAllReceptions(
+  params?: GetAllReceptionsQueryType
+): Promise<PaginatedReceptionsType> {
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+  if (params?.status) {
+    queryParams.append("status", params.status);
+  }
+  if (params?.date) {
+    queryParams.append("date", params.date);
+  }
+  if (params?.type) {
+    queryParams.append("type", params.type);
+  }
+  if (params?.page) {
+    queryParams.append("page", params.page.toString());
+  }
+  if (params?.limit) {
+    queryParams.append("limit", params.limit.toString());
+  }
+
+  const url = queryParams.toString()
+    ? `/receptions?${queryParams.toString()}`
+    : "/receptions";
+
+  const response = await axiosApi.get(url);
   return response.data;
 }

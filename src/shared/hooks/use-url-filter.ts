@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 type ParamKeys<T extends readonly string[]> = {
   [K in T[number] as `selected${Capitalize<K>}`]: string | null;
@@ -27,29 +28,32 @@ export function useUrlFilter<const T extends readonly string[]>(
     return acc;
   }, {} as Record<string, string | null>);
 
-  const setPathParams = (key: T[number], value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+  const setPathParams = useCallback(
+    (key: T[number], value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
 
-    if (value && value.trim() !== "" && value.trim() !== "all") {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
+      if (value && value.trim() !== "" && value.trim() !== "all") {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
 
-    if (key !== "page" && params.has("page")) {
-      params.delete("page");
-    }
+      if (key !== "page" && params.has("page")) {
+        params.delete("page");
+      }
 
-    router.replace(`?${params.toString()}`);
-  };
+      router.replace(`?${params.toString()}`);
+    },
+    [searchParams, router]
+  );
 
-  const handleClearUrlFilters = () => {
+  const handleClearUrlFilters = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     keys.forEach((key) => {
       params.delete(key);
     });
     router.replace(`?${params.toString()}`);
-  };
+  }, [searchParams, router, keys]);
 
   return {
     ...selectedValues,
