@@ -110,11 +110,11 @@ export const processActivityData = (
         ? new Date(activity.endDate)
         : new Date();
 
-      // Создаем границы дня в локальном времени
+      // Создаем границы дня в UTC времени для корректного сравнения
       const dayStart = new Date(currentDate);
-      dayStart.setHours(0, 0, 0, 0);
+      dayStart.setUTCHours(0, 0, 0, 0);
       const dayEnd = new Date(currentDate);
-      dayEnd.setHours(23, 59, 59, 999);
+      dayEnd.setUTCHours(23, 59, 59, 999);
 
       return activityStart <= dayEnd && activityEnd >= dayStart;
     });
@@ -136,9 +136,9 @@ export const processActivityData = (
         const end = activity.endDate ? new Date(activity.endDate) : new Date();
 
         const dayStart = new Date(currentDate);
-        dayStart.setHours(0, 0, 0, 0);
+        dayStart.setUTCHours(0, 0, 0, 0);
         const dayEnd = new Date(currentDate);
-        dayEnd.setHours(23, 59, 59, 999);
+        dayEnd.setUTCHours(23, 59, 59, 999);
 
         const overlapStart = new Date(
           Math.max(start.getTime(), dayStart.getTime())
