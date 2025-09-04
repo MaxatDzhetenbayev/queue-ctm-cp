@@ -1,4 +1,8 @@
-import { ActivityStatus, EmployeeActivity } from "../schemas/activity.schemas";
+import {
+  ActivityStatus,
+  EmployeeActivity,
+  LeaveStatus,
+} from "../schemas/activity.schemas";
 
 export interface ActivityDay {
   date: string;
@@ -23,6 +27,21 @@ export const getStatusColor = (status: ActivityStatus | null): string => {
       return "bg-blue-500";
     default:
       return "bg-gray-200";
+  }
+};
+
+export const getActivityStatusLabel = (status: LeaveStatus): string => {
+  switch (status) {
+    case "WORKING":
+      return "В работе";
+    case "CANCELLED":
+      return "Отменен";
+    case "COMPLETED":
+      return "Завершен";
+    case "PLANNED":
+      return "Планируется";
+    default:
+      return "Неизвестно";
   }
 };
 

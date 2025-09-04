@@ -9,6 +9,7 @@ import {
   XCircle,
 } from "lucide-react";
 
+import { mapAbsenceType } from "@/modules/absences/domain/utils/absence.utils";
 import { Badge } from "@/shared/components/ui/badge";
 import {
   Card,
@@ -28,6 +29,7 @@ import {
   ActivityDay,
   formatDate,
   formatTime,
+  getActivityStatusLabel,
   getStatusLabel,
 } from "../../../domain/utils";
 
@@ -201,13 +203,13 @@ export const ActivityDetailsModal = ({
                               <div>
                                 <p className="text-blue-700">Тип</p>
                                 <p className="font-medium">
-                                  {activity.leave.type}
+                                  {mapAbsenceType(activity.leave.type)}
                                 </p>
                               </div>
                               <div>
                                 <p className="text-blue-700">Статус</p>
                                 <p className="font-medium">
-                                  {activity.leave.status}
+                                  {getActivityStatusLabel(activity.leave.status)}
                                 </p>
                               </div>
                               {activity.leave.comment && (
