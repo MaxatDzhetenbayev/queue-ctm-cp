@@ -64,7 +64,22 @@ const getStatusLabel = (status: string) => {
 };
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("ru-RU", {
+  // Извлекаем только дату из ISO строки (YYYY-MM-DD)
+  let dateOnly: string;
+
+  if (dateString.includes("T")) {
+    // Извлекаем дату до символа T
+    dateOnly = dateString.split("T")[0];
+  } else {
+    // Дата уже в формате YYYY-MM-DD
+    dateOnly = dateString;
+  }
+
+  // Парсим только дату без времени
+  const [year, month, day] = dateOnly.split("-").map(Number);
+  const localDate = new Date(year, month - 1, day); // month - 1, так как месяцы в JS начинаются с 0
+
+  return localDate.toLocaleDateString("ru-RU", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -74,8 +89,25 @@ const formatDate = (dateString: string) => {
 // Проверяем, прошла ли дата
 const isDatePassed = (dateString: string) => {
   const today = new Date();
-  const targetDate = new Date(dateString);
-  return targetDate < today;
+
+  // Извлекаем только дату из ISO строки
+  let dateOnly: string;
+  if (dateString.includes("T")) {
+    dateOnly = dateString.split("T")[0];
+  } else {
+    dateOnly = dateString;
+  }
+
+  // Парсим только дату без времени
+  const [year, month, day] = dateOnly.split("-").map(Number);
+  const targetDate = new Date(year, month - 1, day);
+
+  const todayLocal = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  return targetDate < todayLocal;
 };
 
 // Проверяем, является ли отсутствие завершенным
