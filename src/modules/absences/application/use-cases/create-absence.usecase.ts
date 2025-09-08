@@ -20,7 +20,6 @@ export const useCreateAbsence = (employeeId: string) => {
     },
     toastConfig: {
       successMessage: "Отсутствие успешно создано",
-      errorMessage: "Ошибка при создании отсутствия",
     },
   });
 };
