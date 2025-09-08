@@ -289,14 +289,15 @@ export const AbsenceDetailsModal = ({
               Дополнительная информация
             </h4>
             <div className="grid grid-cols-1 gap-4 text-sm">
-              {!isAbsenceCompleted(absenceDetails) && (
-                <div>
-                  <span className="text-blue-700">Осталось дней:</span>
-                  <span className="ml-2 text-blue-900">
-                    {absenceDetails.remainingDays}
-                  </span>
-                </div>
-              )}
+              {!isAbsenceCompleted(absenceDetails) &&
+                absenceDetails.remainingDays && (
+                  <div>
+                    <span className="text-blue-700">Осталось дней:</span>
+                    <span className="ml-2 text-blue-900">
+                      {absenceDetails.remainingDays}
+                    </span>
+                  </div>
+                )}
               {isAbsenceCompleted(absenceDetails) && (
                 <div>
                   <span className="text-blue-700">Завершено:</span>
