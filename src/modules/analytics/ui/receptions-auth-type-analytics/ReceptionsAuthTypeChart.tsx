@@ -43,7 +43,7 @@ export const ReceptionsAuthTypeChart = ({
     <ChartContainer
       id={chartId}
       config={chartConfig}
-      className={`mx-auto aspect-${aspectRatio} w-full max-w-[${maxWidth}px]`}
+      className={`mx-auto aspect-square w-full max-w-[${maxWidth}px] h-[${maxWidth}px]`}
     >
       <PieChart>
         <ChartTooltip

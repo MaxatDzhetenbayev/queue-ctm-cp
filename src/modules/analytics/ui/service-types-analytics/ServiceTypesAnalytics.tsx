@@ -69,7 +69,7 @@ export const ServiceTypesAnalytics = () => {
           chartConfig={chartConfig}
         />
       </div>
-      <div className="flex flex-1 justify-center pb-0">
+      <div className="flex  justify-center mt-8 max-h-[250px]">
         <ServiceTypeChart
           data={data}
           activeService={activeService}

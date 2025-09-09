@@ -91,7 +91,7 @@ export const ReceptionsAuthTypeAnalytics = () => {
           chartConfig={chartConfig}
         />
       </div>
-      <div className="flex flex-1 justify-center pb-0">
+      <div className="flex  mt-8 h-[250px]">
         <ReceptionsAuthTypeChart
           data={chartData}
           activeType={activeType}
