@@ -62,6 +62,7 @@ export const CreateEmployeeModal: React.FC = () => {
       profile: { fullName: "", phone: "" },
       cabinet: 0,
       table: 0,
+      role: "MANAGER",
       department_id: "",
       service_ids: [],
       employeeFeatures: [],
@@ -146,11 +147,11 @@ export const CreateEmployeeModal: React.FC = () => {
         setOpen(false);
         setSelectedDepartmentId("");
       } catch (error) {
-        console.error("Error creating employee:", error);
       } finally {
         setIsSubmitting(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isSubmitting, trigger, hasLetterFeature, createEmployeeMutation, reset]
   );
 
@@ -223,6 +224,7 @@ export const CreateEmployeeModal: React.FC = () => {
               type="text"
               placeholder="Введите логин работника"
               disabled={isSubmitting}
+              autoComplete="off"
               {...control.register("login")}
             />
             {errors.login && (
@@ -237,6 +239,7 @@ export const CreateEmployeeModal: React.FC = () => {
               type="password"
               placeholder="Введите пароль работника"
               disabled={isSubmitting}
+              autoComplete="new-password"
               {...control.register("password")}
             />
             {errors.password && (
@@ -244,29 +247,49 @@ export const CreateEmployeeModal: React.FC = () => {
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="department">Отдел *</Label>
-            <Select
-              value={selectedDepartmentId}
-              onValueChange={handleDepartmentChange}
-              disabled={isSubmitting}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Выберите отдел" />
-              </SelectTrigger>
-              <SelectContent>
-                {departments?.map((dept) => (
-                  <SelectItem key={dept.id} value={dept.id}>
-                    {dept.name.ru}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.department_id && (
-              <p className="text-sm text-red-500">
-                {errors.department_id.message}
-              </p>
-            )}
+          <div className="space-y-2 flex flex-col gap-2">
+            <div className="flex-1">
+              <Label htmlFor="department">Отдел *</Label>
+              <Select
+                value={selectedDepartmentId}
+                onValueChange={handleDepartmentChange}
+                disabled={isSubmitting}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Выберите отдел" />
+                </SelectTrigger>
+                <SelectContent>
+                  {departments?.map((dept) => (
+                    <SelectItem key={dept.id} value={dept.id}>
+                      {dept.name.ru}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.department_id && (
+                <p className="text-sm text-red-500">
+                  {errors.department_id.message}
+                </p>
+              )}
+            </div>
+            <div className="flex-1">
+              <Label htmlFor="role">Роль *</Label>
+              <Select
+                value={watch("role")}
+                onValueChange={(value) => setValue("role", value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Выберите роль" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MANAGER">Менеджер отдела</SelectItem>
+                  <SelectItem value="HEAD">Руководитель отдела</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.role && (
+                <p className="text-sm text-red-500">{errors.role.message}</p>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">
