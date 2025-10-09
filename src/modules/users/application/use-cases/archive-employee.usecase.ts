@@ -10,7 +10,6 @@ export const useArchiveEmployee = (employeeId: string) => {
     },
     toastConfig: {
       successMessage: "Сотрудник перенесен в архив",
-      errorMessage: "Не удалось отправить сотрудника в архив",
     },
   });
 };

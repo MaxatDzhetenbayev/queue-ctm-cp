@@ -10,7 +10,6 @@ export const useRestoreEmployee = (employeeId: string) => {
     },
     toastConfig: {
       successMessage: "Сотрудник восстановлен",
-      errorMessage: "Не удалось восстановить сотрудника",
     },
   });
 };

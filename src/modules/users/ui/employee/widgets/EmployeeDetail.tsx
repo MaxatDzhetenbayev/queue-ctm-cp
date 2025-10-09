@@ -152,21 +152,21 @@ export const EmployeeDetail = ({
           <button
             onClick={handleArchive}
             disabled={archiveMutation.isPending}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="px-4 py-2 cursor-pointer border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
             {archiveMutation.isPending ? "Архивируем..." : "В архив"}
           </button>
           <button
             onClick={handleRestore}
             disabled={restoreMutation.isPending}
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="px-4 py-2 cursor-pointer border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
             {restoreMutation.isPending ? "Восстанавливаем..." : "Восстановить"}
           </button>
           <button
             onClick={handleRemove}
             disabled={removeMutation.isPending}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+            className="px-4 py-2 cursor-pointer bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
           >
             {removeMutation.isPending ? "Удаляем..." : "Удалить"}
           </button>
