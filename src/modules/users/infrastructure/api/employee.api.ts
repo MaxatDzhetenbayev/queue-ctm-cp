@@ -93,3 +93,33 @@ export async function updateEmployee(
   );
   return response.data;
 }
+
+/**
+ * Отправить сотрудника в архив
+ * @param id - ID сотрудника
+ */
+export async function archiveEmployee(id: string): Promise<{ id: string }> {
+  const response = await axiosApi.post<{ id: string }>(
+    `/employee/${id}/archive`
+  );
+  return response.data;
+}
+
+/**
+ * Восстановить сотрудника из архива
+ * @param id - ID сотрудника
+ */
+export async function restoreEmployee(id: string): Promise<{ id: string }> {
+  const response = await axiosApi.post<{ id: string }>(
+    `/employee/${id}/restore`
+  );
+  return response.data;
+}
+
+/**
+ * Удалить сотрудника (NO_CONTENT)
+ * @param id - ID сотрудника
+ */
+export async function removeEmployee(id: string): Promise<void> {
+  await axiosApi.post(`/employee/${id}/remove`);
+}
