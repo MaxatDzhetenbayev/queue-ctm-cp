@@ -67,11 +67,9 @@ export const ReceptionCreateOffline: React.FC = () => {
   const iin = watch("iin")?.replace(/\s/g, "") || "";
   const isIinComplete = iin.length === 12;
 
-  const {
-    data: userByIin,
-    isLoading: userLoading,
-    error: userError,
-  } = useGetUserByIin(isIinComplete ? iin : null);
+  const { data: userByIin, isLoading: userLoading } = useGetUserByIin(
+    isIinComplete ? iin : null
+  );
 
   const showAdditionalFields = isIinComplete && !userLoading;
 

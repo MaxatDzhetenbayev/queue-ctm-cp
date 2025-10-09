@@ -3,7 +3,6 @@
 import { useCustomMutation } from "@/shared/lib/client";
 
 import { createDepartment } from "../../infrastructure/api/department.api";
-import { CreateDepartmentType } from "../../domain/schemas";
 
 export const useCreateDepartment = () => {
   return useCustomMutation({

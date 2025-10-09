@@ -32,7 +32,6 @@ export const ServiceTypeChart = ({
     innerRadius,
     strokeWidth,
     maxWidth,
-    aspectRatio,
     activeRadiusIncrease,
     activeInnerRadiusIncrease,
     activeOuterRadiusIncrease,

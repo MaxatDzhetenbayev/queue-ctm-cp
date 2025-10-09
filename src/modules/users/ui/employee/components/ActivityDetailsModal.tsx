@@ -154,7 +154,7 @@ export const ActivityDetailsModal = ({
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {day.activities.map((activity, index) => (
+                  {day.activities.map((activity) => (
                     <div
                       key={activity.id}
                       className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
@@ -209,7 +209,9 @@ export const ActivityDetailsModal = ({
                               <div>
                                 <p className="text-blue-700">Статус</p>
                                 <p className="font-medium">
-                                  {getActivityStatusLabel(activity.leave.status)}
+                                  {getActivityStatusLabel(
+                                    activity.leave.status
+                                  )}
                                 </p>
                               </div>
                               {activity.leave.comment && (

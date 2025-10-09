@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, CheckCircle, FileText, User, X } from "lucide-react";
+import { Calendar, CheckCircle, FileText, User } from "lucide-react";
 import React, { useState } from "react";
 
 import { Badge } from "@/shared/components/ui/badge";

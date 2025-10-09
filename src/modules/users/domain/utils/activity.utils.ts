@@ -88,7 +88,7 @@ export const processActivityData = (
   const currentYear = today.getFullYear();
 
   // Начало года
-  const startDate = new Date(currentYear, 0, 1);
+  // const startDate = new Date(currentYear, 0, 1);
   // Конец года
   const endDate = new Date(currentYear, 11, 31);
 

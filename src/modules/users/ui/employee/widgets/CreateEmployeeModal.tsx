@@ -146,7 +146,7 @@ export const CreateEmployeeModal: React.FC = () => {
         reset();
         setOpen(false);
         setSelectedDepartmentId("");
-      } catch (error) {
+      } catch {
       } finally {
         setIsSubmitting(false);
       }

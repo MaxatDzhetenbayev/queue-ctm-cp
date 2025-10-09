@@ -49,14 +49,9 @@ export const getAbsenceDetails = async (
   const validationResult = AbsenceDetailsSchema.safeParse(data);
 
   if (!validationResult.success) {
-    console.warn(
-      "Валидация данных отсутствия не прошла:",
-      validationResult.error
-    );
     // Возвращаем данные даже если валидация не прошла
     return data as AbsenceDetails;
   } else {
-    console.log("Данные отсутствия успешно валидированы");
     return validationResult.data;
   }
 };

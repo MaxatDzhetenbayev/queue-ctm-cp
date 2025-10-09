@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Edit2,
-  User,
-  X,
-} from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, Edit2, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -37,6 +30,7 @@ interface ClientModalProps {
     clientId: string;
   };
   onOpenChange: (open: boolean) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClientUpdate: (client: any) => void;
 }
 
@@ -62,7 +56,6 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
     handleSubmit,
     formState: { errors, isSubmitting, isDirty },
     reset,
-    watch,
   } = useForm<UpdateClientType>({
     resolver: zodResolver(UpdateClientSchema),
     defaultValues: {
@@ -71,9 +64,6 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
       iin: client?.profile.iin || "",
     },
   });
-
-  // Отслеживаем текущие значения формы
-  const watchedValues = watch();
 
   // Сброс формы при изменении client
   useEffect(() => {
@@ -92,7 +82,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
     try {
       await updateClientMutation.mutateAsync(data);
       setIsEditing(false);
-    } catch (error) {}
+    } catch {}
   };
 
   if (isLoading || isError || !client) return;

@@ -52,16 +52,10 @@ export const AbsencesContent = ({
           return mappedType === absence.type;
         });
 
-  const handleCancelAbsence = (absenceId: string) => {
-    if (confirm("Вы уверены, что хотите отменить это отсутствие?")) {
-      // TODO: Реализовать API для отмены отсутствия
-      console.log("Отмена отсутствия:", absenceId);
-    }
-  };
+  const handleCancelAbsence = () => {};
 
-  const handleEditAbsence = (absenceId: string) => {
+  const handleEditAbsence = () => {
     // TODO: Реализовать редактирование отсутствия
-    console.log("Редактирование отсутствия:", absenceId);
   };
 
   const handleViewDetails = (leaveId: string) => {

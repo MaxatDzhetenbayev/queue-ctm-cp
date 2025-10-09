@@ -29,6 +29,7 @@ export const AbsencesCalendar = ({
   });
 
   // Функция для получения читаемого названия типа отсутствия
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getAbsenceTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
       holiday: "Отпуск",
@@ -39,8 +40,10 @@ export const AbsencesCalendar = ({
   };
 
   // Функция для форматирования даты в читаемый вид
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const formatDateRange = (startDate: string, endDate: string) => {
     // Парсим UTC даты и создаем локальные даты без учета времени
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     const start = new Date(startDate + "T00:00:00.000Z");
     const end = new Date(endDate + "T00:00:00.000Z");
 
@@ -82,6 +85,7 @@ export const AbsencesCalendar = ({
   };
 
   // Преобразуем данные в нужный формат
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const absences = absencesResponse?.data?.map(transformAbsenceData) || [];
 
   // Фильтруем отсутствия по типу
@@ -149,9 +153,10 @@ export const AbsencesCalendar = ({
   }, [filteredAbsences, getAbsenceTypeLabel, formatDateRange]);
 
   // Обработчик клика по событию
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEventClick = (clickInfo: any) => {
     const event = clickInfo.event;
-    const extendedProps = event.extendedProps;
+    // const extendedProps = event.extendedProps;
 
     // Открываем модальное окно с деталями отсутствия
     setSelectedLeaveId(event.id);

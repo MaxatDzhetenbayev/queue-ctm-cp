@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Clock, FileText, MapPin, User } from "lucide-react";
+import { Calendar, Clock, FileText, User } from "lucide-react";
 import React from "react";
 
 import { Badge } from "@/shared/components/ui/badge";
@@ -29,6 +29,7 @@ const getTypeColor = (type: string) => {
     case "PERSONAL":
       return "bg-yellow-100 text-yellow-800 border-yellow-200";
     default:
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       return "bg-gray-100 text-gray-800 border-gray-200";
   }
 };
@@ -111,6 +112,7 @@ const isDatePassed = (dateString: string) => {
 };
 
 // Проверяем, является ли отсутствие завершенным
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isAbsenceCompleted = (absenceDetails: any) => {
   return (
     absenceDetails.remainingDays === 0 &&

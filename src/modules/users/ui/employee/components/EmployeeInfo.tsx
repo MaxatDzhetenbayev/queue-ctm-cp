@@ -21,7 +21,6 @@ import {
   UpdateEmployeeType,
 } from "@/modules/users/domain/schemas";
 import { Button } from "@/shared/components/ui/button";
-import { Label } from "@/shared/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -40,6 +39,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 interface EmployeeInfoProps {
   employee: EmployeeOneType | undefined;
   isEditing: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setEditedEmployee: Dispatch<any>;
 }
 
@@ -51,7 +51,7 @@ export const EmployeeInfo = ({
   const updateEmployeeMutation = useUpdateEmployee(employee?.id || "");
   const { data: services } = useGetServiceList();
   const { data: departments } = useGetDepartmentList();
-  const { data: activities, isLoading: activitiesLoading } =
+  const { data: activities } =
     useGetEmployeeActivity(employee?.id || "");
 
   const [selectedServices, setSelectedServices] = useState<string[]>(
@@ -122,8 +122,7 @@ export const EmployeeInfo = ({
         service_ids: selectedServices,
       });
       setEditedEmployee(null);
-    } catch (error) {
-      console.error("Ошибка при обновлении:", error);
+    } catch {
     }
   };
 

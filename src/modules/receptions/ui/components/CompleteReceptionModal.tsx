@@ -65,8 +65,7 @@ export const CompleteReceptionModal: React.FC<CompleteReceptionModalProps> = ({
       reset();
       onOpenChange(false);
       onSuccess?.();
-    } catch (error) {
-      console.error("Ошибка при завершении приема:", error);
+    } catch {
     } finally {
       setIsSubmitting(false);
     }

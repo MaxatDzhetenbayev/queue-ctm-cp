@@ -75,7 +75,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   const user = accessToken
-    ? await verifyToken(accessToken).catch((error) => {
+    ? await verifyToken(accessToken).catch(() => {
         return null;
       })
     : null;

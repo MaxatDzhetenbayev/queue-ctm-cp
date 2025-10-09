@@ -8,8 +8,6 @@ import { LoginSchemaType } from "../../domain/schemas/auth.shemas";
  * @returns {Promise<string>} Ответ.
  */
 export async function fetchUserLogin(data: LoginSchemaType): Promise<string> {
-  console.log(process.env.NEXT_PUBLIC_API_URL + "/auth/login");
-
   const response = await axiosApi.post<string>("/auth/login", data);
   return response.data;
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -25,6 +24,8 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
 import { DepartmentFeaturesControl } from "./DepartmentFeaturesControl";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const CreateDepartmentModal = () => {
   const [open, setOpen] = React.useState(false);

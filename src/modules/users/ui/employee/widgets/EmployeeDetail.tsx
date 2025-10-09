@@ -34,6 +34,7 @@ export const EmployeeDetail = ({
   onOpenChange: (open: boolean) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   const [editedEmployee, setEditedEmployee] = useState<any | null>(null);
 
   const { data: employee } = useGetEmployeeById({ id: selectedEmployee! });

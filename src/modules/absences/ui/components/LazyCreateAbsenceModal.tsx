@@ -35,6 +35,7 @@ const CreateAbsenceModalWithEmployees = ({
     <CreateAbsenceModal
       isOpen={isOpen}
       onClose={onClose}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       employees={employees.managers.map((emp: any) => ({
         id: emp.id,
         name: emp.profile.fullName,

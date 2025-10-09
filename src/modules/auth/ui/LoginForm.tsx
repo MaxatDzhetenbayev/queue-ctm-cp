@@ -19,8 +19,8 @@ import {
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useUserLogin } from "../application/use-cases/use-login";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({

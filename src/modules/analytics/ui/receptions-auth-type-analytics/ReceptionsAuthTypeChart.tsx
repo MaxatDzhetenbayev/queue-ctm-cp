@@ -30,7 +30,6 @@ export const ReceptionsAuthTypeChart = ({
     innerRadius,
     strokeWidth,
     maxWidth,
-    aspectRatio,
     activeRadiusIncrease,
     activeInnerRadiusIncrease,
     activeOuterRadiusIncrease,

@@ -1,4 +1,3 @@
-import { Building2 } from "lucide-react";
 import React from "react";
 
 interface DepartmentHeaderProps {

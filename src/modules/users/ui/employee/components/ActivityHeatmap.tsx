@@ -160,7 +160,7 @@ export const ActivityHeatmap = ({
                     monthPositions.push({ month: monthName, startCol, endCol });
                   }
 
-                  return monthPositions.map((pos, index) => (
+                  return monthPositions.map((pos) => (
                     <div
                       key={pos.month}
                       className="text-xs text-gray-500 text-center absolute top-0"
