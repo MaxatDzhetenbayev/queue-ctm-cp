@@ -4,7 +4,12 @@ import clsx from "clsx";
 import { Edit2, User } from "lucide-react";
 import React, { useState } from "react";
 
-import { useGetEmployeeById } from "@/modules/users/application/use-cases";
+import {
+  useArchiveEmployee,
+  useGetEmployeeById,
+  useRemoveEmployee,
+  useRestoreEmployee,
+} from "@/modules/users/application/use-cases";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +28,6 @@ import { EmployeeReceptions } from "./EmployeeReceptions";
 
 import { EmployeeInfo } from "../components/EmployeeInfo";
 
-
 export const EmployeeDetail = ({
   open,
   selectedEmployee,
@@ -39,6 +43,38 @@ export const EmployeeDetail = ({
 
   const { data: employee } = useGetEmployeeById({ id: selectedEmployee! });
   const [activeTab, setActiveTab] = useState("info");
+
+  const archiveMutation = useArchiveEmployee(selectedEmployee || "");
+  const restoreMutation = useRestoreEmployee(selectedEmployee || "");
+  const removeMutation = useRemoveEmployee(selectedEmployee || "");
+
+  const handleArchive = async () => {
+    if (!selectedEmployee) return;
+    try {
+      await archiveMutation.mutateAsync(undefined as unknown as void);
+      onOpenChange(false);
+    } catch {}
+  };
+
+  const handleRestore = async () => {
+    if (!selectedEmployee) return;
+    try {
+      await restoreMutation.mutateAsync(undefined as unknown as void);
+      onOpenChange(false);
+    } catch {}
+  };
+
+  const handleRemove = async () => {
+    if (!selectedEmployee) return;
+    const confirm = window.confirm(
+      "Удалить сотрудника без возможности восстановления?"
+    );
+    if (!confirm) return;
+    try {
+      await removeMutation.mutateAsync(undefined as unknown as void);
+      onOpenChange(false);
+    } catch {}
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -109,6 +145,31 @@ export const EmployeeDetail = ({
               />
             </TabsContent>
           </Tabs>
+        </div>
+
+        {/* Bottom action bar */}
+        <div className="mt-4 pt-4 border-t flex items-center justify-end gap-2 px-3">
+          <button
+            onClick={handleArchive}
+            disabled={archiveMutation.isPending}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            {archiveMutation.isPending ? "Архивируем..." : "В архив"}
+          </button>
+          <button
+            onClick={handleRestore}
+            disabled={restoreMutation.isPending}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            {restoreMutation.isPending ? "Восстанавливаем..." : "Восстановить"}
+          </button>
+          <button
+            onClick={handleRemove}
+            disabled={removeMutation.isPending}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+          >
+            {removeMutation.isPending ? "Удаляем..." : "Удалить"}
+          </button>
         </div>
       </DialogContent>
     </Dialog>
