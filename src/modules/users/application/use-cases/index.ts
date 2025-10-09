@@ -11,3 +11,6 @@ export { useGetEmployeeActivity } from "./get-employee-activity.usecase";
 export { useCreateEmployee } from "./create-employee.usecase";
 export { useGetDepartmentFeatures } from "./get-department-features.usecase";
 export { useGetUserProfile } from "./get-user-profile.usecase";
+export { useArchiveEmployee } from "./archive-employee.usecase";
+export { useRestoreEmployee } from "./restore-employee.usecase";
+export { useRemoveEmployee } from "./remove-employee.usecase";
