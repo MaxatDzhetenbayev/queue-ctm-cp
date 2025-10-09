@@ -8,16 +8,26 @@ export const useGetEmployeeList = ({
   query,
   page,
   limit,
+  status,
 }: {
   departmentId?: string | null;
   serviceId?: string | null;
   query?: string;
   page?: number;
   limit?: number;
+  status?: string | null;
 }) => {
   return useQuery<EmployeeType>({
-    queryKey: ["employee-list", departmentId, serviceId, query, page, limit],
+    queryKey: [
+      "employee-list",
+      departmentId,
+      serviceId,
+      query,
+      page,
+      limit,
+      status,
+    ],
     queryFn: () =>
-      fetchEmployeeList(page, departmentId, serviceId, query, limit),
+      fetchEmployeeList(page, departmentId, serviceId, query, limit, status),
   });
 };

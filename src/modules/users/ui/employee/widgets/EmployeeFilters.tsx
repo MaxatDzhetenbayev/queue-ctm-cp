@@ -15,7 +15,11 @@ import {
 interface EmployeeFiltersProps {
   selectedDepartment: string | null;
   selectedService: string | null;
-  setPathParams: (key: "department" | "service", value: string) => void;
+  selectedStatus?: string | null;
+  setPathParams: (
+    key: "department" | "service" | "status",
+    value: string
+  ) => void;
   departments: DepartmentType[] | undefined;
   services: ServiceType[] | undefined;
 }
@@ -23,6 +27,7 @@ interface EmployeeFiltersProps {
 export const EmployeeFilters = ({
   selectedDepartment,
   selectedService,
+  selectedStatus,
   setPathParams,
   departments,
   services,
@@ -64,6 +69,22 @@ export const EmployeeFilters = ({
                 {service.name.ru}
               </SelectItem>
             ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <Select
+        value={selectedStatus ?? ""}
+        onValueChange={(value) => setPathParams("status", value)}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Выберите статус" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Все статусы</SelectLabel>
+            <SelectItem value="all">Все статусы</SelectItem>
+            <SelectItem value="ACTIVE">Активные</SelectItem>
+            <SelectItem value="ARCHIVED">Архив</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -20,8 +20,13 @@ import { EmployeeCards } from "../components/cards/EmployeeCards";
 import { EmployeeHeaderTitle } from "../components/EmployeeHeaderTitle";
 
 export const EmployeeList = () => {
-  const { selectedDepartment, selectedService, selectedPage, setPathParams } =
-    useUrlFilter(["department", "service", "page"]);
+  const {
+    selectedDepartment,
+    selectedService,
+    selectedStatus,
+    selectedPage,
+    setPathParams,
+  } = useUrlFilter(["department", "service", "status", "page"]);
   const { inputValue, setInputValue, debouncedQuery } = useSearchQuery({
     searchKey: "query",
     deleteKeys: ["page"],
@@ -39,6 +44,7 @@ export const EmployeeList = () => {
     query: debouncedQuery,
     limit: 9,
     page: Number(selectedPage) || 1,
+    status: selectedStatus,
   });
 
   const { currentPage, totalPages, goToPage } = useEmployeePagination(
@@ -64,6 +70,7 @@ export const EmployeeList = () => {
             <EmployeeFilters
               selectedDepartment={selectedDepartment}
               selectedService={selectedService}
+              selectedStatus={selectedStatus}
               setPathParams={setPathParams}
               departments={departments}
               services={services}
