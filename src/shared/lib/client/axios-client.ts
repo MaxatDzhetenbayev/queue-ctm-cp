@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export const axiosApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -7,21 +7,30 @@ export const axiosApi = axios.create({
 
 let isRefreshing = false;
 let failedQueue: {
-  resolve: (value?: unknown) => void;
+  resolve: (value: AxiosResponse) => void;
   reject: (error: unknown) => void;
   config: AxiosRequestConfig;
 }[] = [];
 
-const processQueue = (error: unknown, token: string | null = null) => {
+const processQueue = (error: unknown) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
     } else {
-      prom.resolve(token);
+      // Повторяем оригинальный запрос с обновленным токеном
+      axiosApi(prom.config).then(prom.resolve).catch(prom.reject);
     }
   });
 
   failedQueue = [];
+};
+
+const redirectToLogin = () => {
+  // Проверяем, что мы в браузере (не в SSR)
+  if (typeof window !== "undefined") {
+    const locale = window.location.pathname.split("/")[1];
+    window.location.href = `/${locale}/login`;
+  }
 };
 
 // Интерцептор ответа
@@ -32,18 +41,13 @@ axiosApi.interceptors.response.use(
       _retry?: boolean;
     };
 
+    // Обрабатываем только 401 ошибки для refresh токена
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         // ждем пока другой запрос обновит токен
         return new Promise((resolve, reject) => {
           failedQueue.push({
-            resolve: () => {
-              // пробуем повторить запрос
-              originalRequest.headers = {
-                ...originalRequest.headers,
-              };
-              resolve(axiosApi(originalRequest));
-            },
+            resolve,
             reject,
             config: originalRequest,
           });
@@ -56,22 +60,17 @@ axiosApi.interceptors.response.use(
       try {
         await axiosApi.post("/auth/refresh");
 
-        processQueue(null, null);
-
+        // Успешно обновили токен - обрабатываем очередь и повторяем запрос
+        processQueue(null);
         return axiosApi(originalRequest);
-      } catch (err) {
-        processQueue(err, null);
+      } catch (refreshError) {
+        // Не удалось обновить токен - очищаем очередь и редиректим на логин
+        processQueue(refreshError);
+        redirectToLogin();
+        return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
       }
-    }
-
-    if (
-      (error.response?.status === 401 || error.response?.status === 403) &&
-      !originalRequest._retry
-    ) {
-      const locale = window.location.pathname.split("/")[1];
-      window.location.href = `/${locale}/login`;
     }
 
     return Promise.reject(error);
