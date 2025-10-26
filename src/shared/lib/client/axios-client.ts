@@ -43,6 +43,12 @@ axiosApi.interceptors.response.use(
 
     // Обрабатываем только 401 ошибки для refresh токена
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // Если это запрос на refresh токен, сразу редиректим на логин
+      if (originalRequest.url?.includes("/auth/refresh")) {
+        redirectToLogin();
+        return Promise.reject(error);
+      }
+
       if (isRefreshing) {
         // ждем пока другой запрос обновит токен
         return new Promise((resolve, reject) => {
