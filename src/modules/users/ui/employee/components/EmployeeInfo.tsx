@@ -16,6 +16,7 @@ import {
   useUpdateEmployee,
 } from "@/modules/users/application/use-cases";
 import {
+  EDITABLE_EMPLOYEE_ROLES,
   EmployeeOneType,
   UpdateEmployeeSchema,
   UpdateEmployeeType,
@@ -75,8 +76,12 @@ export const EmployeeInfo = ({
       department_id: employee?.employeeInfo.department.id || "",
       table: employee?.employeeInfo.table || 0,
       cabinet: employee?.employeeInfo.cabinet || 0,
-      login: "",
+      login: employee?.login ?? "",
       password: "",
+      role:
+        employee?.role && EDITABLE_EMPLOYEE_ROLES.includes(employee.role as "MANAGER" | "HEAD")
+          ? (employee.role as "MANAGER" | "HEAD")
+          : "MANAGER",
       employeeFeatures: employee?.employeeFeatures || [],
     },
   });
@@ -103,8 +108,12 @@ export const EmployeeInfo = ({
         department_id: employee.employeeInfo.department.id || "",
         table: employee.employeeInfo.table || 0,
         cabinet: employee.employeeInfo.cabinet || 0,
-        login: "",
+        login: employee.login ?? "",
         password: "",
+        role:
+          employee.role && EDITABLE_EMPLOYEE_ROLES.includes(employee.role as "MANAGER" | "HEAD")
+            ? (employee.role as "MANAGER" | "HEAD")
+            : "MANAGER",
         employeeFeatures: employee.employeeFeatures || [],
       });
 
@@ -116,11 +125,15 @@ export const EmployeeInfo = ({
   const onSubmit = async (data: UpdateEmployeeType) => {
     if (!employee) return;
 
+    const payload: UpdateEmployeeType = {
+      ...data,
+      service_ids: selectedServices,
+    };
+    if (payload.login === "") delete payload.login;
+    if (payload.password === "") delete payload.password;
+
     try {
-      await updateEmployeeMutation.mutateAsync({
-        ...data,
-        service_ids: selectedServices,
-      });
+      await updateEmployeeMutation.mutateAsync(payload);
       setEditedEmployee(null);
     } catch {
     }
@@ -285,6 +298,44 @@ export const EmployeeInfo = ({
               ) : (
                 <p className="text-gray-900">
                   {employee?.employeeInfo.department.name.ru}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <Briefcase className="h-5 min-w-5 text-gray-400 mt-1" />
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Роль
+              </label>
+              {isEditing ? (
+                <>
+                  <Select
+                    value={watch("role") ?? "MANAGER"}
+                    onValueChange={(value: "MANAGER" | "HEAD") =>
+                      setValue("role", value)
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Выберите роль" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="MANAGER">Специалист</SelectItem>
+                      <SelectItem value="HEAD">Руководитель отдела</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.role && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.role.message}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p className="text-gray-900">
+                  {employee?.role === "HEAD"
+                    ? "Руководитель отдела"
+                    : "Специалист"}
                 </p>
               )}
             </div>

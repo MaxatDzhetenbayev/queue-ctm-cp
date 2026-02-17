@@ -14,8 +14,13 @@ const EmployeeInfoSchema = z.object({
   center: CenterSchema,
 });
 
+/** Роли, доступные при редактировании сотрудника (специалист / руководитель отдела). */
+export const EDITABLE_EMPLOYEE_ROLES = ["MANAGER", "HEAD"] as const;
+export type EditableEmployeeRole = (typeof EDITABLE_EMPLOYEE_ROLES)[number];
+
 const EmployeeOneSchema = z.object({
   login: z.string(),
+  role: z.enum(["REGULAR", "MANAGER", "ADMIN", "SUPERADMIN", "HEAD"]).optional(),
   ...UserProfileSchema.shape,
   employeeInfo: EmployeeInfoSchema,
   employeeServices: z.array(
@@ -56,6 +61,13 @@ export const UpdateEmployeeSchema = z.object({
   cabinet: z.number().optional(),
   password: z.string().optional(),
   login: z.string().optional(),
+  role: z
+    .enum(EDITABLE_EMPLOYEE_ROLES, {
+      errorMap: () => ({
+        message: "Роль может быть только MANAGER (специалист) или HEAD (руководитель отдела)",
+      }),
+    })
+    .optional(),
   employeeFeatures: z
     .array(
       z.object({
