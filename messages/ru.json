@@ -1,4 +1,15 @@
 {
   "welcome": "Добро пожаловать",
-  "goodbye": "До свидания"
+  "goodbye": "До свидания",
+  "report": {
+    "downloadReport": "Скачать отчёт",
+    "modal": {
+      "title": "Отчёт за период",
+      "startDate": "Дата начала",
+      "endDate": "Дата окончания",
+      "download": "Скачать",
+      "errorInvalidPeriod": "Дата окончания не может быть раньше даты начала",
+      "errorRequired": "Укажите обе даты"
+    }
+  }
 }

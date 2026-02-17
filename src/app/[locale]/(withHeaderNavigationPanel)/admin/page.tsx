@@ -1,8 +1,17 @@
-import React from "react";
+"use client";
+
+import { Download } from "lucide-react";
+import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { AnalyticsWrapper } from "@/modules/analytics/ui";
+import { DownloadReportModal } from "@/modules/analytics/ui/components";
+import { Button } from "@/shared/components/ui/button";
 
 const AdminPage = () => {
+  const t = useTranslations("report");
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+
   return (
     <div>
       <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
@@ -14,28 +23,21 @@ const AdminPage = () => {
             Обзор деятельности центров карьеры
           </p>
         </div>
-        {/* <div className=" flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-          <div className="flex items-center space-x-3 bg-white px-4 py-2 rounded-lg border border-gray-200">
-            <Calendar className="h-5 w-5 text-gray-400" />
-            <input
-              type="date"
-              // value={dateRange.startDate}
-
-              className="border-none focus:ring-0 text-sm"
-            />
-            <span className="text-gray-400">—</span>
-            <input type="date" className="border-none focus:ring-0 text-sm" />
-          </div>
-
-          <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            <Download className="h-4 w-4" />
-            <span>Скачать отчет</span>
-          </button>
-        </div> */}
+        <Button
+          onClick={() => setReportModalOpen(true)}
+          className="flex items-center space-x-2"
+        >
+          <Download className="h-4 w-4" />
+          <span>{t("downloadReport")}</span>
+        </Button>
       </div>
       <div className="mt-4">
         <AnalyticsWrapper />
       </div>
+      <DownloadReportModal
+        open={reportModalOpen}
+        onOpenChange={setReportModalOpen}
+      />
     </div>
   );
 };
