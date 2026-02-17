@@ -4,6 +4,7 @@ import {
   MoreHorizontalIcon,
 } from "lucide-react";
 import * as React from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
@@ -69,6 +70,8 @@ function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const t = useTranslations("common.pagination");
+  const locale = useLocale();
   return (
     <PaginationLink
       aria-label="Go to previous page"
@@ -77,7 +80,7 @@ function PaginationPrevious({
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">Назад</span>
+      <span className="hidden sm:block">{t("prev")}</span>
     </PaginationLink>
   );
 }
@@ -86,6 +89,7 @@ function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const t = useTranslations("common.pagination");
   return (
     <PaginationLink
       aria-label="Go to next page"
@@ -93,7 +97,7 @@ function PaginationNext({
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span className="hidden sm:block">Вперед</span>
+      <span className="hidden sm:block">{t("next")}</span>
       <ChevronRightIcon />
     </PaginationLink>
   );

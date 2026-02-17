@@ -1,6 +1,8 @@
 "use client";
 
-import { Building2, Calendar, FileText, Home, Menu, Users } from "lucide-react";
+import { Building2, Calendar, FileText, Globe, Home, Menu, Users } from "lucide-react";
+import { usePathname as useNextPathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import React, { useState } from "react";
 
 import { LogoutButton } from "@/modules/auth/ui";
@@ -17,15 +19,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/shared/components/ui/sheet";
-import { Link } from "@/shared/configs/i18";
-
-const navigation = [
-  { name: "Главная", href: "/admin", icon: Home },
-  { name: "Персонал", href: "/admin/employee", icon: Users },
-  { name: "Отделы", href: "/admin/departments", icon: Building2 },
-  { name: "Отсутствия", href: "/admin/absences", icon: Calendar },
-  { name: "Записи", href: "/admin/receptions", icon: FileText },
-];
+import { Link, useRouter } from "@/shared/configs/i18";
 
 // Функция для получения инициалов из полного имени
 const getInitials = (fullName: string) => {
@@ -43,6 +37,27 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ showNavigation = true }) => {
   const { data: userProfile } = useGetUserProfile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const t = useTranslations("header");
+  const locale = useLocale();
+  const router = useRouter();
+  const fullPathname = useNextPathname();
+
+  const navigation = [
+    { name: t("navigation.home"), href: "/admin", icon: Home, key: "home" },
+    { name: t("navigation.employees"), href: "/admin/employee", icon: Users, key: "employees" },
+    { name: t("navigation.departments"), href: "/admin/departments", icon: Building2, key: "departments" },
+    { name: t("navigation.absences"), href: "/admin/absences", icon: Calendar, key: "absences" },
+    { name: t("navigation.receptions"), href: "/admin/receptions", icon: FileText, key: "receptions" },
+  ];
+
+  const handleLanguageChange = (newLocale: string) => {
+    // Из полного URL убираем текущий префикс локали (ru|kz),
+    // чтобы избежать дублирования вида `/ru/ru/...`
+    const normalizedPathname =
+      fullPathname.replace(/^\/(ru|kz)(?=\/|$)/, "") || "/";
+
+    router.replace(normalizedPathname, { locale: newLocale });
+  };
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
@@ -61,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({ showNavigation = true }) => {
 
                 return (
                   <Link
-                    key={item.name}
+                    key={item.key}
                     href={item.href}
                     className="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-100"
                   >
@@ -73,8 +88,31 @@ export const Header: React.FC<HeaderProps> = ({ showNavigation = true }) => {
             </div>
           )}
 
-          {/* Правая часть: аватар пользователя и мобильное меню */}
+          {/* Правая часть: переключатель языка, аватар пользователя и мобильное меню */}
           <div className="flex items-center space-x-4">
+            {/* Переключатель языка */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                  <Globe className="h-5 w-5 text-gray-600" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => handleLanguageChange("ru")}
+                  className={locale === "ru" ? "bg-gray-100" : ""}
+                >
+                  {t("language.russian")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleLanguageChange("kz")}
+                  className={locale === "kz" ? "bg-gray-100" : ""}
+                >
+                  {t("language.kazakh")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {/* Аватар пользователя с dropdown */}
             {userProfile && (
               <DropdownMenu>
@@ -111,7 +149,7 @@ export const Header: React.FC<HeaderProps> = ({ showNavigation = true }) => {
 
                       return (
                         <Link
-                          key={item.name}
+                          key={item.key}
                           href={item.href}
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-100"
@@ -121,6 +159,34 @@ export const Header: React.FC<HeaderProps> = ({ showNavigation = true }) => {
                         </Link>
                       );
                     })}
+                    {/* Переключатель языка в мобильном меню */}
+                    <div className="border-t pt-4 mt-4">
+                      <div className="px-3 py-2 text-sm font-medium text-gray-700 mb-2">
+                        {t("language.switch")}
+                      </div>
+                      <button
+                        onClick={() => {
+                          handleLanguageChange("ru");
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors hover:bg-gray-100 ${
+                          locale === "ru" ? "bg-gray-100 font-medium" : ""
+                        }`}
+                      >
+                        {t("language.russian")}
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleLanguageChange("kz");
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors hover:bg-gray-100 ${
+                          locale === "kz" ? "bg-gray-100 font-medium" : ""
+                        }`}
+                      >
+                        {t("language.kazakh")}
+                      </button>
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>

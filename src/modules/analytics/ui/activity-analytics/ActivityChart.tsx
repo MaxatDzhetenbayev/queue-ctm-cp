@@ -1,6 +1,7 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   ChartConfig,
@@ -21,6 +22,8 @@ export const ActivityChart = ({ data, chartConfig }: ActivityChartProps) => {
   const { height, margin, tooltipWidth } = activityConfig.MAIN_CONFIG.chart;
   const { tooltip: tooltipFormat, axis: axisFormat } =
     activityConfig.MAIN_CONFIG.dateFormat;
+  const locale = useLocale();
+  const t = useTranslations("analytics.activity");
 
   return (
     <ChartContainer
@@ -37,7 +40,10 @@ export const ActivityChart = ({ data, chartConfig }: ActivityChartProps) => {
           minTickGap={32}
           tickFormatter={(value) => {
             const date = new Date(value);
-            return date.toLocaleDateString("ru-RU", axisFormat);
+            return date.toLocaleDateString(
+              locale === "kz" ? "kk-KZ" : "ru-RU",
+              axisFormat
+            );
           }}
         />
         <ChartTooltip
@@ -47,15 +53,15 @@ export const ActivityChart = ({ data, chartConfig }: ActivityChartProps) => {
               formatter={(_, __, item) => (
                 <>
                   <div>
-                    📑 Записи за этот день: <b>{item.payload.count}</b>
+                    📑 {t("recordsPerDay")} <b>{item.payload.count}</b>
                   </div>
                 </>
               )}
               labelFormatter={(value) => {
                 return new Date(value).toLocaleDateString(
-                  "ru-RU",
-                  tooltipFormat
-                );
+                    locale === "kz" ? "kk-KZ" : "ru-RU",
+                    tooltipFormat
+                  );
               }}
             />
           }

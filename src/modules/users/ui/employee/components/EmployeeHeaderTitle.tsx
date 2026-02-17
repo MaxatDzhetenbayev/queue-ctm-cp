@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface EmployeeHeaderTitleProps {
@@ -5,13 +8,15 @@ interface EmployeeHeaderTitleProps {
 }
 
 export const EmployeeHeaderTitle = ({ total }: EmployeeHeaderTitleProps) => {
+  const t = useTranslations("employee");
+  
   return (
     <div className="flex items-center justify-between">
       <h1 className="text-3xl font-bold text-gray-900">
-        Управление персоналом
+        {t("title")}
       </h1>
       <div className="text-sm text-gray-500">
-        Всего сотрудников: {total || 0}
+        {t("total")}: {total || 0}
       </div>
     </div>
   );

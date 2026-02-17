@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import { ChartConfig } from "@/shared/components/ui/chart";
 
@@ -17,6 +18,7 @@ import { activityConfig } from "../../domain/configs";
 
 export const ActivityAnalytics = () => {
   const { data, isLoading, isError } = useGetActivityAnalytics();
+  const t = useTranslations("analytics.activityChart");
 
   // Состояние загрузки
   if (isLoading) {
@@ -26,7 +28,7 @@ export const ActivityAnalytics = () => {
   // Состояние ошибки
   if (isError) {
     return (
-      <StateWrapper title={activityConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <ErrorState />
       </StateWrapper>
     );
@@ -35,7 +37,7 @@ export const ActivityAnalytics = () => {
   // Проверка на пустые данные
   if (!data || data.length === 0) {
     return (
-      <StateWrapper title={activityConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <EmptyState />
       </StateWrapper>
     );
@@ -50,7 +52,7 @@ export const ActivityAnalytics = () => {
   };
 
   return (
-    <StateWrapper title={activityConfig.MAIN_CONFIG.title}>
+    <StateWrapper title={t("title")}>
       <div className="px-2 pt-6 sm:p-6">
         <ActivityChart data={data} chartConfig={chartConfig} />
       </div>

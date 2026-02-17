@@ -3,6 +3,7 @@
 import { Phone, Plus, User } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   CreateOfflineReceptionSchema,
@@ -37,6 +38,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const ReceptionCreateOffline: React.FC = () => {
+  const t = useTranslations("receptions.create.offline");
+  const locale = useLocale();
   const [open, setOpen] = React.useState(false);
   const [clientModalOpen, setClientModalOpen] = React.useState(false);
   const [clientData, setClientData] = React.useState<{
@@ -122,25 +125,23 @@ export const ReceptionCreateOffline: React.FC = () => {
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
-          Создать прием
+          {t("button")}
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Создать офлайн прием</DialogTitle>
-          <DialogDescription>
-            Заполните информацию о клиенте для создания приема.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-4">
           {/* ИИН поле */}
           <div className="space-y-2">
-            <Label htmlFor="iin">ИИН/БИН *</Label>
+            <Label htmlFor="iin">{t("iinLabel")}</Label>
             <Input
               id="iin"
-              placeholder="Введите ИИН (12 цифр)"
+              placeholder={t("iinPlaceholder")}
               disabled={createOfflineMutation.isPending}
               maxLength={12}
               {...register("iin", {
@@ -155,7 +156,7 @@ export const ReceptionCreateOffline: React.FC = () => {
 
             {/* Индикатор загрузки */}
             {userLoading && (
-              <p className="text-sm text-blue-500">Поиск пользователя...</p>
+              <p className="text-sm text-blue-500">{t("userLoading")}</p>
             )}
 
             {/* Найденный пользователь */}
@@ -164,7 +165,7 @@ export const ReceptionCreateOffline: React.FC = () => {
                 <div className="flex items-center space-x-2 text-green-800">
                   <User className="h-4 w-4" />
                   <span className="font-medium">
-                    Найден существующий клиент:
+                    {t("userFoundTitle")}
                   </span>
                 </div>
                 <div className="mt-2 space-y-1 text-sm text-green-700">
@@ -192,11 +193,11 @@ export const ReceptionCreateOffline: React.FC = () => {
                 <div className="flex items-center space-x-2 text-blue-800">
                   <User className="h-4 w-4" />
                   <span className="font-medium">
-                    Пользователь не найден в базе данных
+                    {t("userNotFoundTitle")}
                   </span>
                 </div>
                 <div className="mt-1 text-sm text-blue-700">
-                  Заполните данные для создания нового клиента
+                  {t("userNotFoundDescription")}
                 </div>
               </div>
             )}
@@ -206,10 +207,10 @@ export const ReceptionCreateOffline: React.FC = () => {
           {showAdditionalFields && !userByIin && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="full_name">ФИО клиента/Наименование *</Label>
+                <Label htmlFor="full_name">{t("fullNameLabel")}</Label>
                 <Input
                   id="full_name"
-                  placeholder="Введите ФИО клиента/Наименование"
+                  placeholder={t("fullNamePlaceholder")}
                   disabled={createOfflineMutation.isPending}
                   {...register("full_name")}
                 />
@@ -221,11 +222,11 @@ export const ReceptionCreateOffline: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Телефон *</Label>
+                <Label htmlFor="phone">{t("phoneLabel")}</Label>
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="Введите номер телефона"
+                  placeholder={t("phonePlaceholder")}
                   disabled={createOfflineMutation.isPending}
                   {...register("phone")}
                 />
@@ -239,18 +240,18 @@ export const ReceptionCreateOffline: React.FC = () => {
           {/* Поле сервиса всегда показывается */}
           {showAdditionalFields && (
             <div className="space-y-2">
-              <Label htmlFor="serviceId">Сервис *</Label>
+              <Label htmlFor="serviceId">{t("serviceLabel")}</Label>
               <Select
                 disabled={createOfflineMutation.isPending || servicesLoading}
                 onValueChange={(value) => setValue("serviceId", value)}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Выберите сервис" />
+                  <SelectValue placeholder={t("servicePlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {services?.map((service) => (
                     <SelectItem key={service.id} value={service.id}>
-                      {service.name.ru}
+                      {service.name[locale as "ru" | "kz"]}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -270,7 +271,7 @@ export const ReceptionCreateOffline: React.FC = () => {
               onClick={handleClose}
               disabled={createOfflineMutation.isPending}
             >
-              Отмена
+              {t("cancel")}
             </Button>
             <Button
               type="submit"
@@ -283,7 +284,9 @@ export const ReceptionCreateOffline: React.FC = () => {
                 (!userByIin && (!watch("full_name") || !watch("phone")))
               }
             >
-              {createOfflineMutation.isPending ? "Создание..." : "Создать"}
+              {createOfflineMutation.isPending
+                ? t("submitCreating")
+                : t("submit")}
             </Button>
           </DialogFooter>
         </form>

@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { Edit2, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 
 import {
@@ -37,6 +38,7 @@ export const EmployeeDetail = ({
   selectedEmployee: string | null;
   onOpenChange: (open: boolean) => void;
 }) => {
+  const tTabs = useTranslations("employee.tabs");
   const [isEditing, setIsEditing] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   const [editedEmployee, setEditedEmployee] = useState<any | null>(null);
@@ -120,10 +122,10 @@ export const EmployeeDetail = ({
           >
             <TabsList className="bg-transparent mb-3 px-4">
               <TabsTrigger value="info" className="rounded-none">
-                Информация
+                {tTabs("info")}
               </TabsTrigger>
               <TabsTrigger value="employee-receptions" className="rounded-none">
-                Записи
+                {tTabs("receptions")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="info">

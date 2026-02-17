@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { useGetServiceTypeCount } from "@/modules/analytics/application/use-cases/get-analytics-service-type-counts";
 import { ChartConfig } from "@/shared/components/ui/chart";
@@ -14,12 +15,14 @@ import { EmptyState, ErrorState, StateWrapper } from "../components/LoadStates";
 
 export const ServiceTypesAnalytics = () => {
   const { data, isLoading, isError } = useGetServiceTypeCount();
+  const t = useTranslations("analytics.serviceTypes");
+  const locale = useLocale();
   const [activeService, setActiveService] = useState<string>("");
   const chartId = "pie-interactive";
 
   if (isLoading) {
     return (
-      <StateWrapper title={serviceTypesConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <ServiceTypesSkeleton />
       </StateWrapper>
     );
@@ -27,7 +30,7 @@ export const ServiceTypesAnalytics = () => {
 
   if (isError) {
     return (
-      <StateWrapper title={serviceTypesConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <ErrorState />
       </StateWrapper>
     );
@@ -35,19 +38,20 @@ export const ServiceTypesAnalytics = () => {
 
   if (!data || data.length === 0) {
     return (
-      <StateWrapper title={serviceTypesConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <EmptyState />
       </StateWrapper>
     );
   }
 
   if (activeService === "" && data && data.length > 0) {
-    setActiveService(data[0].name.ru);
+    setActiveService(data[0].name[locale as "ru" | "kz"]);
   }
 
   const chartConfig: ChartConfig = data.reduce((acc, item, index) => {
-    acc[item.name.ru] = {
-      label: item.name.ru,
+    const label = item.name[locale as "ru" | "kz"];
+    acc[label] = {
+      label,
       color: `var(--chart-${index + 1})`,
     };
     return acc;
@@ -60,7 +64,7 @@ export const ServiceTypesAnalytics = () => {
     >
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900">
-          {serviceTypesConfig.MAIN_CONFIG.title}
+          {t("title")}
         </h2>
         <ServiceTypeSelect
           data={data}

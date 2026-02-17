@@ -1,6 +1,7 @@
 "use client";
 
 import { Filter, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 
 import { Button } from "@/shared/components/ui/button";
@@ -14,6 +15,8 @@ import { AbsencesStatistics } from "./widgets/AbsencesStatistics";
 import { UpcomingAbsences } from "./widgets/UpcomingAbsences";
 
 export const AbsencesPage = () => {
+  const t = useTranslations("absences");
+  const tCommon = useTranslations("common.buttons");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("all");
@@ -34,12 +37,18 @@ export const AbsencesPage = () => {
     setSelectedLeaveId(null);
   };
 
+  const absenceTypes = [
+    { id: "HOLIDAY", label: t("types.holiday"), color: "bg-blue-500" },
+    { id: "SICK_LEAVE", label: t("types.sickLeave"), color: "bg-red-500" },
+    { id: "PERSONAL", label: t("types.personal"), color: "bg-yellow-500" },
+  ];
+
   return (
     <div className="container mx-auto mt-6 space-y-6">
       {/* Заголовок и кнопки */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">
-          Управление отсутствиями
+          {t("title")}
         </h1>
         <div className="flex items-center space-x-3">
           <Button
@@ -48,14 +57,14 @@ export const AbsencesPage = () => {
             className="flex items-center space-x-2"
           >
             <Filter className="h-4 w-4" />
-            <span>Фильтры</span>
+            <span>{tCommon("filter")}</span>
           </Button>
           <Button
             onClick={handleCreateAbsence}
             className="flex items-center space-x-2"
           >
             <Plus className="h-4 w-4" />
-            <span>Добавить отсутствие</span>
+            <span>{t("create.button")}</span>
           </Button>
         </div>
       </div>
@@ -65,11 +74,7 @@ export const AbsencesPage = () => {
         <AbsenceFilters
           selectedType={selectedType}
           onTypeChange={setSelectedType}
-          absenceTypes={[
-            { id: "HOLIDAY", label: "Отпуск", color: "bg-blue-500" },
-            { id: "SICK_LEAVE", label: "Больничный", color: "bg-red-500" },
-            { id: "PERSONAL", label: "Отгул", color: "bg-yellow-500" },
-          ]}
+          absenceTypes={absenceTypes}
         />
       )}
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import {
@@ -28,6 +29,9 @@ export const ActivityHeatmap = ({
   activities,
   employeeName,
 }: ActivityHeatmapProps) => {
+  const locale = useLocale();
+  const t = useTranslations("employee.activity");
+
   const [selectedDay, setSelectedDay] = useState<ActivityDay | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,26 +56,28 @@ export const ActivityHeatmap = ({
       return (
         <div className="text-center">
           <p className="font-medium">{day.date}</p>
-          <p className="text-sm text-gray-500">Нет активности</p>
+          <p className="text-sm text-gray-500">{t("noActivity")}</p>
         </div>
       );
     }
 
     const statusLabel = day.status
       ? day.status === "ONLINE"
-        ? "Онлайн"
+        ? t("statusOnline")
         : day.status === "OFFLINE"
-        ? "Оффлайн"
-        : "Отсутствует по причине"
-      : "Смешанная активность";
+        ? t("statusOffline")
+        : t("statusAbsentReason")
+      : t("statusMixed");
 
     return (
       <div className="text-center">
         <p className="font-medium">{day.date}</p>
         <p className="text-sm">{statusLabel}</p>
-        <p className="text-xs text-gray-500">{day.activities.length} записей</p>
         <p className="text-xs text-gray-500">
-          {day.totalHours.toFixed(1)} часов
+          {day.activities.length} {t("records")}
+        </p>
+        <p className="text-xs text-gray-500">
+          {day.totalHours.toFixed(1)} {t("hours")}
         </p>
       </div>
     );
@@ -80,7 +86,7 @@ export const ActivityHeatmap = ({
   return (
     <div className="mt-8 col-span-2 border-t border-gray-100">
       <h4 className="text-lg font-medium text-gray-900 pt-2 mb-4">
-        Активность сотрудника
+        {t("title")}
       </h4>
 
       <TooltipProvider>
@@ -90,15 +96,15 @@ export const ActivityHeatmap = ({
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-green-500 rounded"></div>
-                <span>Онлайн</span>
+                <span>{t("legendOnline")}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-red-500 rounded"></div>
-                <span>Оффлайн</span>
+                <span>{t("legendOffline")}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                <span>Отсутствует</span>
+                <span>{t("legendAbsent")}</span>
               </div>
             </div>
           </div>
@@ -154,7 +160,7 @@ export const ActivityHeatmap = ({
                     );
 
                     const monthName = monthStartDate.toLocaleDateString(
-                      "ru-RU",
+                      locale === "kz" ? "kk-KZ" : "ru-RU",
                       { month: "short" }
                     );
                     monthPositions.push({ month: monthName, startCol, endCol });
@@ -226,13 +232,13 @@ export const ActivityHeatmap = ({
                 <div className="text-2xl font-bold text-green-600">
                   {activities.filter((a) => a.status === "ONLINE").length}
                 </div>
-                <div className="text-gray-600">Онлайн сессий</div>
+                <div className="text-gray-600">{t("onlineSessions")}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-red-600">
                   {activities.filter((a) => a.status === "OFFLINE").length}
                 </div>
-                <div className="text-gray-600">Оффлайн сессий</div>
+                <div className="text-gray-600">{t("offlineSessions")}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
@@ -241,7 +247,7 @@ export const ActivityHeatmap = ({
                       .length
                   }
                 </div>
-                <div className="text-gray-600">Отсутствий</div>
+                <div className="text-gray-600">{t("absences")}</div>
               </div>
             </div>
           </div>

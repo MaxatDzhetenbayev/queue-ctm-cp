@@ -1,3 +1,6 @@
+"use client";
+
+import { useLocale,useTranslations } from "next-intl";
 import React from "react";
 
 import { DepartmentType } from "@/modules/departments/domain/schemas";
@@ -32,6 +35,10 @@ export const EmployeeFilters = ({
   departments,
   services,
 }: EmployeeFiltersProps) => {
+  const locale = useLocale();
+  const t = useTranslations("employee.filters");
+  const tForm = useTranslations("employee.form");
+  
   return (
     <>
       <Select
@@ -39,15 +46,15 @@ export const EmployeeFilters = ({
         onValueChange={(value) => setPathParams("department", value)}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Выберите отдел" />
+          <SelectValue placeholder={tForm("selectDepartment")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Все отделы</SelectLabel>
-            <SelectItem value="all">Все отделы</SelectItem>
+            <SelectLabel>{t("allDepartments")}</SelectLabel>
+            <SelectItem value="all">{t("allDepartments")}</SelectItem>
             {departments?.map((dept) => (
               <SelectItem key={dept.id} value={dept.id}>
-                {dept.name.ru}
+                {dept.name[locale as "ru" | "kz"]}
               </SelectItem>
             ))}
           </SelectGroup>
@@ -58,15 +65,15 @@ export const EmployeeFilters = ({
         onValueChange={(value) => setPathParams("service", value)}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Выберите сервис" />
+          <SelectValue placeholder={tForm("selectServices")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Все сервисы</SelectLabel>
-            <SelectItem value="all">Все сервисы</SelectItem>
+            <SelectLabel>{t("allServices")}</SelectLabel>
+            <SelectItem value="all">{t("allServices")}</SelectItem>
             {services?.map((service) => (
               <SelectItem key={service.id} value={service.id}>
-                {service.name.ru}
+                {service.name[locale as "ru" | "kz"]}
               </SelectItem>
             ))}
           </SelectGroup>
@@ -77,14 +84,14 @@ export const EmployeeFilters = ({
         onValueChange={(value) => setPathParams("status", value)}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Выберите статус" />
+          <SelectValue placeholder={t("allStatuses")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Все статусы</SelectLabel>
-            <SelectItem value="all">Все статусы</SelectItem>
-            <SelectItem value="ACTIVE">Активные</SelectItem>
-            <SelectItem value="ARCHIVED">Архив</SelectItem>
+            <SelectLabel>{t("allStatuses")}</SelectLabel>
+            <SelectItem value="all">{t("allStatuses")}</SelectItem>
+            <SelectItem value="ACTIVE">{t("active")}</SelectItem>
+            <SelectItem value="ARCHIVED">{t("archived")}</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

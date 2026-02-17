@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { useGetReceptionsAuthType } from "@/modules/analytics/application/use-cases/get-analytics-receptions-auth-type";
 import { ChartConfig } from "@/shared/components/ui/chart";
@@ -15,12 +16,13 @@ import { EmptyState, ErrorState, StateWrapper } from "../components/LoadStates";
 
 export const ReceptionsAuthTypeAnalytics = () => {
   const { data, isLoading, isError } = useGetReceptionsAuthType();
+  const t = useTranslations("analytics.receptionsAuthType");
   const [activeType, setActiveType] = useState<string>("");
   const chartId = "receptions-auth-type-pie";
 
   if (isLoading) {
     return (
-      <StateWrapper title={receptionsAuthTypeConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <ReceptionsAuthTypeSkeleton />
       </StateWrapper>
     );
@@ -28,7 +30,7 @@ export const ReceptionsAuthTypeAnalytics = () => {
 
   if (isError) {
     return (
-      <StateWrapper title={receptionsAuthTypeConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <ErrorState />
       </StateWrapper>
     );
@@ -36,7 +38,7 @@ export const ReceptionsAuthTypeAnalytics = () => {
 
   if (!data || data.length === 0) {
     return (
-      <StateWrapper title={receptionsAuthTypeConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <EmptyState />
       </StateWrapper>
     );
@@ -82,7 +84,7 @@ export const ReceptionsAuthTypeAnalytics = () => {
     >
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900">
-          {receptionsAuthTypeConfig.MAIN_CONFIG.title}
+          {t("title")}
         </h2>
         <ReceptionsAuthTypeSelect
           data={chartData}

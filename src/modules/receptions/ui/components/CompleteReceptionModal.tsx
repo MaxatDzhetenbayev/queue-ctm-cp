@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -20,7 +21,7 @@ import { useChangeReceptionStatus } from "../../application/use-cases";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const CompleteReceptionSchema = z.object({
-  comment: z.string().min(1, "Комментарий обязателен"),
+  comment: z.string().min(1, "commentRequired"),
 });
 
 type CompleteReceptionType = z.infer<typeof CompleteReceptionSchema>;
@@ -38,6 +39,8 @@ export const CompleteReceptionModal: React.FC<CompleteReceptionModalProps> = ({
   receptionId,
   onSuccess,
 }) => {
+  const t = useTranslations("receptions.complete");
+  const tButtons = useTranslations("common.buttons");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const changeStatusMutation = useChangeReceptionStatus();
@@ -80,24 +83,23 @@ export const CompleteReceptionModal: React.FC<CompleteReceptionModalProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Завершить прием</DialogTitle>
-          <DialogDescription>
-            Добавьте комментарий о завершении приема. Это поле обязательно для
-            заполнения.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="comment">Комментарий</Label>
+            <Label htmlFor="comment">{t("commentLabel")}</Label>
             <Textarea
               id="comment"
-              placeholder="Введите комментарий о завершении приема..."
+              placeholder={t("commentPlaceholder")}
               {...register("comment")}
               className="min-h-[100px]"
             />
             {errors.comment && (
-              <p className="text-sm text-red-500">{errors.comment.message}</p>
+              <p className="text-sm text-red-500">
+                {t(errors.comment.message)}
+              </p>
             )}
           </div>
 
@@ -108,10 +110,10 @@ export const CompleteReceptionModal: React.FC<CompleteReceptionModalProps> = ({
               onClick={handleCancel}
               disabled={isSubmitting}
             >
-              Отмена
+              {tButtons("cancel")}
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Завершение..." : "Завершить прием"}
+              {isSubmitting ? t("submitting") : t("submit")}
             </Button>
           </DialogFooter>
         </form>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -23,6 +24,7 @@ import { useUserLogin } from "../application/use-cases/use-login";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const LoginForm = () => {
+  const t = useTranslations("auth.login");
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -38,17 +40,17 @@ export const LoginForm = () => {
         onSubmit={form.handleSubmit((data: LoginSchemaType) => mutate(data))}
         className="w-2/3 space-y-6"
       >
-        <h1>Вход в систему</h1>
+        <h1>{t("title")}</h1>
         <FormField
           control={form.control}
           name="login"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Имя пользователя</FormLabel>
+              <FormLabel>{t("username")}</FormLabel>
               <FormControl>
-                <Input placeholder="Логин" {...field} />
+                <Input placeholder={t("usernamePlaceholder")} {...field} />
               </FormControl>
-              <FormDescription>Это ваш публичный логин.</FormDescription>
+              <FormDescription>{t("usernameDescription")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -58,17 +60,17 @@ export const LoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Пароль</FormLabel>
+              <FormLabel>{t("password")}</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input type="password" placeholder={t("passwordPlaceholder")} {...field} />
               </FormControl>
-              <FormDescription>Это ваш секретный пароль.</FormDescription>
+              <FormDescription>{t("passwordDescription")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" className="cursor-pointer">
-          Войти
+          {t("submit")}
         </Button>
       </form>
     </Form>

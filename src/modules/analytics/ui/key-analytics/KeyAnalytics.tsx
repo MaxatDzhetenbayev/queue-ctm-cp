@@ -1,12 +1,14 @@
 "use client";
 
 import { Calendar, Target, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import { useGetKeyStats } from "@/modules/analytics/application/use-cases";
 
 export const KeyAnalytics = () => {
   const { data: stats } = useGetKeyStats();
+  const t = useTranslations("analytics.key");
 
   return (
     <div className="grid grid-cols-1  md:grid-cols-3 gap-6">
@@ -14,7 +16,7 @@ export const KeyAnalytics = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-gray-600">
-              Всего сотрудников
+              {t("totalEmployees")}
             </p>
             <p className="text-3xl font-bold text-gray-900">
               {stats?.totalManagers.value || 0}
@@ -26,16 +28,18 @@ export const KeyAnalytics = () => {
         </div>
         <div className="mt-4 flex items-center text-sm">
           <span className="text-green-600 font-medium">
-            {stats?.totalManagers.activeManagers || 0} активных
+            {stats?.totalManagers.activeManagers || 0} {t("active")}
           </span>
-          <span className="text-gray-500 ml-2">сегодня</span>
+          <span className="text-gray-500 ml-2">{t("today")}</span>
         </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-600">Всего записей</p>
+            <p className="text-sm font-medium text-gray-600">
+              {t("totalReceptions")}
+            </p>
             <p className="text-3xl font-bold text-gray-900">
               {stats?.totalReceptions.value || 0}
             </p>
@@ -46,9 +50,9 @@ export const KeyAnalytics = () => {
         </div>
         <div className="mt-4 flex items-center text-sm">
           <span className="text-green-600 font-medium">
-            {stats?.totalReceptions.doneReceptions || 0} завершено
+            {stats?.totalReceptions.doneReceptions || 0} {t("done")}
           </span>
-          <span className="text-gray-500 ml-2">за период</span>
+          <span className="text-gray-500 ml-2">{t("period")}</span>
         </div>
       </div>
 
@@ -56,7 +60,7 @@ export const KeyAnalytics = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-gray-600">
-              Процент завершения
+              {t("completionRate")}
             </p>
             <p className="text-3xl font-bold text-gray-900">
               {stats?.receptionsDonePercentage || 0}%

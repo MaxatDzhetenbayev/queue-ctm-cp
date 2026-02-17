@@ -1,6 +1,7 @@
 "use client";
 
 import { Clock, Eye, FileText } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { useEffect } from "react";
 import { Control } from "react-hook-form";
 
@@ -26,6 +27,7 @@ interface DepartmentFeaturesControlProps {
 export const DepartmentFeaturesControl = ({
   features = null,
 }: DepartmentFeaturesControlProps) => {
+  const t = useTranslations("departments.create");
   const timeSlots = getHoursFromToHourEnd("09:00", "18:30");
 
   const {
@@ -81,11 +83,11 @@ export const DepartmentFeaturesControl = ({
         <div className="space-y-2">
           <Label htmlFor="startTime" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            Начальное время
+            {t("startTime")}
           </Label>
           <Select value={startTime} onValueChange={setStartTime}>
             <SelectTrigger>
-              <SelectValue placeholder="Выберите время" />
+              <SelectValue placeholder={t("selectTime")} />
             </SelectTrigger>
             <SelectContent>
               {timeSlots.map((slot) => (
@@ -100,11 +102,11 @@ export const DepartmentFeaturesControl = ({
         <div className="space-y-2">
           <Label htmlFor="endTime" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            Конечное время
+            {t("endTime")}
           </Label>
           <Select value={endTime} onValueChange={setEndTime}>
             <SelectTrigger>
-              <SelectValue placeholder="Выберите время" />
+              <SelectValue placeholder={t("selectTime")} />
             </SelectTrigger>
             <SelectContent>
               {timeSlots.map((slot) => (
@@ -130,7 +132,7 @@ export const DepartmentFeaturesControl = ({
             className="flex items-center gap-2 cursor-pointer"
           >
             <Eye className="h-4 w-4" />
-            Показывать отдел в базе телеграм
+            {t("showInTelegram")}
           </Label>
         </div>
 
@@ -145,7 +147,7 @@ export const DepartmentFeaturesControl = ({
             className="flex items-center gap-2 cursor-pointer"
           >
             <FileText className="h-4 w-4" />
-            Принимать людей по алфавиту (по буквам) в телеграмме
+            {t("acceptByAlphabet")}
           </Label>
         </div>
       </div>

@@ -1,4 +1,8 @@
+"use client";
+
 import { Calendar, Clock, FileText, Phone, Search, User } from "lucide-react";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 
 import { useGetReceptionsByEmployeeIdList } from "@/modules/users/application/use-cases";
@@ -22,6 +26,8 @@ export const EmployeeReceptions = ({
   managerId: string;
   isModalOpen: boolean;
 }) => {
+  const locale = useLocale();
+  const t = useTranslations("employee.receptions");
   const {
     selectedReceptionDate,
     selectedReceptionStatus,
@@ -63,7 +69,7 @@ export const EmployeeReceptions = ({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input
               type="text"
-              placeholder="Поиск посетителя по ФИО..."
+              placeholder={t("searchPlaceholder")}
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -117,27 +123,27 @@ export const EmployeeReceptions = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
             <div className="flex items-center space-x-2 text-gray-600">
               <User className="h-4 w-4" />
-              <span>ИИН\БИН: {appointment.user.profile.iin}</span>
+              <span>{t("iinBin")}: {appointment.user.profile.iin}</span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
               <Phone className="h-4 w-4" />
-              <span>Телефон:</span>
+              <span>{t("phone")}:</span>
               <span>{appointment.user.profile.phone}</span>
             </div>
             <div className="flex items-center space-x-2 col-span-2 text-gray-600">
               <FileText className="h-4 w-4" />
-              <span>Услуга:</span>
-              <span>{appointment.service.name.ru}</span>
+              <span>{t("service")}:</span>
+              <span>{appointment.service.name[locale as "ru" | "kz"]}</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Calendar className="h-4 w-4 " />
-              <span>Дата:</span>
-              {new Date(appointment.date).toLocaleDateString("ru-RU")}
+              <span>{t("date")}:</span>
+              {new Date(appointment.date).toLocaleDateString(locale === "kz" ? "kk-KZ" : "ru-RU")}
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Clock className="h-4 w-4" />
-              <span>Время:</span>
-              {new Date(appointment.time).toLocaleTimeString("ru-RU", {
+              <span>{t("time")}:</span>
+              {new Date(appointment.time).toLocaleTimeString(locale === "kz" ? "kk-KZ" : "ru-RU", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}

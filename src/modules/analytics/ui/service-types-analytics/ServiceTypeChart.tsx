@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   ChartConfig,
@@ -28,6 +29,8 @@ export const ServiceTypeChart = ({
   chartId,
 }: ServiceTypeChartProps) => {
   const router = useRouter();
+  const t = useTranslations("analytics.serviceTypes");
+  const locale = useLocale();
   const {
     innerRadius,
     strokeWidth,
@@ -36,14 +39,16 @@ export const ServiceTypeChart = ({
     activeInnerRadiusIncrease,
     activeOuterRadiusIncrease,
   } = serviceTypesConfig.MAIN_CONFIG.chart;
-  const { services } = serviceTypesConfig.MAIN_CONFIG.messages;
-
-  const activeIndex = data.findIndex((item) => item.name.ru === activeService);
 
   const chartData = data.map((item, index) => ({
     ...item,
+    displayName: item.name[locale as "ru" | "kz"],
     fill: `var(--chart-${index + 1})`,
   }));
+
+  const activeIndex = chartData.findIndex(
+    (item) => item.displayName === activeService
+  );
 
   return (
     <ChartContainer
@@ -60,7 +65,7 @@ export const ServiceTypeChart = ({
           className="cursor-pointer"
           data={chartData}
           dataKey="count"
-          nameKey="name.ru"
+          nameKey="displayName"
           innerRadius={innerRadius}
           strokeWidth={strokeWidth}
           activeIndex={activeIndex}
@@ -108,7 +113,7 @@ export const ServiceTypeChart = ({
                       y={(viewBox.cy || 0) + 24}
                       className="fill-muted-foreground"
                     >
-                      {services}
+                      {t("services")}
                     </tspan>
                   </text>
                 );

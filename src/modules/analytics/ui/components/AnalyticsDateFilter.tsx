@@ -1,6 +1,7 @@
 "use client";
 
 import { Calendar, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 
 import { Button } from "@/shared/components/ui/button";
@@ -10,6 +11,8 @@ import { useAnalyticsDateStore } from "../../domain/stores/analytics-date.store"
 
 export const AnalyticsDateFilter = () => {
   const { selectedDate, setSelectedDate, clearDate } = useAnalyticsDateStore();
+  const t = useTranslations("analytics.dateFilter");
+  const locale = useLocale();
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
@@ -25,7 +28,7 @@ export const AnalyticsDateFilter = () => {
       <div className="flex items-center space-x-2">
         <Calendar className="h-4 w-4 text-gray-500" />
         <span className="text-sm font-medium text-gray-700">
-          Фильтр по дате:
+          {t("label")}:
         </span>
       </div>
 
@@ -34,7 +37,7 @@ export const AnalyticsDateFilter = () => {
         value={selectedDate || ""}
         onChange={handleDateChange}
         className="w-40"
-        placeholder="Выберите дату"
+        placeholder={t("placeholder")}
       />
 
       {selectedDate && (
@@ -45,14 +48,16 @@ export const AnalyticsDateFilter = () => {
           className="flex items-center space-x-1"
         >
           <X className="h-3 w-3" />
-          <span>Очистить</span>
+          <span>{t("clear")}</span>
         </Button>
       )}
 
       {selectedDate && (
         <span className="text-sm text-gray-500">
-          Показать данные за:{" "}
-          {new Date(selectedDate).toLocaleDateString("ru-RU")}
+          {t("showFor")}:{" "}
+          {new Date(selectedDate).toLocaleDateString(
+            locale === "kz" ? "kk-KZ" : "ru-RU"
+          )}
         </span>
       )}
     </div>

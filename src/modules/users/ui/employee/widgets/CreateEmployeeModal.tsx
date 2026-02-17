@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,6 +35,10 @@ import { KAZAKH_ALPHABET } from "@/shared/consts";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const CreateEmployeeModal: React.FC = () => {
+  const locale = useLocale();
+  const t = useTranslations("employee.create");
+  const tForm = useTranslations("employee.form");
+  const tCommon = useTranslations("common.buttons");
   const [open, setOpen] = React.useState(false);
   const [selectedDepartmentId, setSelectedDepartmentId] =
     React.useState<string>("");
@@ -186,25 +191,24 @@ export const CreateEmployeeModal: React.FC = () => {
     if (!services) return [];
     return services.map((service) => ({
       value: service.id,
-      label: service.name.ru,
+      label: service.name[locale as "ru" | "kz"],
     }));
-  }, [services]);
+  }, [services, locale]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
-          Создать работника
+          {t("button")}
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Создать нового работника</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Заполните информацию о новом работнике. Все поля обязательны для
-            заполнения.
+            Заполните информацию о новом работнике. Все поля обязательны для заполнения.
           </DialogDescription>
         </DialogHeader>
 
@@ -218,11 +222,11 @@ export const CreateEmployeeModal: React.FC = () => {
           className="space-y-4 overflow-y-auto flex-1"
         >
           <div className="space-y-2">
-            <Label htmlFor="login">Логин *</Label>
+            <Label htmlFor="login">{tForm("login")} *</Label>
             <Input
               id="login"
               type="text"
-              placeholder="Введите логин работника"
+              placeholder={tForm("login")}
               disabled={isSubmitting}
               autoComplete="off"
               {...control.register("login")}
@@ -233,7 +237,7 @@ export const CreateEmployeeModal: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Пароль *</Label>
+            <Label htmlFor="password">{tForm("password")} *</Label>
             <Input
               id="password"
               type="password"
@@ -249,19 +253,19 @@ export const CreateEmployeeModal: React.FC = () => {
 
           <div className="space-y-2 flex flex-col gap-2">
             <div className="flex-1">
-              <Label htmlFor="department">Отдел *</Label>
+              <Label htmlFor="department">{tForm("department")} *</Label>
               <Select
                 value={selectedDepartmentId}
                 onValueChange={handleDepartmentChange}
                 disabled={isSubmitting}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Выберите отдел" />
+                  <SelectValue placeholder={tForm("selectDepartment")} />
                 </SelectTrigger>
                 <SelectContent>
                   {departments?.map((dept) => (
                     <SelectItem key={dept.id} value={dept.id}>
-                      {dept.name.ru}
+                      {dept.name[locale as "ru" | "kz"]}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -273,13 +277,13 @@ export const CreateEmployeeModal: React.FC = () => {
               )}
             </div>
             <div className="flex-1">
-              <Label htmlFor="role">Роль *</Label>
+              <Label htmlFor="role">{tForm("role")} *</Label>
               <Select
                 value={watch("role")}
                 onValueChange={(value) => setValue("role", value)}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Выберите роль" />
+                  <SelectValue placeholder={tForm("selectRole")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="MANAGER">Менеджер отдела</SelectItem>
@@ -410,14 +414,14 @@ export const CreateEmployeeModal: React.FC = () => {
               onClick={handleClose}
               disabled={isSubmitting}
             >
-              Отмена
+              {tCommon("cancel")}
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting || !isFormValid}
               title={!isFormValid ? "Заполните все обязательные поля" : ""}
             >
-              {isSubmitting ? "Создание..." : "Создать"}
+              {isSubmitting ? t("creating") : tCommon("create")}
             </Button>
           </DialogFooter>
         </form>

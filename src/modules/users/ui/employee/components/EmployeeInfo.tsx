@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Armchair,
   Briefcase,
@@ -6,6 +8,8 @@ import {
   Phone,
   User,
 } from "lucide-react";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import React, { Dispatch, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -49,6 +53,8 @@ export const EmployeeInfo = ({
   isEditing,
   setEditedEmployee,
 }: EmployeeInfoProps) => {
+  const locale = useLocale();
+  const t = useTranslations("employee.detail");
   const updateEmployeeMutation = useUpdateEmployee(employee?.id || "");
   const { data: services } = useGetServiceList();
   const { data: departments } = useGetDepartmentList();
@@ -164,7 +170,7 @@ export const EmployeeInfo = ({
             <User className="h-5 w-5 text-gray-400" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                ФИО
+                {t("fullName")}
               </label>
               {isEditing ? (
                 <input
@@ -186,7 +192,7 @@ export const EmployeeInfo = ({
             <Phone className="h-5 w-5 text-gray-400" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Телефон
+                {t("phone")}
               </label>
               {isEditing ? (
                 <input
@@ -209,7 +215,7 @@ export const EmployeeInfo = ({
             <User className="h-5 w-5 text-gray-400" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Логин
+                {t("login")}
               </label>
               {isEditing ? (
                 <input
@@ -217,11 +223,11 @@ export const EmployeeInfo = ({
                   autoComplete="off"
                   {...register("login")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Введите логин"
+                  placeholder={t("loginPlaceholder")}
                 />
               ) : (
                 <p className="text-gray-900">
-                  {employee?.login || "Не указан"}
+                  {employee?.login || t("notSpecified")}
                 </p>
               )}
               {isEditing && errors.login && (
@@ -236,7 +242,7 @@ export const EmployeeInfo = ({
             <User className="h-5 w-5 text-gray-400" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Пароль
+                {t("password")}
               </label>
               {isEditing ? (
                 <input
@@ -244,7 +250,7 @@ export const EmployeeInfo = ({
                   type="password"
                   {...register("password")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Оставьте пустым, если не хотите менять"
+                  placeholder={t("passwordPlaceholder")}
                 />
               ) : (
                 <p className="text-gray-900">••••••••</p>
@@ -263,10 +269,10 @@ export const EmployeeInfo = ({
             <MapPin className="h-5 w-5 text-gray-400 mt-1" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Центр
+                {t("center")}
               </label>
               <p className="text-gray-900">
-                {employee?.employeeInfo.center.name.ru}
+                {employee?.employeeInfo.center.name[locale as "ru" | "kz"]}
               </p>
             </div>
           </div>
@@ -275,7 +281,7 @@ export const EmployeeInfo = ({
             <Briefcase className="h-5 min-w-5  text-gray-400 mt-1" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Отдел
+                {t("department")}
               </label>
               {isEditing ? (
                 <Select
@@ -283,13 +289,13 @@ export const EmployeeInfo = ({
                   value={selectedDepartmentId}
                 >
                   <SelectTrigger className="w-full ">
-                    <SelectValue placeholder="Выберите отдел" />
+                    <SelectValue placeholder={t("selectDepartment")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       {departments?.map((department) => (
                         <SelectItem key={department.id} value={department.id}>
-                          {department.name.ru}
+                          {department.name[locale as "ru" | "kz"]}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -297,7 +303,7 @@ export const EmployeeInfo = ({
                 </Select>
               ) : (
                 <p className="text-gray-900">
-                  {employee?.employeeInfo.department.name.ru}
+                  {employee?.employeeInfo.department.name[locale as "ru" | "kz"]}
                 </p>
               )}
             </div>
@@ -307,7 +313,7 @@ export const EmployeeInfo = ({
             <Briefcase className="h-5 min-w-5 text-gray-400 mt-1" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Роль
+                {t("role")}
               </label>
               {isEditing ? (
                 <>
@@ -318,11 +324,11 @@ export const EmployeeInfo = ({
                     }
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Выберите роль" />
+                      <SelectValue placeholder={t("selectRole")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="MANAGER">Специалист</SelectItem>
-                      <SelectItem value="HEAD">Руководитель отдела</SelectItem>
+                      <SelectItem value="MANAGER">{t("roleSpecialist")}</SelectItem>
+                      <SelectItem value="HEAD">{t("roleHead")}</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.role && (
@@ -334,8 +340,8 @@ export const EmployeeInfo = ({
               ) : (
                 <p className="text-gray-900">
                   {employee?.role === "HEAD"
-                    ? "Руководитель отдела"
-                    : "Специалист"}
+                    ? t("roleHead")
+                    : t("roleSpecialist")}
                 </p>
               )}
             </div>
@@ -345,7 +351,7 @@ export const EmployeeInfo = ({
             <Armchair className="h-5 w-5 text-gray-400 mt-1" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Стол
+                {t("table")}
               </label>
               {isEditing ? (
                 <input
@@ -368,7 +374,7 @@ export const EmployeeInfo = ({
             <DoorOpen className="h-5 w-5 text-gray-400 mt-1" />
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Кабинет
+                {t("cabinet")}
               </label>
               {isEditing ? (
                 <input
@@ -400,7 +406,7 @@ export const EmployeeInfo = ({
 
       <div className="mt-8 col-span-2 border-t border-gray-100">
         <h4 className="text-lg font-medium text-gray-900 pt-2">
-          Предоставляемые услуги
+          {t("providedServices")}
         </h4>
         {isEditing && services ? (
           <div className="flex flex-wrap mt-2 gap-2">
@@ -414,7 +420,7 @@ export const EmployeeInfo = ({
                 }`}
                 onClick={() => toggleService(service.id)}
               >
-                {service.name.ru}
+                {service.name[locale as "ru" | "kz"]}
               </span>
             ))}
           </div>
@@ -425,7 +431,7 @@ export const EmployeeInfo = ({
                 key={index}
                 className="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full"
               >
-                {service.name.ru}
+                {service.name[locale as "ru" | "kz"]}
               </span>
             ))}
           </div>
@@ -435,7 +441,7 @@ export const EmployeeInfo = ({
       {/* Employee Features */}
       {hasLetterFeature && (
         <div className="mt-8 col-span-2 border-t border-gray-100">
-          <h4 className="text-lg font-medium text-gray-900 pt-2">Буквы</h4>
+          <h4 className="text-lg font-medium text-gray-900 pt-2">{t("letters")}</h4>
           {isEditing ? (
             <LetterSelector
               onLettersChange={handleLettersChange}

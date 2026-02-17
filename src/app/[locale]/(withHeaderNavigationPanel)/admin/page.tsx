@@ -1,8 +1,8 @@
 "use client";
 
 import { Download } from "lucide-react";
-import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import React, { useState } from "react";
 
 import { AnalyticsWrapper } from "@/modules/analytics/ui";
 import { DownloadReportModal } from "@/modules/analytics/ui/components";
@@ -10,6 +10,7 @@ import { Button } from "@/shared/components/ui/button";
 
 const AdminPage = () => {
   const t = useTranslations("report");
+  const tAdmin = useTranslations("admin.dashboard");
   const [reportModalOpen, setReportModalOpen] = useState(false);
 
   return (
@@ -17,10 +18,10 @@ const AdminPage = () => {
       <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <div className="">
           <h1 className="text-3xl font-bold text-gray-900">
-            Панель управления
+            {tAdmin("title")}
           </h1>
           <p className="text-gray-600 mt-1">
-            Обзор деятельности центров карьеры
+            {tAdmin("subtitle")}
           </p>
         </div>
         <Button

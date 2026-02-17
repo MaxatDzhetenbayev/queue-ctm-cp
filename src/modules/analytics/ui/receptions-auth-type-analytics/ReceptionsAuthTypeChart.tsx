@@ -2,6 +2,7 @@
 
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
+import { useTranslations } from "next-intl";
 
 import {
   ChartConfig,
@@ -26,6 +27,7 @@ export const ReceptionsAuthTypeChart = ({
   chartConfig,
   chartId,
 }: ReceptionsAuthTypeChartProps) => {
+  const t = useTranslations("analytics.receptionsAuthType");
   const {
     innerRadius,
     strokeWidth,
@@ -34,7 +36,6 @@ export const ReceptionsAuthTypeChart = ({
     activeInnerRadiusIncrease,
     activeOuterRadiusIncrease,
   } = receptionsAuthTypeConfig.MAIN_CONFIG.chart;
-  const { receptions } = receptionsAuthTypeConfig.MAIN_CONFIG.messages;
 
   const activeIndex = data.findIndex((item) => item.name === activeType);
 
@@ -93,7 +94,7 @@ export const ReceptionsAuthTypeChart = ({
                       y={(viewBox.cy || 0) + 24}
                       className="fill-muted-foreground"
                     >
-                      {receptions}
+                      {t("receptions")}
                     </tspan>
                   </text>
                 );

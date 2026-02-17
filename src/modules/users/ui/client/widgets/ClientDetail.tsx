@@ -1,6 +1,7 @@
 "use client";
 
 import { Calendar, ChevronLeft, ChevronRight, Edit2, User } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -39,6 +40,9 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
   open,
   params,
 }) => {
+  const t = useTranslations("client.detail");
+  const tButtons = useTranslations("common.buttons");
+  const locale = useLocale();
   const [isEditing, setIsEditing] = useState(false);
   const [currentAppointmentIndex, setCurrentAppointmentIndex] = useState(0);
 
@@ -104,7 +108,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
       <DialogContent className="min-w-[900px]">
         <DialogHeader>
           <DialogDescription className="hidden">
-            Здесь описание клиента
+            {client?.profile.fullName}
           </DialogDescription>
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <div className="flex items-center space-x-4">
@@ -122,7 +126,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                   className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
                   <Edit2 className="h-4 w-4" />
-                  <span>Редактировать</span>
+                  <span>{t("edit")}</span>
                 </button>
               )}
             </div>
@@ -134,14 +138,14 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Имя
+                      {t("name")}
                     </label>
                     {isEditing ? (
                       <input
                         type="text"
                         {...register("name")}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Введите имя"
+                        placeholder={t("name")}
                       />
                     ) : (
                       <p className="text-gray-900">
@@ -158,14 +162,14 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                   <div className="flex items-center space-x-3">
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        ИИН
+                        {t("iin")}
                       </label>
                       {isEditing ? (
                         <input
                           type="text"
                           {...register("iin")}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="Введите ИИН (12 цифр)"
+                          placeholder={t("iin")}
                         />
                       ) : (
                         <p className="text-gray-900">{client?.profile.iin}</p>
@@ -183,14 +187,14 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                   <div className="flex items-center space-x-3">
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Телефон
+                        {t("phone")}
                       </label>
                       {isEditing ? (
                         <input
                           type="text"
                           {...register("phone")}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                          placeholder="+7 (999) 999-99-99"
+                          placeholder={t("phone")}
                         />
                       ) : (
                         <p className="text-gray-900">{client?.profile.phone}</p>
@@ -205,7 +209,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Количество записей
+                      {t("recordsCount")}
                     </label>
                     <p className="text-2xl font-bold text-green-600">
                       {client?.receptions.length}
@@ -219,7 +223,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="text-lg font-medium text-gray-900">
-                      История посещений
+                      {t("history")}
                     </h4>
                     <div className="flex items-center space-x-2">
                       <button
@@ -230,7 +234,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                         <ChevronLeft className="h-5 w-5" />
                       </button>
                       <span className="text-sm text-gray-600">
-                        {currentAppointmentIndex + 1} из{" "}
+                        {currentAppointmentIndex + 1} {t("of")}{" "}
                         {client.receptions.length}
                       </span>
                       <button
@@ -251,7 +255,11 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                       <div className="flex items-start justify-between mb-4">
                         <div>
                           <h5 className="text-lg font-semibold text-gray-900 mb-2">
-                            {currentAppointment.service.name.ru}
+                            {
+                              currentAppointment.service.name[
+                                locale as "ru" | "kz"
+                              ]
+                            }
                           </h5>
                           <span
                             className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(
@@ -267,29 +275,34 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                         <div className="col-span-2 flex items-center space-x-2 text-sm text-gray-600">
                           <User className="h-4 w-4" />
                           <span>
-                            Менеджер:{" "}
+                            {t("manager")}:{" "}
                             {currentAppointment.employee?.profile.fullName}
                           </span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                           <Calendar className="h-4 w-4" />
                           <span>
-                            Дата:{" "}
+                            {t("date")}:{" "}
                             {new Date(
                               currentAppointment.date
-                            ).toLocaleDateString("ru-RU")}
+                            ).toLocaleDateString(
+                              locale === "kz" ? "kk-KZ" : "ru-RU"
+                            )}
                           </span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                           <Calendar className="h-4 w-4" />
                           <span>
-                            Время:
+                            {t("time")}:
                             {new Date(
                               currentAppointment.time
-                            ).toLocaleTimeString("ru-RU", {
+                            ).toLocaleTimeString(
+                              locale === "kz" ? "kk-KZ" : "ru-RU",
+                              {
                               hour: "2-digit",
                               minute: "2-digit",
-                            })}
+                              }
+                            )}
                           </span>
                         </div>
                       </div>
@@ -297,7 +310,9 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                       {currentAppointment.comment && (
                         <div className="mt-4 p-3 bg-white rounded-lg">
                           <p className="text-sm text-gray-700">
-                            <span className="font-medium">Заметки: </span>
+                            <span className="font-medium">
+                              {t("notes")}:{" "}
+                            </span>
                             {currentAppointment.comment}
                           </p>
                         </div>
@@ -311,10 +326,10 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                 <div className="text-center py-8">
                   <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    Нет записей
+                    {t("noReceptionsTitle")}
                   </h3>
                   <p className="text-gray-500">
-                    У этого клиента пока нет записей на прием
+                    {t("noReceptionsDescription")}
                   </p>
                 </div>
               )}
@@ -334,7 +349,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                   disabled={isSubmitting || updateClientMutation.isPending}
                   className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
                 >
-                  Отмена
+                  {tButtons("cancel")}
                 </button>
                 <button
                   onClick={handleSubmit(onSubmit)}
@@ -344,8 +359,8 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
                 >
                   {isSubmitting || updateClientMutation.isPending
-                    ? "Сохранение..."
-                    : "Сохранить"}
+                    ? tButtons("save")
+                    : tButtons("save")}
                 </button>
               </div>
             </div>

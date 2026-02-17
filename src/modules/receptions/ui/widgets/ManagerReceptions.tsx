@@ -2,16 +2,14 @@
 
 import { Calendar, FileText, Phone, User } from "lucide-react";
 import React from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ReceptionStatusType } from "@/modules/receptions/domain/schemas/reception.schemas";
 import { ClientDetail } from "@/modules/users/ui/client/widgets/ClientDetail";
 import { useSearchQuery } from "@/shared/hooks";
 
 import { useGetManagerReceptions } from "../../application/use-cases";
-import {
-  STATUS_COLORS,
-  STATUS_LABELS,
-} from "../../domain/constants/status.constants";
+import { STATUS_COLORS } from "../../domain/constants/status.constants";
 import {
   useReceptionFiltersStore,
   useReceptionModalsStore,
@@ -24,11 +22,6 @@ import {
   ReceptionSearch,
   ReceptionStatusFilter,
 } from "../components";
-
-// Функция для нормализации статуса
-const normalizeStatus = (status: ReceptionStatusType): string => {
-  return STATUS_LABELS[status] || status;
-};
 
 // Функция для получения цвета статуса
 const getStatusColor = (status: ReceptionStatusType): string => {
@@ -48,6 +41,29 @@ const normalizeAuthVariant = (authType: string): string => {
 };
 
 export const ManagerReceptions: React.FC = () => {
+  const t = useTranslations("manager.receptions");
+  const tStatus = useTranslations("common.status");
+  const locale = useLocale();
+
+  const getStatusLabel = (status: ReceptionStatusType): string => {
+    switch (status) {
+      case "PENDING":
+        return tStatus("pending");
+      case "CALLED":
+        return tStatus("called");
+      case "WORKING":
+        return tStatus("working");
+      case "DONE":
+        return tStatus("done");
+      case "NO_SHOW":
+        return tStatus("noShow");
+      case "CANCELED":
+        return tStatus("canceled");
+      default:
+        return status;
+    }
+  };
+
   // Используем Zustand store для фильтров
   const { searchValue, selectedDate, selectedStatus } =
     useReceptionFiltersStore();
@@ -84,7 +100,7 @@ export const ManagerReceptions: React.FC = () => {
   return (
     <div className="h-[85vh] flex flex-col">
       <div className="mb-6 flex-shrink-0">
-        <h2 className="text-2xl font-semibold mb-4">Приемы</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t("title")}</h2>
         <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 flex-1">
             <ReceptionSearch value={inputValue} />
@@ -127,7 +143,9 @@ export const ManagerReceptions: React.FC = () => {
             ))}
           </div>
         ) : !data?.length ? (
-          <div className="text-center text-gray-500 py-8">Нет записей</div>
+          <div className="text-center text-gray-500 py-8">
+            {t("noData")}
+          </div>
         ) : (
           <div className="space-y-4">
             {data?.map((reception) => (
@@ -158,7 +176,7 @@ export const ManagerReceptions: React.FC = () => {
                           reception.status
                         )}`}
                       >
-                        {normalizeStatus(reception.status)}
+                        {getStatusLabel(reception.status)}
                       </span>
                     </div>
                   </div>
@@ -168,10 +186,10 @@ export const ManagerReceptions: React.FC = () => {
                       <User className="h-5 w-5 flex-shrink-0" />
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-medium text-gray-900">
-                          ИИН
+                          {t("iin")}
                         </div>
                         <div className="text-sm truncate">
-                          {reception.user.profile.iin || "Не указан"}
+                          {reception.user.profile.iin || t("notSpecified")}
                         </div>
                       </div>
                     </div>
@@ -180,7 +198,7 @@ export const ManagerReceptions: React.FC = () => {
                       <Phone className="h-5 w-5 flex-shrink-0" />
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-medium text-gray-900">
-                          Телефон
+                          {t("phone")}
                         </div>
                         <div className="text-sm truncate">
                           {reception.user.profile.phone}
@@ -192,10 +210,14 @@ export const ManagerReceptions: React.FC = () => {
                       <FileText className="h-5 w-5 flex-shrink-0" />
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-medium text-gray-900">
-                          Услуга
+                          {t("service")}
                         </div>
                         <div className="text-sm truncate">
-                          {reception.service.name.ru}
+                          {
+                            reception.service.name[
+                              locale as "ru" | "kz"
+                            ]
+                          }
                         </div>
                       </div>
                     </div>
@@ -204,12 +226,14 @@ export const ManagerReceptions: React.FC = () => {
                       <Calendar className="h-5 w-5 flex-shrink-0" />
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-medium text-gray-900">
-                          Дата и время
+                          {t("dateTime")}
                         </div>
                         <div className="text-sm truncate">
-                          {new Date(reception.date).toLocaleDateString("ru-RU")}{" "}
+                          {new Date(reception.date).toLocaleDateString(
+                            locale === "kz" ? "kk-KZ" : "ru-RU"
+                          )}{" "}
                           {new Date(reception.time).toLocaleTimeString(
-                            "ru-RU",
+                            locale === "kz" ? "kk-KZ" : "ru-RU",
                             {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -228,7 +252,7 @@ export const ManagerReceptions: React.FC = () => {
                         }}
                         className="px-3 sm:px-4 py-2 text-xs sm:text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                       >
-                        Детали
+                        {t("details")}
                       </button>
                     )}
                     {reception.status === "NO_SHOW" && (
@@ -237,7 +261,7 @@ export const ManagerReceptions: React.FC = () => {
                           id={reception.id}
                           status="WORKING"
                         >
-                          Принять
+                          {t("accept")}
                         </ChangeReceptionStatusButton>
                         <button
                           onClick={() => {
@@ -245,7 +269,7 @@ export const ManagerReceptions: React.FC = () => {
                           }}
                           className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
-                          Детали
+                          {t("details")}
                         </button>
                       </>
                     )}
@@ -256,7 +280,7 @@ export const ManagerReceptions: React.FC = () => {
                         }}
                         className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                       >
-                        Детали
+                        {t("details")}
                       </button>
                     )}
                     {reception.status === "CALLED" && (
@@ -265,14 +289,14 @@ export const ManagerReceptions: React.FC = () => {
                           id={reception.id}
                           status="WORKING"
                         >
-                          Принять
+                          {t("accept")}
                         </ChangeReceptionStatusButton>
                         <ChangeReceptionStatusButton
                           id={reception.id}
                           status="NO_SHOW"
                           variant="destructive"
                         >
-                          Не пришел
+                          {t("noShow")}
                         </ChangeReceptionStatusButton>
                       </>
                     )}
@@ -282,7 +306,7 @@ export const ManagerReceptions: React.FC = () => {
                           id={reception.id}
                           status="CALLED"
                         >
-                          Позвать
+                          {t("call")}
                         </ChangeReceptionStatusButton>
                         <button
                           onClick={() => {
@@ -290,7 +314,7 @@ export const ManagerReceptions: React.FC = () => {
                           }}
                           className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
-                          Детали
+                          {t("details")}
                         </button>
                       </>
                     )}
@@ -302,7 +326,7 @@ export const ManagerReceptions: React.FC = () => {
                           }}
                           className="px-4 py-2 text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-medium"
                         >
-                          Завершить
+                          {t("complete")}
                         </button>
                         <button
                           onClick={() => {
@@ -310,7 +334,7 @@ export const ManagerReceptions: React.FC = () => {
                           }}
                           className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                         >
-                          Детали
+                          {t("details")}
                         </button>
                       </>
                     )}

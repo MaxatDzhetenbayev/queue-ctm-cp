@@ -1,5 +1,9 @@
+"use client";
+
 import clsx from "clsx";
 import { Briefcase, MapPin, Phone, Users } from "lucide-react";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import React, { Dispatch, SetStateAction } from "react";
 
 import { EmployeeType } from "@/modules/users/domain/schemas";
@@ -21,6 +25,9 @@ export const EmployeeCards = ({
   onOpen,
   selectedEmployee,
 }: EmployeeCardsProps) => {
+  const locale = useLocale();
+  const t = useTranslations("employee.card");
+  
   const handleClickToCard = (employeeId: string): void => {
     selectedEmployee(employeeId);
     onOpen(true);
@@ -42,10 +49,10 @@ export const EmployeeCards = ({
             <div className="flex flex-col justify-center text-center py-12">
               <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Сотрудники не найдены
+                {t("empty")}
               </h3>
               <p className="text-gray-500">
-                Попробуйте изменить параметры поиска или фильтрации
+                {t("emptyDescription")}
               </p>
             </div>
           ) : (
@@ -84,18 +91,18 @@ export const EmployeeCards = ({
 
                       <div className="flex items-start text-sm text-gray-600">
                         <MapPin className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5" />
-                        <span>{employee.employeeInfo.center.name.ru}</span>
+                        <span>{employee.employeeInfo.center.name[locale as "ru" | "kz"]}</span>
                       </div>
 
                       <div className="flex items-start text-sm text-gray-600">
                         <Briefcase className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5" />
-                        <span>{employee.employeeInfo.department.name.ru}</span>
+                        <span>{employee.employeeInfo.department.name[locale as "ru" | "kz"]}</span>
                       </div>
                     </div>
 
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <p className="text-xs font-medium text-gray-500 mb-2">
-                        Услуги:
+                        {t("services")}:
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {employee.employeeServices.map(({ service }, index) => (
@@ -103,7 +110,7 @@ export const EmployeeCards = ({
                             key={index}
                             className="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full"
                           >
-                            {service.name.ru}
+                            {service.name[locale as "ru" | "kz"]}
                           </span>
                         ))}
                       </div>

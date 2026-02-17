@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -28,6 +29,8 @@ import { DepartmentFeaturesControl } from "./DepartmentFeaturesControl";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const CreateDepartmentModal = () => {
+  const t = useTranslations("departments");
+  const tCommon = useTranslations("common.buttons");
   const [open, setOpen] = React.useState(false);
   const createDepartmentMutation = useCreateDepartment();
   const { departmentFeatures, resetForm } = useDepartmentFormStore();
@@ -69,24 +72,23 @@ export const CreateDepartmentModal = () => {
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
-          Создать отдел
+          {t("create.button")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Создать новый отдел</DialogTitle>
+          <DialogTitle>{t("create.title")}</DialogTitle>
           <DialogDescription>
-            Заполните информацию о новом отделе. Все поля обязательны для
-            заполнения.
+            {t("create.description")}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="nameRu">Название (RU)</Label>
+            <Label htmlFor="nameRu">{t("create.nameRu")}</Label>
             <Input
               id="nameRu"
-              placeholder="Введите название на русском"
+              placeholder={t("create.nameRuPlaceholder")}
               {...control.register("name.ru")}
             />
             {errors.name?.ru && (
@@ -95,10 +97,10 @@ export const CreateDepartmentModal = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="nameKz">Название (KZ)</Label>
+            <Label htmlFor="nameKz">{t("create.nameKz")}</Label>
             <Input
               id="nameKz"
-              placeholder="Введите название на казахском"
+              placeholder={t("create.nameKzPlaceholder")}
               {...control.register("name.kz")}
             />
             {errors.name?.kz && (
@@ -107,7 +109,7 @@ export const CreateDepartmentModal = () => {
           </div>
 
           <div className="space-y-2">
-            <Label>Особенности отдела</Label>
+            <Label>{t("create.features")}</Label>
             <DepartmentFeaturesControl control={control} />
           </div>
 
@@ -118,10 +120,10 @@ export const CreateDepartmentModal = () => {
               onClick={() => setOpen(false)}
               disabled={createDepartmentMutation.isPending}
             >
-              Отмена
+              {tCommon("cancel")}
             </Button>
             <Button type="submit" disabled={createDepartmentMutation.isPending}>
-              {createDepartmentMutation.isPending ? "Создание..." : "Создать"}
+              {createDepartmentMutation.isPending ? t("create.creating") : tCommon("create")}
             </Button>
           </DialogFooter>
         </form>

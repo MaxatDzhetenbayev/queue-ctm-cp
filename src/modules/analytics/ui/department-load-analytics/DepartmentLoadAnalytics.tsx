@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+
 import { useGetDepartmentLoads } from "@/modules/analytics/application/use-cases";
 
 import { DepartmentLoadChart } from "./DepartmentLoadChart";
@@ -15,6 +17,8 @@ import {
 
 export const DepartmentLoadAnalytics = () => {
   const { data, isLoading, isError } = useGetDepartmentLoads();
+  const t = useTranslations("analytics.departmentLoad");
+  const locale = useLocale();
 
   if (isLoading) {
     return <LoadingState />;
@@ -22,7 +26,7 @@ export const DepartmentLoadAnalytics = () => {
 
   if (isError) {
     return (
-      <StateWrapper title={departmentLoadConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <ErrorState />
       </StateWrapper>
     );
@@ -30,7 +34,7 @@ export const DepartmentLoadAnalytics = () => {
 
   if (!data || data.length === 0) {
     return (
-      <StateWrapper title={departmentLoadConfig.MAIN_CONFIG.title}>
+      <StateWrapper title={t("title")}>
         <EmptyState />
       </StateWrapper>
     );
@@ -39,12 +43,12 @@ export const DepartmentLoadAnalytics = () => {
   const chartData: departmentLoadTypes.ChartDataItem[] = (data || []).map(
     (item: departmentLoadTypes.DepartmentLoadData) => ({
       ...item,
-      displayName: item.name.kz,
+      displayName: item.name[locale as "ru" | "kz"],
     })
   );
 
   return (
-    <StateWrapper title={departmentLoadConfig.MAIN_CONFIG.title}>
+    <StateWrapper title={t("title")}>
       <DepartmentLoadChart data={chartData} />
     </StateWrapper>
   );

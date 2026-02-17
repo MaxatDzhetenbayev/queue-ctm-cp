@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { useLocale } from "next-intl";
 
 import { serviceTypesConfig } from "../../domain/configs";
 import { serviceTypesTypes } from "../../domain/types";
@@ -31,6 +32,7 @@ export const ServiceTypeSelect = ({
     itemClass,
     colorIndicatorClass,
   } = serviceTypesConfig.MAIN_CONFIG.select;
+  const locale = useLocale();
 
   return (
     <Select value={activeService} onValueChange={onServiceChange}>
@@ -39,13 +41,14 @@ export const ServiceTypeSelect = ({
       </SelectTrigger>
       <SelectContent align="end" className={contentClass}>
         {data.map((item) => {
-          const config = chartConfig[item.name.ru];
+          const name = item.name[locale as "ru" | "kz"];
+          const config = chartConfig[name];
           if (!config) return null;
 
           return (
             <SelectItem
-              key={item.name.ru}
-              value={item.name.ru}
+              key={name}
+              value={name}
               className={itemClass}
             >
               <div className="flex items-center gap-2 text-xs">
@@ -57,7 +60,7 @@ export const ServiceTypeSelect = ({
                       serviceTypesConfig.chartConfig.defaultColor,
                   }}
                 />
-                {config.label || item.name.ru}
+                {config.label || name}
               </div>
             </SelectItem>
           );

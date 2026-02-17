@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface DepartmentHeaderProps {
@@ -5,15 +8,23 @@ interface DepartmentHeaderProps {
 }
 
 export const DepartmentHeader = ({ total }: DepartmentHeaderProps) => {
+  const t = useTranslations("departments");
+  
+  const getCountLabel = () => {
+    if (total === 1) return t("count.one");
+    if (total < 5) return t("count.few");
+    return t("count.many");
+  };
+
   return (
     <div className="flex  items-center justify-between mb-8">
       <div className="flex items-center space-x-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
-            Управление отделами
+            {t("title")}
           </h1>
           <p className="text-gray-500">
-            {total} {total === 1 ? "отдел" : total < 5 ? "отдела" : "отделов"}
+            {total} {getCountLabel()}
           </p>
         </div>
       </div>
