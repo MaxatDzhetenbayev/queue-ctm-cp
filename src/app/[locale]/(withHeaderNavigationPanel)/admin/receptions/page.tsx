@@ -1,13 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { AdminReceptionsList } from "@/modules/receptions/ui/components";
 
 const AdminReceptionsPage = () => {
   const t = useTranslations("receptions");
-  
+
   return (
     <div>
       <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
@@ -21,7 +21,9 @@ const AdminReceptionsPage = () => {
         </div>
       </div>
       <div className="mt-4">
-        <AdminReceptionsList />
+        <Suspense fallback={<div className="animate-pulse rounded-lg bg-gray-200 h-64" />}>
+          <AdminReceptionsList />
+        </Suspense>
       </div>
     </div>
   );

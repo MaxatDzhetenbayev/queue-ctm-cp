@@ -1,9 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 
 import { ManagerReceptionsPage } from "@/modules/receptions";
 
 export default function ManagerPage() {
-  return <ManagerReceptionsPage />;
+  return (
+    <Suspense fallback={<div className="animate-pulse rounded-lg bg-gray-200 h-64" />}>
+      <ManagerReceptionsPage />
+    </Suspense>
+  );
 }
