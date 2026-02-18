@@ -63,9 +63,8 @@ export const UpdateEmployeeSchema = z.object({
   login: z.string().optional(),
   role: z
     .enum(EDITABLE_EMPLOYEE_ROLES, {
-      errorMap: () => ({
-        message: "Роль может быть только MANAGER (специалист) или HEAD (руководитель отдела)",
-      }),
+      message:
+        "Роль может быть только MANAGER (специалист) или HEAD (руководитель отдела)",
     })
     .optional(),
   employeeFeatures: z
