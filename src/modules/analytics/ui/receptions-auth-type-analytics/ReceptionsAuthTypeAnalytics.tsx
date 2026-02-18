@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import React, { useState } from "react";
 
 import { useGetReceptionsAuthType } from "@/modules/analytics/application/use-cases/get-analytics-receptions-auth-type";
 import { ChartConfig } from "@/shared/components/ui/chart";

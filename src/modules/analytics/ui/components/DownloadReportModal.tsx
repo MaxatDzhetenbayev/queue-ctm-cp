@@ -1,8 +1,8 @@
 "use client";
 
 import { Download } from "lucide-react";
-import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import React, { useState } from "react";
 
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -64,7 +64,7 @@ export const DownloadReportModal = ({
       onOpenChange(false);
       setStartDate("");
       setEndDate("");
-    } catch (err) {
+    } catch {
       setError(tModal("errorInvalidPeriod"));
     } finally {
       setLoading(false);

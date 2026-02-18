@@ -1,8 +1,8 @@
 "use client";
 
 import { Calendar, FileText, Phone, User } from "lucide-react";
-import React from "react";
 import { useLocale, useTranslations } from "next-intl";
+import React from "react";
 
 import { ReceptionStatusType } from "@/modules/receptions/domain/schemas/reception.schemas";
 import { ClientDetail } from "@/modules/users/ui/client/widgets/ClientDetail";

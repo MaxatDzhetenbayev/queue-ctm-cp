@@ -6,7 +6,6 @@ import { useGetDepartmentLoads } from "@/modules/analytics/application/use-cases
 
 import { DepartmentLoadChart } from "./DepartmentLoadChart";
 
-import { departmentLoadConfig } from "../../domain/configs";
 import { departmentLoadTypes } from "../../domain/types";
 import {
   EmptyState,

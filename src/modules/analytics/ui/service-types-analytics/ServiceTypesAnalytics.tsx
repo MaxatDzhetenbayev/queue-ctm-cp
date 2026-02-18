@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import React, { useState } from "react";
 
 import { useGetServiceTypeCount } from "@/modules/analytics/application/use-cases/get-analytics-service-type-counts";
 import { ChartConfig } from "@/shared/components/ui/chart";
@@ -10,7 +10,6 @@ import { ServiceTypeChart } from "./ServiceTypeChart";
 import { ServiceTypesSkeleton } from "./ServiceTypesAnalyticsSkeleton";
 import { ServiceTypeSelect } from "./ServiceTypeSelect";
 
-import { serviceTypesConfig } from "../../domain/configs";
 import { EmptyState, ErrorState, StateWrapper } from "../components/LoadStates";
 
 export const ServiceTypesAnalytics = () => {

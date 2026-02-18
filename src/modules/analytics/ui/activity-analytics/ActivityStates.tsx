@@ -1,5 +1,4 @@
 import { AlertCircle, BarChart3 } from "lucide-react";
-import { useTranslations } from "next-intl";
 
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
@@ -28,7 +27,6 @@ export const LoadingState = () => (
 );
 
 export const ErrorState = () => {
-  const t = useTranslations("analytics.activityChart");
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
@@ -43,7 +41,6 @@ export const ErrorState = () => {
 };
 
 export const EmptyState = () => {
-  const t = useTranslations("analytics.activityChart");
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       <BarChart3 className="h-12 w-12 text-gray-400 mb-4" />

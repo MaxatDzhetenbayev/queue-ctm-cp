@@ -1,9 +1,9 @@
 "use client";
 
 import { Phone, Plus, User } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useLocale, useTranslations } from "next-intl";
 
 import {
   CreateOfflineReceptionSchema,

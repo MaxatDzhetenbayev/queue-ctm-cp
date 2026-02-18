@@ -1,7 +1,7 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { useLocale, useTranslations } from "next-intl";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   ChartConfig,

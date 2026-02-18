@@ -1,9 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -98,7 +98,7 @@ export const CompleteReceptionModal: React.FC<CompleteReceptionModalProps> = ({
             />
             {errors.comment && (
               <p className="text-sm text-red-500">
-                {t(errors.comment.message)}
+                {t(errors.comment.message || "commentRequired")}
               </p>
             )}
           </div>

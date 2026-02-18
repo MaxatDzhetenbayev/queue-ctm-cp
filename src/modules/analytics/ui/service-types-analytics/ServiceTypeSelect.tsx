@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "next-intl";
+
 import {
   Select,
   SelectContent,
@@ -7,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { useLocale } from "next-intl";
 
 import { serviceTypesConfig } from "../../domain/configs";
 import { serviceTypesTypes } from "../../domain/types";

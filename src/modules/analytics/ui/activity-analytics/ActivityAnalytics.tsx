@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { useTranslations } from "next-intl";
+import React from "react";
 
 import { ChartConfig } from "@/shared/components/ui/chart";
 

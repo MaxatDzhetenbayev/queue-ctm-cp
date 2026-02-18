@@ -3,8 +3,8 @@ import {
   ChevronRightIcon,
   MoreHorizontalIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import * as React from "react";
-import { useLocale, useTranslations } from "next-intl";
 
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
@@ -71,7 +71,6 @@ function PaginationPrevious({
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
   const t = useTranslations("common.pagination");
-  const locale = useLocale();
   return (
     <PaginationLink
       aria-label="Go to previous page"

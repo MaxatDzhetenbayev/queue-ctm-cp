@@ -101,6 +101,7 @@ export async function updateEmployee(
 /**
  * Отправить сотрудника в архив
  * @param id - ID сотрудника
+ * @returns {Promise<{ id: string }>} Результат архивирования сотрудника.
  */
 export async function archiveEmployee(id: string): Promise<{ id: string }> {
   const response = await axiosApi.post<{ id: string }>(
@@ -112,6 +113,7 @@ export async function archiveEmployee(id: string): Promise<{ id: string }> {
 /**
  * Восстановить сотрудника из архива
  * @param id - ID сотрудника
+ * @returns {Promise<{ id: string }>} Результат восстановления сотрудника.
  */
 export async function restoreEmployee(id: string): Promise<{ id: string }> {
   const response = await axiosApi.post<{ id: string }>(

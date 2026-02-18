@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
-import { useLocale, useTranslations } from "next-intl";
 
 import {
   ChartConfig,
