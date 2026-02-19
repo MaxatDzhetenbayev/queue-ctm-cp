@@ -77,15 +77,21 @@ const CenterDetailPage = () => {
           <Link href="/superadmin/centers">{t("back")}</Link>
         </Button>
       </div>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
         {links.map(({ href, icon: Icon, key }) => (
           <Link
             key={key}
             href={href}
-            className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition hover:bg-gray-50"
+            className="group relative flex min-h-[112px] items-center gap-5 overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm ring-1 ring-slate-100 transition-transform transition-shadow hover:-translate-y-1 hover:border-blue-200 hover:bg-white hover:shadow-lg hover:ring-blue-100"
           >
-            <Icon className="h-8 w-8 text-gray-600" />
-            <span className="font-medium">{t(key)}</span>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 text-blue-600 ring-1 ring-blue-100/80 transition-colors group-hover:bg-blue-600 group-hover:text-white group-hover:ring-blue-400/80">
+              <Icon className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-slate-900">
+                {t(key)}
+              </span>
+            </div>
           </Link>
         ))}
       </div>
