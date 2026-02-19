@@ -46,3 +46,17 @@ export async function updateCenter(
 export async function deleteCenter(id: string): Promise<void> {
   await axiosApi.delete(`/centers/${id}`);
 }
+
+export async function attachServiceToCenter(
+  centerId: string,
+  serviceId: string
+): Promise<void> {
+  await axiosApi.post(`/centers/${centerId}/services`, { serviceId });
+}
+
+export async function detachServiceFromCenter(
+  centerId: string,
+  serviceId: string
+): Promise<void> {
+  await axiosApi.delete(`/centers/${centerId}/services/${serviceId}`);
+}
