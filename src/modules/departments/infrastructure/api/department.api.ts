@@ -24,3 +24,21 @@ export async function createDepartment(
   const response = await axiosApi.post<DepartmentType>("/departments", data);
   return response.data;
 }
+
+/**
+ * API для обновления отдела.
+ *
+ * @param id - ID отдела.
+ * @param data - Данные для обновления отдела.
+ * @returns {Promise<DepartmentType>} Обновленный отдел.
+ */
+export async function updateDepartment(
+  id: string,
+  data: Partial<CreateDepartmentType>
+): Promise<DepartmentType> {
+  const response = await axiosApi.patch<DepartmentType>(
+    `/departments/${id}`,
+    data
+  );
+  return response.data;
+}

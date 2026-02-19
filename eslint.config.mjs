@@ -1,6 +1,6 @@
 // import boundaries from "eslint-plugin-boundaries";
 import eslintJsDoc from "eslint-plugin-jsdoc";
-import simpleImportSort from "eslint-plugin-simple-import-sort";
+// import simpleImportSort from "eslint-plugin-simple-import-sort";
 import sonarJs from "eslint-plugin-sonarjs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -24,7 +24,7 @@ const eslintConfig = [
       // boundaries,
       jsdoc: eslintJsDoc,
       sonarjs: sonarJs,
-      "simple-import-sort": simpleImportSort,
+      // "simple-import-sort": simpleImportSort,
     },
     settings: {
       "import/resolver": {
@@ -77,19 +77,19 @@ const eslintConfig = [
       "jsdoc/check-param-names": "error",
       "jsdoc/check-tag-names": "error",
 
-      "simple-import-sort/imports": [
-        "error",
-        {
-          groups: [
-            // Внешние библиотеки
-            ["^\\w"],
-            // Абсолютные импорты
-            ["^@/"],
-            // Относительные импорты
-            ["^\\./"],
-          ],
-        },
-      ],
+      // "simple-import-sort/imports": [
+      //   "error",
+      //   {
+      //     groups: [
+      //       // Внешние библиотеки
+      //       ["^\\w"],
+      //       // Абсолютные импорты
+      //       ["^@/"],
+      //       // Относительные импорты
+      //       ["^\\./"],
+      //     ],
+      //   },
+      // ],
       // "boundaries/element-types": [
       //   "error",
       //   {

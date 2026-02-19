@@ -7,6 +7,7 @@ import { routing } from "@i18/index";
 const intlMiddleware = createMiddleware(routing);
 
 const protectedRoutes: Record<string, string> = {
+  superadmin: "SUPERADMIN",
   admin: "ADMIN",
   manager: "MANAGER",
 };

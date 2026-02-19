@@ -4,10 +4,11 @@ import { getReceptionsAuthType } from "@/modules/analytics/infrastructure/api/cl
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetReceptionsAuthType = () => {
-  const { selectedDate } = useAnalyticsDateStore();
+  const { selectedDate, centerId } = useAnalyticsDateStore();
 
   return useQuery({
-    queryKey: ["receptions-auth-type", selectedDate],
-    queryFn: () => getReceptionsAuthType(selectedDate || undefined),
+    queryKey: ["receptions-auth-type", selectedDate, centerId],
+    queryFn: () =>
+      getReceptionsAuthType(selectedDate || undefined, centerId || undefined),
   });
 };

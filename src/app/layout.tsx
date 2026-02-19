@@ -4,8 +4,12 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
-// Корневой layout нужен Next.js, но вся разметка и провайдеры
-// находятся в `app/[locale]/layout.tsx`
+// В Next.js корневой layout обязан содержать <html> и <body>.
+// Локаль и провайдеры задаются в app/[locale]/layout.tsx.
 export default function RootLayout({ children }: RootLayoutProps) {
-  return children;
+  return (
+    <html lang="ru" suppressHydrationWarning>
+      <body>{children}</body>
+    </html>
+  );
 }

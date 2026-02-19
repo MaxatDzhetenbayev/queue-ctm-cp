@@ -1,6 +1,16 @@
 "use client";
 
-import { Building2, Calendar, FileText, Globe, Home, Menu, Users } from "lucide-react";
+import {
+  Building2,
+  Calendar,
+  FileText,
+  Globe,
+  Home,
+  LayoutDashboard,
+  Menu,
+  Users,
+  Wrench,
+} from "lucide-react";
 import { usePathname as useNextPathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useState } from "react";
@@ -38,17 +48,75 @@ export const Header: React.FC<HeaderProps> = ({ showNavigation = true }) => {
   const { data: userProfile } = useGetUserProfile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = useTranslations("header");
+  const tSuper = useTranslations("superadmin.nav");
   const locale = useLocale();
   const router = useRouter();
   const fullPathname = useNextPathname();
 
-  const navigation = [
+  const isSuperadmin = userProfile?.role === "SUPERADMIN";
+
+  const adminNavigation = [
     { name: t("navigation.home"), href: "/admin", icon: Home, key: "home" },
-    { name: t("navigation.employees"), href: "/admin/employee", icon: Users, key: "employees" },
-    { name: t("navigation.departments"), href: "/admin/departments", icon: Building2, key: "departments" },
-    { name: t("navigation.absences"), href: "/admin/absences", icon: Calendar, key: "absences" },
-    { name: t("navigation.receptions"), href: "/admin/receptions", icon: FileText, key: "receptions" },
+    {
+      name: t("navigation.employees"),
+      href: "/admin/employee",
+      icon: Users,
+      key: "employees",
+    },
+    {
+      name: t("navigation.departments"),
+      href: "/admin/departments",
+      icon: Building2,
+      key: "departments",
+    },
+    {
+      name: t("navigation.absences"),
+      href: "/admin/absences",
+      icon: Calendar,
+      key: "absences",
+    },
+    {
+      name: t("navigation.receptions"),
+      href: "/admin/receptions",
+      icon: FileText,
+      key: "receptions",
+    },
   ];
+
+  const superadminNavigation = [
+    {
+      name: tSuper("dashboard"),
+      href: "/superadmin",
+      icon: LayoutDashboard,
+      key: "dashboard",
+    },
+    {
+      name: tSuper("services"),
+      href: "/superadmin/services",
+      icon: Wrench,
+      key: "services",
+    },
+    {
+      name: tSuper("departments"),
+      href: "/superadmin/departments",
+      icon: Building2,
+      key: "departments",
+    },
+    {
+      name: tSuper("centers"),
+      href: "/superadmin/centers",
+      icon: Building2,
+      key: "centers",
+    },
+    {
+      name: tSuper("receptions"),
+      href: "/superadmin/receptions",
+      icon: FileText,
+      key: "receptions",
+    },
+  ];
+
+  const navigation = isSuperadmin ? superadminNavigation : adminNavigation;
 
   const handleLanguageChange = (newLocale: string) => {
     // Из полного URL убираем текущий префикс локали (ru|kz),

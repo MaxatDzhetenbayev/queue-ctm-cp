@@ -5,10 +5,14 @@ import { fetchGetServiceTypeCounts } from "@/modules/analytics/infrastructure/ap
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetServiceTypeCount = () => {
-  const { selectedDate } = useAnalyticsDateStore();
+  const { selectedDate, centerId } = useAnalyticsDateStore();
 
   return useQuery<ServiceTypeCountsSchemaType>({
-    queryFn: () => fetchGetServiceTypeCounts(selectedDate || undefined),
-    queryKey: ["service-type-counts", selectedDate],
+    queryFn: () =>
+      fetchGetServiceTypeCounts(
+        selectedDate || undefined,
+        centerId || undefined
+      ),
+    queryKey: ["service-type-counts", selectedDate, centerId],
   });
 };

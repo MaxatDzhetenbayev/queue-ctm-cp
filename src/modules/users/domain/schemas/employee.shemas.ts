@@ -21,7 +21,7 @@ export type EditableEmployeeRole = (typeof EDITABLE_EMPLOYEE_ROLES)[number];
 const EmployeeOneSchema = z.object({
   login: z.string(),
   role: z.enum(["REGULAR", "MANAGER", "ADMIN", "SUPERADMIN", "HEAD"]).optional(),
-  ...UserProfileSchema.shape,
+  ...UserProfileSchema.omit({ role: true }).shape,
   employeeInfo: EmployeeInfoSchema,
   employeeServices: z.array(
     z.object({

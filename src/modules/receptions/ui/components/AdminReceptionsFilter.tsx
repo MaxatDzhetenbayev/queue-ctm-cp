@@ -28,6 +28,8 @@ const authTypeOptions = [
   { value: "OFFLINE", label: "Создание через менеджера" },
 ];
 
+const filterInputClass = "h-10 w-full min-w-[160px]";
+
 export const AdminReceptionsFilter = ({
   selectedReceptionDate,
   selectedReceptionStatus,
@@ -38,6 +40,7 @@ export const AdminReceptionsFilter = ({
     <>
       <Input
         type="date"
+        className={filterInputClass}
         value={selectedReceptionDate ?? ""}
         onChange={(e) => setPathParams.receptionDate(e.target.value)}
       />
@@ -45,7 +48,7 @@ export const AdminReceptionsFilter = ({
         value={selectedReceptionStatus ?? ""}
         onValueChange={(value) => setPathParams.receptionStatus(value)}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className={filterInputClass}>
           <SelectValue placeholder="Выберите статус" />
         </SelectTrigger>
         <SelectContent>
@@ -64,7 +67,7 @@ export const AdminReceptionsFilter = ({
         value={selectedAuthType ?? ""}
         onValueChange={(value) => setPathParams.authType(value)}
       >
-        <SelectTrigger className="w-[200px]">
+        <SelectTrigger className={filterInputClass}>
           <SelectValue placeholder="Тип авторизации" />
         </SelectTrigger>
         <SelectContent>

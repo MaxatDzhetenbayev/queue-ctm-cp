@@ -44,24 +44,39 @@ export const ReceptionsAuthTypeAnalytics = () => {
     );
   }
 
-  // Преобразуем данные в формат для графика
-  const chartData: receptionsAuthTypeTypes.ReceptionsAuthTypeChartData[] =
-    data.map((item) => {
-      const entries = Object.entries(item);
-      const [type, value] = entries[0];
-      const config =
-        receptionsAuthTypeConfig.MAIN_CONFIG.authTypes[
-          type as keyof typeof receptionsAuthTypeConfig.MAIN_CONFIG.authTypes
-        ];
+  const AUTH_TYPES_TO_HIDE = ["CREDENTIALS"];
 
-      return {
-        name: type,
-        value: value as unknown as number,
-        fill:
-          config?.color || receptionsAuthTypeConfig.chartConfig.defaultColor,
-        label: config?.label || type,
-      };
-    });
+  // Преобразуем данные в формат для графика (без CREDENTIALS)
+  const chartData: receptionsAuthTypeTypes.ReceptionsAuthTypeChartData[] =
+    data
+      .filter((item) => {
+        const type = Object.keys(item)[0];
+        return type && !AUTH_TYPES_TO_HIDE.includes(type);
+      })
+      .map((item) => {
+        const entries = Object.entries(item);
+        const [type, value] = entries[0];
+        const config =
+          receptionsAuthTypeConfig.MAIN_CONFIG.authTypes[
+            type as keyof typeof receptionsAuthTypeConfig.MAIN_CONFIG.authTypes
+          ];
+
+        return {
+          name: type,
+          value: value as unknown as number,
+          fill:
+            config?.color || receptionsAuthTypeConfig.chartConfig.defaultColor,
+          label: config?.label || type,
+        };
+      });
+
+  if (chartData.length === 0) {
+    return (
+      <StateWrapper title={t("title")}>
+        <EmptyState />
+      </StateWrapper>
+    );
+  }
 
   // Установка активного типа по умолчанию
   if (activeType === "" && chartData.length > 0) {

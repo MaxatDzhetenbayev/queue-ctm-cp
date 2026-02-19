@@ -115,6 +115,7 @@ export const GetAllReceptionsQuerySchema = z.object({
   status: ReceptionStatusSchema.optional(),
   date: z.string().optional(),
   type: AuthTypeSchema.optional(),
+  centerId: z.string().optional(),
   page: z.number().optional(),
   limit: z.number().optional(),
 });

@@ -127,6 +127,9 @@ export async function fetchAllReceptions(
   if (params?.type) {
     queryParams.append("type", params.type);
   }
+  if (params?.centerId) {
+    queryParams.append("centerId", params.centerId);
+  }
   if (params?.page) {
     queryParams.append("page", params.page.toString());
   }

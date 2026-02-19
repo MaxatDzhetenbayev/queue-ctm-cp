@@ -5,10 +5,14 @@ import { fetchGetDepartmentLoad } from "@/modules/analytics/infrastructure/api/c
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetDepartmentLoads = () => {
-  const { selectedDate } = useAnalyticsDateStore();
+  const { selectedDate, centerId } = useAnalyticsDateStore();
 
   return useQuery<DepartmentLoadAnalyticsSchemaType>({
-    queryFn: () => fetchGetDepartmentLoad(selectedDate || undefined),
-    queryKey: ["department-loads", selectedDate],
+    queryFn: () =>
+      fetchGetDepartmentLoad(
+        selectedDate || undefined,
+        centerId || undefined
+      ),
+    queryKey: ["department-loads", selectedDate, centerId],
   });
 };

@@ -14,9 +14,26 @@ import {
 } from "@/shared/lib";
 import { CustomPagination } from "@/widgets/pagination/Pagination";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 import { AdminReceptionsFilter } from "./AdminReceptionsFilter";
 
-export const AdminReceptionsList = () => {
+interface AdminReceptionsListProps {
+  centerIdFilter?: string;
+  onCenterIdChange?: (id: string) => void;
+  centersForFilter?: { id: string; name?: Record<string, string | undefined> }[];
+}
+
+export const AdminReceptionsList = ({
+  centerIdFilter,
+  onCenterIdChange,
+  centersForFilter,
+}: AdminReceptionsListProps = {}) => {
   // Состояние для фильтров
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
@@ -57,6 +74,7 @@ export const AdminReceptionsList = () => {
         selectedAuthType === "all" || !selectedAuthType
           ? undefined
           : (selectedAuthType as "TELEGRAM" | "OFFLINE"),
+      centerId: centerIdFilter || undefined,
       page: currentPage,
       limit,
     }),
@@ -65,6 +83,7 @@ export const AdminReceptionsList = () => {
       selectedStatus,
       selectedDate,
       selectedAuthType,
+      centerIdFilter,
       currentPage,
     ]
   );
@@ -114,20 +133,40 @@ export const AdminReceptionsList = () => {
 
   return (
     <div className="flex px-4 flex-col gap-4">
-      {/* Фильтры и поиск - всегда видны */}
+      {/* Фильтры и поиск */}
       <div className="pt-6">
-        <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Поиск посетителя по ФИО..."
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+        <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm shadow-gray-200/50">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6 lg:items-center">
+            <div className="relative lg:col-span-2">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Поиск посетителя по ФИО..."
+                className="h-10 w-full pl-9"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+            </div>
+            {centersForFilter && onCenterIdChange && (
+              <div className="min-w-0">
+                <Select
+                  value={centerIdFilter ?? "all"}
+                  onValueChange={(v) => onCenterIdChange(v === "all" ? "" : v)}
+                >
+                  <SelectTrigger className="h-10 w-full min-w-[160px]">
+                    <SelectValue placeholder="Центр" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Все центры</SelectItem>
+                    {centersForFilter.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name?.ru ?? c.name?.kz ?? c.id}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <AdminReceptionsFilter
               selectedReceptionDate={selectedDate}
               selectedReceptionStatus={selectedStatus}

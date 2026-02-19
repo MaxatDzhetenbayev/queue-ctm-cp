@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const UserProfileSchema = z.object({
   id: z.string(),
+  role: z.enum(["SUPERADMIN", "ADMIN", "USER"]).optional(),
   profile: z.object({
     id: z.string(),
     fullName: z.string(),

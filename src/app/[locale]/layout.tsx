@@ -48,20 +48,16 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NextIntlClientProvider>
-          <QueryProvider>
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-              {children}
-            </main>
-          </QueryProvider>
-        </NextIntlClientProvider>
-        <ToastContainer />
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale}>
+      <QueryProvider>
+        <main
+          className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10`}
+        >
+          {children}
+        </main>
+      </QueryProvider>
+      <ToastContainer />
+    </NextIntlClientProvider>
   );
 }
 
