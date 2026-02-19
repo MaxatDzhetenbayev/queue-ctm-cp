@@ -60,3 +60,17 @@ export async function detachServiceFromCenter(
 ): Promise<void> {
   await axiosApi.delete(`/centers/${centerId}/services/${serviceId}`);
 }
+
+export async function attachDepartmentToCenter(
+  centerId: string,
+  departmentId: string
+): Promise<void> {
+  await axiosApi.post(`/centers/${centerId}/departments`, { departmentId });
+}
+
+export async function detachDepartmentFromCenter(
+  centerId: string,
+  centerDepartmentId: string
+): Promise<void> {
+  await axiosApi.delete(`/centers/${centerId}/departments/${centerDepartmentId}`);
+}
