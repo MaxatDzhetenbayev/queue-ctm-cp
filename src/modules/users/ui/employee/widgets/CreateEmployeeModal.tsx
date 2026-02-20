@@ -34,7 +34,14 @@ import { KAZAKH_ALPHABET } from "@/shared/consts";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export const CreateEmployeeModal: React.FC = () => {
+interface CreateEmployeeModalProps {
+  /** ID центра (для суперадмина: создание работника в этом центре) */
+  centerId?: string | null;
+}
+
+export const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
+  centerId,
+}) => {
   const locale = useLocale();
   const t = useTranslations("employee.create");
   const tForm = useTranslations("employee.form");
@@ -46,7 +53,7 @@ export const CreateEmployeeModal: React.FC = () => {
 
   const createEmployeeMutation = useCreateEmployee();
   const { data: services } = useGetServiceList();
-  const { data: departments } = useGetDepartmentList();
+  const { data: departments } = useGetDepartmentList(centerId ?? undefined);
   const { data: departmentFeatures } =
     useGetDepartmentFeatures(selectedDepartmentId);
 
@@ -71,6 +78,7 @@ export const CreateEmployeeModal: React.FC = () => {
       department_id: "",
       service_ids: [],
       employeeFeatures: [],
+      ...(centerId ? { center_id: centerId } : {}),
     },
   });
 
@@ -146,7 +154,11 @@ export const CreateEmployeeModal: React.FC = () => {
         }
 
         const validatedData = CreateEmployeeSchema.parse(data);
-        await createEmployeeMutation.mutateAsync(validatedData);
+        const payload = {
+          ...validatedData,
+          ...(centerId ? { center_id: centerId } : {}),
+        };
+        await createEmployeeMutation.mutateAsync(payload);
 
         reset();
         setOpen(false);
@@ -156,8 +168,7 @@ export const CreateEmployeeModal: React.FC = () => {
         setIsSubmitting(false);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isSubmitting, trigger, hasLetterFeature, createEmployeeMutation, reset]
+    [isSubmitting, trigger, hasLetterFeature, createEmployeeMutation, reset, centerId]
   );
 
   const handleClose = React.useCallback(() => {

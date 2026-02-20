@@ -19,7 +19,14 @@ import { EmployeeQuery } from "./EmployeeQuery";
 import { EmployeeCards } from "../components/cards/EmployeeCards";
 import { EmployeeHeaderTitle } from "../components/EmployeeHeaderTitle";
 
-export const EmployeeList = () => {
+interface EmployeeListProps {
+  /** ID центра для списка работников (суперадмин); без него используется центр из контекста (админ) */
+  centerId?: string | null;
+  /** Скрыть заголовок (когда страница сама рендерит заголовок и кнопку «Назад») */
+  hideHeader?: boolean;
+}
+
+export const EmployeeList = ({ centerId, hideHeader }: EmployeeListProps) => {
   const {
     selectedDepartment,
     selectedService,
@@ -32,7 +39,7 @@ export const EmployeeList = () => {
     deleteKeys: ["page"],
   });
 
-  const { data: departments } = useGetDepartmentList();
+  const { data: departments } = useGetDepartmentList(centerId ?? undefined);
   const { data: services } = useGetServiceList();
   const {
     data: employeeList,
@@ -45,6 +52,7 @@ export const EmployeeList = () => {
     limit: 9,
     page: Number(selectedPage) || 1,
     status: selectedStatus,
+    centerId,
   });
 
   const { currentPage, totalPages, goToPage } = useEmployeePagination(
@@ -58,7 +66,9 @@ export const EmployeeList = () => {
 
   return (
     <div className="space-y-6 mt-6">
-      <EmployeeHeaderTitle total={employeeList?.total} />
+      {!hideHeader && (
+        <EmployeeHeaderTitle total={employeeList?.total} />
+      )}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
           <EmployeeQuery
@@ -77,7 +87,7 @@ export const EmployeeList = () => {
             />
 
             {/* Кнопка создания работника */}
-            <CreateEmployeeModal />
+            <CreateEmployeeModal centerId={centerId} />
           </div>
         </div>
       </div>

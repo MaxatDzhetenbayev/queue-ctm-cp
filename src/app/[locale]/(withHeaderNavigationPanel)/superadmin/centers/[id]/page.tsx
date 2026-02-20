@@ -1,13 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  BarChart3,
-  Building2,
-  FileText,
-  Users,
-  Wrench,
-} from "lucide-react";
+import { BarChart3, Building2, FileText, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import React from "react";
@@ -41,11 +35,6 @@ const CenterDetailPage = () => {
       href: `/superadmin/centers/${id}/directors`,
       icon: Users,
       key: "directors",
-    },
-    {
-      href: `/superadmin/centers/${id}/services`,
-      icon: Wrench,
-      key: "services",
     },
     {
       href: `/superadmin/centers/${id}/departments`,

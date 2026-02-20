@@ -15,6 +15,7 @@ import {
  * @param query - Строка запроса для поиска сотрудников по ФИО
  * @param limit - Количество сотрудников на странице
  * @param status - Статус сотрудника
+ * @param centerId - ID центра (для superadmin, иначе берётся из контекста)
  *
  * @returns {Promise<EmployeeType>} Данные пользователей.
  *
@@ -25,7 +26,8 @@ export async function fetchEmployeeList(
   serviceId?: string | null,
   query?: string,
   limit?: number,
-  status?: string | null
+  status?: string | null,
+  centerId?: string | null
 ): Promise<EmployeeType> {
   const params: {
     departmentId?: string | null;
@@ -34,6 +36,7 @@ export async function fetchEmployeeList(
     page?: number;
     limit?: number;
     status?: string | null;
+    centerId?: string | null;
   } = {};
   if (limit) params.limit = limit;
   if (page) params.page = page;
@@ -41,6 +44,7 @@ export async function fetchEmployeeList(
   if (serviceId) params.serviceId = serviceId;
   if (query) params.search = query;
   if (status) params.status = status;
+  if (centerId) params.centerId = centerId;
 
   const response = await axiosApi.get<EmployeeType>("/users/managers/center", {
     params,

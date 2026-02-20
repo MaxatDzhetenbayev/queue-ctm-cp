@@ -4,11 +4,16 @@ import { CreateDepartmentType, DepartmentType } from "../../domain/schemas";
 
 /**
  * API для получения списка отделов.
- *
- * @returns {Promise<DepartmentType[]>} Список отделов.
+ * @param centerId — ID центра (для суперадмина: департаменты этого центра; для админа центр из контекста).
+ * @returns {Promise<DepartmentType[]>} Список отделов (при centerId — связи центр–департамент с id = centerDepartment.id).
  */
-export async function fetchDepartmentList(): Promise<DepartmentType[]> {
-  const response = await axiosApi.get<DepartmentType[]>("/departments");
+export async function fetchDepartmentList(
+  centerId?: string | null
+): Promise<DepartmentType[]> {
+  const response = await axiosApi.get<DepartmentType[]>(
+    "/departments",
+    centerId ? { params: { centerId } } : undefined
+  );
   return response.data;
 }
 

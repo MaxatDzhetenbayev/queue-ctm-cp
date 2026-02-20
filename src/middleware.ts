@@ -6,10 +6,10 @@ import { routing } from "@i18/index";
 
 const intlMiddleware = createMiddleware(routing);
 
-const protectedRoutes: Record<string, string> = {
-  superadmin: "SUPERADMIN",
-  admin: "ADMIN",
-  manager: "MANAGER",
+const protectedRoutes: Record<string, string[]> = {
+  superadmin: ["SUPERADMIN"],
+  admin: ["ADMIN"],
+  manager: ["MANAGER", "HEAD"],
 };
 
 /**
@@ -28,17 +28,14 @@ async function verifyToken(token: string) {
 }
 
 /**
- *
- * @param userRole - роль пользователя
- * @returns
+ * Возвращает маршрут для редиректа после авторизации по роли пользователя.
+ * MANAGER и HEAD ведут на страницу менеджера.
  */
 function getAllowedRoute(userRole: string) {
-  // ищем, куда можно пускать пользователя с его ролью
-  const allowedRoute = Object.entries(protectedRoutes).find(
-    ([, role]) => role === userRole
-  )?.[0];
-
-  return allowedRoute;
+  const entry = Object.entries(protectedRoutes).find(([, roles]) =>
+    roles.includes(userRole)
+  );
+  return entry?.[0];
 }
 
 /**
@@ -92,9 +89,9 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  for (const [route, allowedRole] of Object.entries(protectedRoutes)) {
+  for (const [route, allowedRoles] of Object.entries(protectedRoutes)) {
     if (pathname.startsWith(`/${locale}/${route}`)) {
-      if (user && user.role !== allowedRole) {
+      if (user && !allowedRoles.includes(user.role)) {
         const allowedRoute = getAllowedRoute(user.role);
         return NextResponse.redirect(
           new URL(`/${locale}/${allowedRoute}`, req.url)

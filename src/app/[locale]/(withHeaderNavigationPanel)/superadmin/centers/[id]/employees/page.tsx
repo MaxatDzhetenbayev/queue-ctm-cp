@@ -2,10 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Link } from "@/shared/configs/i18";
 
+import { EmployeeList } from "@/modules/users/ui/employee";
 import { Button } from "@/shared/components/ui/button";
 
 const CenterEmployeesPage = () => {
@@ -21,7 +22,13 @@ const CenterEmployeesPage = () => {
           <Link href={`/superadmin/centers/${id}`}>{t("back")}</Link>
         </Button>
       </div>
-      <p className="mt-4 text-gray-600">Список работников центра — в разработке.</p>
+      <Suspense
+        fallback={
+          <div className="mt-6 animate-pulse rounded-lg bg-gray-200 h-64" />
+        }
+      >
+        <EmployeeList centerId={id} hideHeader />
+      </Suspense>
     </div>
   );
 };

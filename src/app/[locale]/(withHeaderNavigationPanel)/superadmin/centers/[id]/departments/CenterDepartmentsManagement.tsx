@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -38,8 +39,8 @@ export const CenterDepartmentsManagement = ({
   });
 
   const { data: allDepartments, isLoading: departmentsLoading } = useQuery({
-    queryKey: ["departments-list"],
-    queryFn: fetchDepartmentList,
+    queryKey: ["department-list"],
+    queryFn: () => fetchDepartmentList(),
   });
 
   const attachMutation = useMutation({
@@ -47,7 +48,7 @@ export const CenterDepartmentsManagement = ({
       attachDepartmentToCenter(centerId, departmentId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["center", centerId] });
-      queryClient.invalidateQueries({ queryKey: ["departments-list"] });
+      queryClient.invalidateQueries({ queryKey: ["department-list"] });
       toast.success("Департамент успешно добавлен к центру");
       setSelectedDepartmentId("");
     },
