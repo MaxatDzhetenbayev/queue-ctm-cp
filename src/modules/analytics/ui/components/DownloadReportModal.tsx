@@ -19,11 +19,14 @@ import { axiosApi } from "@/shared/lib/client";
 interface DownloadReportModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Для суперадмина: ID центра, по которому формировать отчёт */
+  centerId?: string;
 }
 
 export const DownloadReportModal = ({
   open,
   onOpenChange,
+  centerId,
 }: DownloadReportModalProps) => {
   const tModal = useTranslations("report.modal");
   const [startDate, setStartDate] = useState("");
@@ -50,6 +53,7 @@ export const DownloadReportModal = ({
         startDate: start.toISOString().split("T")[0],
         endDate: end.toISOString().split("T")[0],
       });
+      if (centerId) params.set("centerId", centerId);
       const { data } = await axiosApi.get(`/receptions/report/excel?${params}`, {
         responseType: "blob",
       });
