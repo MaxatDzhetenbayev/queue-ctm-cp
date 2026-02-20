@@ -12,6 +12,7 @@ const EmployeeInfoSchema = z.object({
   department: DepartmentSchema,
   isOnline: z.boolean(),
   center: CenterSchema,
+  status: z.string().optional(),
 });
 
 /** Роли, доступные при редактировании сотрудника (специалист / руководитель отдела). */
