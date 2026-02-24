@@ -69,6 +69,7 @@ export const DepartmentFormModal = ({
         await createDepartment({ name: { ru: nameRu, kz: nameKz } });
       }
       queryClient.invalidateQueries({ queryKey: ["department-list"] });
+      queryClient.invalidateQueries({ queryKey: ["department-catalog"] });
       onOpenChange(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Ошибка");

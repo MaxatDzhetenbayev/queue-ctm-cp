@@ -2,6 +2,8 @@ import { axiosApi } from "@/shared/lib/client";
 
 import { CreateDepartmentType, DepartmentType } from "../../domain/schemas";
 
+const DEPARTMENTS_ENDPOINT = "/departments";
+
 /**
  * API для получения списка отделов.
  * @param centerId — ID центра (для суперадмина: департаменты этого центра; для админа центр из контекста).
@@ -11,8 +13,20 @@ export async function fetchDepartmentList(
   centerId?: string | null
 ): Promise<DepartmentType[]> {
   const response = await axiosApi.get<DepartmentType[]>(
-    "/departments",
+    DEPARTMENTS_ENDPOINT,
     centerId ? { params: { centerId } } : undefined
+  );
+  return response.data;
+}
+
+/**
+ * API для получения справочника отделов (глобальные Department, id = Department.id).
+ * Использовать при добавлении отдела к центру. Эндпоинт /departments/catalog всегда возвращает каталог.
+ * @returns {Promise<DepartmentType[]>} Справочник отделов с id из таблицы Department.
+ */
+export async function fetchDepartmentCatalog(): Promise<DepartmentType[]> {
+  const response = await axiosApi.get<DepartmentType[]>(
+    `${DEPARTMENTS_ENDPOINT}/catalog`
   );
   return response.data;
 }
@@ -26,7 +40,10 @@ export async function fetchDepartmentList(
 export async function createDepartment(
   data: CreateDepartmentType
 ): Promise<DepartmentType> {
-  const response = await axiosApi.post<DepartmentType>("/departments", data);
+  const response = await axiosApi.post<DepartmentType>(
+    DEPARTMENTS_ENDPOINT,
+    data
+  );
   return response.data;
 }
 
@@ -42,7 +59,7 @@ export async function updateDepartment(
   data: Partial<CreateDepartmentType>
 ): Promise<DepartmentType> {
   const response = await axiosApi.patch<DepartmentType>(
-    `/departments/${id}`,
+    `${DEPARTMENTS_ENDPOINT}/${id}`,
     data
   );
   return response.data;

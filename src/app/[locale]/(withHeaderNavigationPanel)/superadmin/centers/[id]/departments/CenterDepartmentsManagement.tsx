@@ -4,14 +4,15 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import React, { useState } from "react";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Pencil } from "lucide-react";
 
 import {
   getCenter,
   attachDepartmentToCenter,
   detachDepartmentFromCenter,
+  updateCenterDepartmentFeatures,
 } from "@/shared/api/centers.api";
-import { fetchDepartmentList } from "@/modules/departments/infrastructure/api/department.api";
+import { fetchDepartmentCatalog } from "@/modules/departments/infrastructure/api/department.api";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
@@ -21,6 +22,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { toast } from "react-toastify";
+import { DepartmentFeaturesModal } from "./DepartmentFeaturesModal";
 
 interface CenterDepartmentsManagementProps {
   centerId: string;
@@ -32,6 +34,10 @@ export const CenterDepartmentsManagement = ({
   const t = useTranslations("superadmin.centers");
   const queryClient = useQueryClient();
   const [selectedDepartmentId, setSelectedDepartmentId] = useState<string>("");
+  const [addFeaturesModalOpen, setAddFeaturesModalOpen] = useState(false);
+  const [editCenterDepartmentId, setEditCenterDepartmentId] = useState<
+    string | null
+  >(null);
 
   const { data: center, isLoading: centerLoading } = useQuery({
     queryKey: ["center", centerId],
@@ -39,22 +45,55 @@ export const CenterDepartmentsManagement = ({
   });
 
   const { data: allDepartments, isLoading: departmentsLoading } = useQuery({
-    queryKey: ["department-list"],
-    queryFn: () => fetchDepartmentList(),
+    queryKey: ["department-catalog"],
+    queryFn: () => fetchDepartmentCatalog(),
   });
 
   const attachMutation = useMutation({
-    mutationFn: (departmentId: string) =>
-      attachDepartmentToCenter(centerId, departmentId),
+    mutationFn: ({
+      departmentId,
+      departmentFeatures,
+    }: {
+      departmentId: string;
+      departmentFeatures?: { [key: string]: string };
+    }) =>
+      attachDepartmentToCenter(centerId, departmentId, departmentFeatures),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["center", centerId] });
-      queryClient.invalidateQueries({ queryKey: ["department-list"] });
+      queryClient.invalidateQueries({ queryKey: ["department-catalog"] });
       toast.success("Департамент успешно добавлен к центру");
       setSelectedDepartmentId("");
+      setAddFeaturesModalOpen(false);
     },
     onError: (error: any) => {
       toast.error(
         error?.response?.data?.message || "Ошибка при добавлении департамента"
+      );
+    },
+  });
+
+  const updateFeaturesMutation = useMutation({
+    mutationFn: ({
+      centerDepartmentId,
+      departmentFeatures,
+    }: {
+      centerDepartmentId: string;
+      departmentFeatures: { [key: string]: string };
+    }) =>
+      updateCenterDepartmentFeatures(
+        centerId,
+        centerDepartmentId,
+        departmentFeatures
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["center", centerId] });
+      toast.success("Настройки отдела сохранены");
+      setEditCenterDepartmentId(null);
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message ||
+          "Ошибка при сохранении настроек отдела"
       );
     },
   });
@@ -90,13 +129,26 @@ export const CenterDepartmentsManagement = ({
     return String(name);
   };
 
-  const handleAddDepartment = () => {
+  const handleAddDepartmentClick = () => {
     if (!selectedDepartmentId) {
       toast.warning("Выберите департамент для добавления");
       return;
     }
-    attachMutation.mutate(selectedDepartmentId);
+    setAddFeaturesModalOpen(true);
   };
+
+  const handleAddFeaturesSubmit = (departmentFeatures: {
+    [key: string]: string;
+  }) => {
+    attachMutation.mutate({
+      departmentId: selectedDepartmentId,
+      departmentFeatures,
+    });
+  };
+
+  const editingCenterDepartment = editCenterDepartmentId
+    ? centerDepartments.find((cd) => cd.id === editCenterDepartmentId)
+    : null;
 
   const handleRemoveDepartment = (
     centerDepartmentId: string,
@@ -121,7 +173,7 @@ export const CenterDepartmentsManagement = ({
       {/* Добавление департамента */}
       <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-gray-900">
-          Добавить департамент к центру
+          {t("addDepartmentToCenter")}
         </h2>
         <div className="flex gap-3">
           <Select
@@ -129,7 +181,7 @@ export const CenterDepartmentsManagement = ({
             onValueChange={setSelectedDepartmentId}
           >
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Выберите департамент" />
+              <SelectValue placeholder={t("selectDepartment")} />
             </SelectTrigger>
             <SelectContent>
               {availableDepartments.length > 0 ? (
@@ -140,26 +192,37 @@ export const CenterDepartmentsManagement = ({
                 ))
               ) : (
                 <SelectItem value="no-departments" disabled>
-                  Нет доступных департаментов
+                  {t("noDepartmentsAvailable")}
                 </SelectItem>
               )}
             </SelectContent>
           </Select>
           <Button
-            onClick={handleAddDepartment}
+            onClick={handleAddDepartmentClick}
             disabled={!selectedDepartmentId || attachMutation.isPending}
           >
             <Plus className="mr-2 h-4 w-4" />
-            Добавить
+            {t("addDepartment")}
           </Button>
         </div>
+
+        <DepartmentFeaturesModal
+          open={addFeaturesModalOpen}
+          onOpenChange={setAddFeaturesModalOpen}
+          title={t("departmentFeaturesModalTitle")}
+          submitLabel={t("addDepartment")}
+          onSubmit={handleAddFeaturesSubmit}
+          isSubmitting={attachMutation.isPending}
+        />
       </div>
 
       {/* Список департаментов центра */}
       <div className="rounded-xl border border-gray-100 bg-white shadow-sm">
         <div className="border-b border-gray-100 p-4">
           <h2 className="text-lg font-semibold text-gray-900">
-            Департаменты центра ({centerDepartments.length})
+            {t("centerDepartmentsCount", {
+              count: centerDepartments.length,
+            })}
           </h2>
         </div>
         {centerDepartments.length > 0 ? (
@@ -167,39 +230,67 @@ export const CenterDepartmentsManagement = ({
             {centerDepartments.map((centerDepartment) => (
               <li
                 key={centerDepartment.id}
-                className="flex items-center justify-between px-4 py-3 hover:bg-gray-50"
+                className="flex items-center justify-between gap-2 px-4 py-3 hover:bg-gray-50"
               >
                 <span className="font-medium text-gray-900">
                   {centerDepartment.department
                     ? nameOf(centerDepartment.department.name)
                     : "Без департамента"}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    handleRemoveDepartment(
-                      centerDepartment.id,
-                      centerDepartment.department
-                        ? nameOf(centerDepartment.department.name)
-                        : "Без департамента"
-                    )
-                  }
-                  disabled={detachMutation.isPending}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Удалить
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditCenterDepartmentId(centerDepartment.id)}
+                    disabled={updateFeaturesMutation.isPending}
+                  >
+                    <Pencil className="mr-2 h-4 w-4" />
+                    {t("editDepartmentFeatures")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      handleRemoveDepartment(
+                        centerDepartment.id,
+                        centerDepartment.department
+                          ? nameOf(centerDepartment.department.name)
+                          : "Без департамента"
+                      )
+                    }
+                    disabled={detachMutation.isPending}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Удалить
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>
         ) : (
           <div className="px-4 py-8 text-center text-gray-500">
-            У центра пока нет департаментов. Добавьте департаменты выше.
+            {t("noCenterDepartments")}
           </div>
         )}
       </div>
+
+      <DepartmentFeaturesModal
+        open={!!editCenterDepartmentId}
+        onOpenChange={(open) => !open && setEditCenterDepartmentId(null)}
+        title={t("departmentFeaturesModalEditTitle")}
+        initialFeatures={editingCenterDepartment?.departmentFeatures}
+        submitLabel={t("save")}
+        onSubmit={(departmentFeatures) => {
+          if (editCenterDepartmentId) {
+            updateFeaturesMutation.mutate({
+              centerDepartmentId: editCenterDepartmentId,
+              departmentFeatures,
+            });
+          }
+        }}
+        isSubmitting={updateFeaturesMutation.isPending}
+      />
     </div>
   );
 };

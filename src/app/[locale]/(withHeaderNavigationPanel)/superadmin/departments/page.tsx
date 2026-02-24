@@ -1,16 +1,20 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 
-import { useGetDepartmentList } from "@/modules/users/application/use-cases/get-department-list.usecases";
+import { fetchDepartmentCatalog } from "@/modules/departments/infrastructure/api/department.api";
 import { Button } from "@/shared/components/ui/button";
 
 import { DepartmentFormModal } from "./DepartmentFormModal";
 
 const SuperadminDepartmentsPage = () => {
   const t = useTranslations("superadmin.departments");
-  const { data: departments, isLoading } = useGetDepartmentList();
+  const { data: departments, isLoading } = useQuery({
+    queryKey: ["department-catalog"],
+    queryFn: () => fetchDepartmentCatalog(),
+  });
   const [createOpen, setCreateOpen] = useState(false);
   const [editDepartment, setEditDepartment] = useState<{
     id: string;
