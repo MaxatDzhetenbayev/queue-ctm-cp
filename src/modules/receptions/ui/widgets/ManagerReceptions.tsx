@@ -6,6 +6,7 @@ import React from "react";
 
 import { ReceptionStatusType } from "@/modules/receptions/domain/schemas/reception.schemas";
 import { ClientDetail } from "@/modules/users/ui/client/widgets/ClientDetail";
+import { formatTimeAlmaty } from "@/shared/lib";
 import { useSearchQuery } from "@/shared/hooks";
 
 import { useGetManagerReceptions } from "../../application/use-cases";
@@ -232,13 +233,7 @@ export const ManagerReceptions: React.FC = () => {
                           {new Date(reception.date).toLocaleDateString(
                             locale === "kz" ? "kk-KZ" : "ru-RU"
                           )}{" "}
-                          {new Date(reception.time).toLocaleTimeString(
-                            locale === "kz" ? "kk-KZ" : "ru-RU",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
+                          {formatTimeAlmaty(reception.time)}
                         </div>
                       </div>
                     </div>

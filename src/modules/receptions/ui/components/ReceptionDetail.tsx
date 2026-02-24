@@ -5,6 +5,7 @@ import React from "react";
 
 import { ReceptionStatusType } from "@/modules/receptions/domain/schemas/reception.schemas";
 import { Button } from "@/shared/components/ui/button";
+import { formatDateTimeAlmaty, formatTimeAlmaty } from "@/shared/lib";
 import {
   Dialog,
   DialogContent,
@@ -83,7 +84,7 @@ export const ReceptionDetail: React.FC<ReceptionDetailProps> = ({ id }) => {
                   Время приема
                 </h4>
                 <p className="text-sm">
-                  {new Date(reception.time).toLocaleString("ru-RU")}
+                  {formatDateTimeAlmaty(reception.time)}
                 </p>
               </div>
               <div>
@@ -112,7 +113,7 @@ export const ReceptionDetail: React.FC<ReceptionDetailProps> = ({ id }) => {
                   Время приема
                 </h4>
                 <p className="text-sm">
-                  {new Date(reception.time).toLocaleTimeString("ru-RU")}
+                  {formatTimeAlmaty(reception.time)}
                 </p>
               </div>
             </div>

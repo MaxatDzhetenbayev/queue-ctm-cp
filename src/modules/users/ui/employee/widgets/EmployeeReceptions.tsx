@@ -10,6 +10,7 @@ import { StatusesType } from "@/modules/users/domain/schemas";
 import { Input } from "@/shared/components/ui/input";
 import { useSearchQuery, useUrlFilter } from "@/shared/hooks";
 import {
+  formatTimeAlmaty,
   getStatusColor,
   normalizeAuthVariant,
   normalizeStatus,
@@ -143,10 +144,7 @@ export const EmployeeReceptions = ({
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Clock className="h-4 w-4" />
               <span>{t("time")}:</span>
-              {new Date(appointment.time).toLocaleTimeString(locale === "kz" ? "kk-KZ" : "ru-RU", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {formatTimeAlmaty(appointment.time)}
             </div>
           </div>
         </div>

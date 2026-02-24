@@ -20,7 +20,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { getStatusColor, normalizeStatus } from "@/shared/lib";
+import {
+  formatTimeAlmaty,
+  getStatusColor,
+  normalizeStatus,
+} from "@/shared/lib";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -294,15 +298,7 @@ export const ClientDetail: React.FC<ClientModalProps> = ({
                           <Calendar className="h-4 w-4" />
                           <span>
                             {t("time")}:
-                            {new Date(
-                              currentAppointment.time
-                            ).toLocaleTimeString(
-                              locale === "kz" ? "kk-KZ" : "ru-RU",
-                              {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              }
-                            )}
+                            {formatTimeAlmaty(currentAppointment.time)}
                           </span>
                         </div>
                       </div>

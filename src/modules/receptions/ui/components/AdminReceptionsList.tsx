@@ -8,6 +8,7 @@ import { ClientDetail } from "@/modules/users/ui/client/widgets/ClientDetail";
 import { Input } from "@/shared/components/ui/input";
 import { useSearchQuery } from "@/shared/hooks";
 import {
+  formatTimeAlmaty,
   getStatusColor,
   normalizeAuthVariant,
   normalizeStatus,
@@ -285,10 +286,7 @@ export const AdminReceptionsList = ({
                   <span>
                     Время:{" "}
                     {appointment.time
-                      ? new Date(appointment.time).toLocaleTimeString("ru-RU", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
+                      ? formatTimeAlmaty(appointment.time)
                       : "Не указано"}
                   </span>
                 </div>

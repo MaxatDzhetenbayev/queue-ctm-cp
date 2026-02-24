@@ -18,7 +18,7 @@ export const ReceptionStatusSchema = z.enum([
 export const ReceptionSchema = z.object({
   id: z.string(),
   date: z.date(),
-  time: z.date(),
+  time: z.string(),
   status: ReceptionStatusSchema,
   comment: z.string().optional(),
   service: ServiceSchema,

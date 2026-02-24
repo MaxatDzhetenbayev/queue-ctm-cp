@@ -1,8 +1,15 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
 import {
   ActivityStatus,
   EmployeeActivity,
   LeaveStatus,
 } from "../schemas/activity.schemas";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export interface ActivityDay {
   date: string;
@@ -61,11 +68,9 @@ export const formatDate = (date: string): string => {
   });
 };
 
+/** Время в Asia/Almaty (UTC+5), формат HH:mm */
 export const formatTime = (date: string): string => {
-  return new Date(date).toLocaleTimeString("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return dayjs.utc(date).tz("Asia/Almaty").format("HH:mm");
 };
 
 export const getStatusLabel = (status: ActivityStatus): string => {
